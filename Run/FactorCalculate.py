@@ -22,6 +22,8 @@ def cal_factor(params_dict: dict):
     factor_name = params_dict['factor_name']
     factor_params = params_dict['factor_params']
 
+    print(f"\033[1;31m{dt.datetime.now().strftime('%X')}: {factor_name}\033[0m")
+
     A.load_factor(fact_name=factor_name,
                   factor_params=factor_params,
                   cal=params_dict['cal'])
@@ -65,11 +67,9 @@ def main():
             print(f"\033[1;31m{dt.datetime.now().strftime('%X')}: {factor_dict['factor_name']}\033[0m")
             db = 'Fin'
             cal_factor(factor_dict, db)
-    pass
 
 
 def main1(fact_dict):
-
     # print(f"\033[1;31m{dt.datetime.now().strftime('%X')}: "
     #       f"{factor_dict['factor_name']}-{factor_dict['factor_params']['n']}\033[0m")
     print(f"\033[1;31m{dt.datetime.now().strftime('%X')}: {fact_dict['factor_name']}\033[0m")
@@ -88,10 +88,10 @@ def main1(fact_dict):
     # cal_factor(factor_dict, db)
 
 
-def cal(fact_list):
+def cal(fact_list, pamas):
     for fac in fact_list:
         factor_dict = {"factor_name": fac,
-                       "factor_params": {},
+                       "factor_params": pamas,
                        'factor': None,
                        'cal': True
                        }
@@ -102,7 +102,8 @@ def cal_pa(fact_list, pa):
     for fac in fact_list:
         for p_ in pa:
             factor_dict = {"factor_name": fac,
-                           "factor_params": {'period': p_,
+                           "factor_params": {"period": p_,
+                                             "minute": 1,
                                              "n": 1},
                            'factor': None,
                            'cal': True
@@ -112,37 +113,64 @@ def cal_pa(fact_list, pa):
 
 
 def main_M():
-    fac_dict = {"Q": ["HighFreq035", "HighFreq056", "HighFreq057", "HighFreq058", "HighFreq059", "HighFreq060", "HighFreq062", "HighFreq080"],
-                "W": ["HighFreq038", "HighFreq039", "HighFreq040", "HighFreq041", "HighFreq042", "HighFreq043", ],
-                "E": ["HighFreq044", "HighFreq045", "HighFreq046", "HighFreq047", "HighFreq076", "HighFreq077", "HighFreq078"],
-                "R": ["HighFreq071", "HighFreq072", "HighFreq073", "HighFreq074", "HighFreq075"],
-                "T": ["HighFreq036", "HighFreq037"]}
-    pam = [5, 15, 30, 60]
+    factor_name = [f"Distribution{i:03}" for i in [1, 30, 31] + list(range(4, 10)) + list(range(11, 28)) + [28, 29]] + \
+                  [f"FundFlow{i:03}" for i in list(range(1, 7)) + list(range(9, 14)) + list(range(25, 30)) + [32, 35, 39, 40]] + \
+                  [f"VolPrice{i:03}" for i in list(range(11, 18)) + [8, 9]]
 
-    pool = Pool(processes=4)
-    for key_, value_ in fac_dict.items():
-        pool.apply_async(cal, (value_, pam))
-    # pool.apply_async(cal_pa, (dd, pam))
-    pool.close()
-    pool.join()
+    factorPa = {"minute": 1,
+                "method": 'mid',
+                "R": 0.1,
+                "q": 0.2,
+                "n": 1}
+
+    for N in factor_name:
+        if N in ['Distribution028', 'Distribution029', "FundFlow039", "FundFlow040"]:
+            factorPa['n'] = 20
+        elif N in ["FundFlow032"]:
+            factorPa['n'] = 21
+        else:
+            factorPa['n'] = 1
+        if N not in ['Distribution018', 'Distribution025', 'Distribution028', 'Distribution030'] + \
+                ['FundFlow001', 'FundFlow006', 'FundFlow013', 'FundFlow028', 'FundFlow033', 'FundFlow034', 'FundFlow039'] + \
+                ['VolPrice012', 'VolPrice013', 'VolPrice017']:
+            continue
+        # if N.startswith('Distribution'):
+        #     continue
+        factor_dict = {"factor_name": N,
+                       "factor_params": factorPa,
+                       'factor': None,
+                       'cal': True
+                       }
+        try:
+            cal_factor(factor_dict)
+        except Exception as e:
+            print(f"{N}: {e}")
+    # pool = Pool(processes=4)
+    # for key_, value_ in fac_dict.items():
+    #     pool.apply_async(cal, (value_, pam))
+    # # pool.apply_async(cal_pa, (dd, pam))
+    # pool.close()
+    # pool.join()
+
+
+def single():
+    for s in ['all', 'open', 'close', 'between']:  # ['all', 'open', 'close', 'between']
+        for factor in [f"FundFlow{i:03}" for i in [46, 47, 48]]:
+            fact_dict = {
+                "factor_name": factor,
+                "factor_params": {"minute": 1,
+                                  "x_min": s,
+                                  "method": 'mid',
+                                  "period": s,
+                                  "depth": 10,
+                                  "ratio": 0.1,
+                                  "q": 0.2,
+                                  "n": 1},
+                'cal': True
+            }
+            cal_factor(fact_dict)
 
 
 if __name__ == '__main__':
-    # for i in range(6, 28):
-    #     if i in [10, 11]:
-    #         continue
-    #     factor = 'Momentum{:0>3}'.format(i)
-    # f_list = ['FundFlow020']
-    p = Pool(2)
-    p.apply_async(cal_pa, (['FundFlow020'], ['all']))
-    p.apply_async(cal_pa, (['FundFlow020'], ['open']))
-    p.apply_async(cal_pa, (['FundFlow020'], ['between']))
-    p.apply_async(cal_pa, (['FundFlow020'], ['close']))
-    # p.apply_async(cal_pa, (['VolPrice020'], [5, 10]))
-    # p.apply_async(cal_pa, (['FundFlow019'], ['close']))
-    # p.apply_async(cal_pa, (['FundFlow020'], ['all', 'open', 'between', 'close']))
-    # cal_pa(['FundFlow019'], ['close'])
-    # cal_pa(['FundFlow020'], ['all', 'open', 'between', 'close'])
-    p.close()
-    p.join()
-    # cal(['FundFlow047'])
+    single()
+    # main_M()

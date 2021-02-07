@@ -1,10 +1,11 @@
 import pandas as pd
 import numpy as np
 import os
+from typing import Dict
 import datetime as dt
 import time
 import sys
-from Data.GetData import SQL
+from collections import defaultdict
 from constant import (
     KeyName as KN,
     PriceVolumeName as PVN,
@@ -14,19 +15,44 @@ from constant import (
 
 
 class LabelPool(object):
-    PATH = {"price": os.path.join(FPN.label_pool_path.value, 'StockPrice.csv'),
-            "industry": os.path.join(FPN.label_pool_path.value, 'IndustryLabel.csv'),
-            "composition": os.path.join(FPN.label_pool_path.value, 'IndexStockWeight.csv'),
-            "index_weight": os.path.join(FPN.label_pool_path.value, 'IndexStockWeight.csv'),
-            "mv": os.path.join(FPN.label_pool_path.value, 'MV.csv'), }
+    Mapping = {"price": {"file": 'AStockData.csv',
+                         "columns": [PVN.CLOSE_ADJ.value, PVN.OPEN_ADJ.value, PVN.HIGH_ADJ.value, PVN.LOW_ADJ.value]},
+               "industry": {"file": 'AStockData.csv',
+                            "columns": [SN.INDUSTRY_FLAG.value]},
+               "mv": {"file": 'AStockData.csv',
+                      "columns": [PVN.LIQ_MV.value]},
+               "composition": {"file": 'IndexMember.csv',
+                               "columns": [SN.CSI_300.value, SN.CSI_500.value, SN.CSI_800.value]},
+               "stock_w1": {"file": "StockPool.csv",
+                            "columns": [SN.STOCK_WEIGHT.value]},
+               "stock_w2": {"file": "StockPool.csv",
+                            "columns": ["stockPool", SN.STOCK_WEIGHT.value]},
+               "priceLimit": {"file": "AStockData.csv",
+                              "columns": [PVN.Up_Down.value]},
+               "index_w": {"file": "StockPool.csv",
+                           "columns": ["stockPool", "stockWeight"]},
+               }
 
     def __init__(self):
-        self.Q = SQL()
+        self.path = FPN.Input_data_server.value
+        self.local_path = FPN.Input_data_local.value
 
-    def stock_return(self,
-                     stock_price: pd.DataFrame,
-                     return_type: str = PVN.OPEN.value,
-                     label: bool = True) -> pd.Series:
+    def read_data(self) -> Dict[str, pd.DataFrame]:
+        file = defaultdict(list)
+        for label_name, label_info in self.Mapping.items():
+            file[label_info['file']] += label_info['columns']
+
+        data = {}
+        for file_name, columns_list in file.items():
+            data[file_name] = pd.read_csv(os.path.join(self.path, file_name),
+                                          usecols=[KN.TRADE_DATE.value, KN.STOCK_ID.value] + columns_list,
+                                          index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        return data
+
+    def stock_ret(self,
+                  stock_price: pd.DataFrame,
+                  return_type: str = PVN.OPEN.value,
+                  label: bool = True) -> pd.Series:
         """
         收益率作为预测标签需放置到前一天, 默认每个交易日至少存在一只股票价格，否则会出现收益率跳空计算现象
         :param stock_price: 股票价格表
@@ -34,172 +60,182 @@ class LabelPool(object):
         :param label: 是否作为标签
         :return:
         """
-        stock_price.sort_index(inplace=True)
+        stock_price = stock_price.sort_index()
+        result = stock_price[return_type].groupby(KN.STOCK_ID.value).pct_change()
         if label:
             if return_type == PVN.OPEN.value:
-                result = stock_price[return_type].groupby(as_index=True,
-                                                          level=KN.STOCK_ID.value).apply(
-                    lambda x: x.shift(-2) / x.shift(-1) - 1)
+                result = result.groupby(KN.STOCK_ID.value).shift(-2)
             else:
-                result = stock_price[return_type].groupby(as_index=True,
-                                                          level=KN.STOCK_ID.value).apply(lambda x: x.shift(-1) / x - 1)
+                result = result.groupby(KN.STOCK_ID.value).shift(-1)
         else:
             if return_type == PVN.OPEN.value:
-                result = stock_price[return_type].groupby(as_index=True,
-                                                          level=KN.STOCK_ID.value).apply(lambda x: x.shift(-1) / x - 1)
-            else:
-                result = stock_price[return_type].groupby(as_index=True,
-                                                          level=KN.STOCK_ID.value).apply(lambda x: x / x.shift(1) - 1)
+                result = result.groupby(KN.STOCK_ID.value).shift(-1)
 
-        result = round(result, 6)
-        result.name = KN.STOCK_RETURN.value + '_' + return_type
+        result.name = KN.RETURN.value + return_type.capitalize()
         return result
 
-    def industry_weight(self,
-                        index_weight: pd.Series,
-                        industry_exposure: pd.Series,
-                        index_name: str = SN.CSI_500_INDUSTRY_WEIGHT.value) -> pd.Series:
+    def industry_w(self,
+                   index_weight: pd.Series,
+                   industry_exposure: pd.Series) -> pd.Series:
         """
         生成行业权重
         如果某个行业权重为零则舍弃掉
         """
-        data_ = pd.concat([index_weight[index_name], industry_exposure], axis=1, join='inner')
+        data_ = pd.concat([index_weight, industry_exposure], axis=1).dropna()
+        data_[SN.INDUSTRY_WEIGHT.value] = data_.groupby(KN.TRADE_DATE.value, group_keys=False).apply(
+            lambda x: x[SN.STOCK_WEIGHT.value] / x[SN.STOCK_WEIGHT.value].sum())
         # industry weight
-        ind_weight = data_.groupby([KN.TRADE_DATE.value, SN.INDUSTRY_FLAG.value]).sum()
+        ind_weight = data_.groupby([KN.TRADE_DATE.value, SN.INDUSTRY_FLAG.value])[SN.INDUSTRY_WEIGHT.value].sum()
         index_ = industry_exposure.index.get_level_values(KN.TRADE_DATE.value).drop_duplicates()
         ind_weight_new = ind_weight.unstack().reindex(index_).fillna(method='ffill').stack(dropna=False)
-
+        ind_weight_new.name = SN.INDUSTRY_WEIGHT.value
         # fill weight and industry
         res_ = pd.merge(ind_weight_new.reset_index(), industry_exposure.reset_index(),
                         on=[KN.TRADE_DATE.value, SN.INDUSTRY_FLAG.value], how='right')
-        res_.set_index(['date', 'stock_id'], inplace=True)
+        res_ = res_.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value]).sort_index()
 
-        return res_[index_name]
+        return res_[SN.INDUSTRY_WEIGHT.value]
 
     def industry_mv(self,
                     index_weight: pd.Series,
                     industry_exposure: pd.Series,
-                    mv: pd.Series,
-                    index_name: str = SN.CSI_300_INDUSTRY_WEIGHT.value,
-                    mv_name: str = PVN.LIQ_MV.value) -> pd.Series:
+                    mv: pd.Series) -> pd.Series:
 
-        weight_mv_name = index_name.replace('weight', 'mv')
+        data_ = pd.concat([index_weight, mv, industry_exposure], axis=1)
 
-        data_ = pd.concat([index_weight[index_name], mv[mv_name], industry_exposure], axis=1, join='inner')
-        data_[weight_mv_name] = data_[mv_name] * data_[index_name]
-
+        data_[SN.INDUSTRY_MV.value] = data_.groupby(KN.TRADE_DATE.value, group_keys=False).apply(
+            lambda x: x[PVN.LIQ_MV.value] * x[SN.STOCK_WEIGHT.value] / x[SN.STOCK_WEIGHT.value].sum())
         # industry weight
-        ind_mv = data_[[weight_mv_name,
-                        SN.INDUSTRY_FLAG.value]].groupby([KN.TRADE_DATE.value,
-                                                          SN.INDUSTRY_FLAG.value]).sum()
+        ind_mv = data_.groupby([KN.TRADE_DATE.value, SN.INDUSTRY_FLAG.value])[SN.INDUSTRY_MV.value].sum()
         index_ = industry_exposure.index.get_level_values(KN.TRADE_DATE.value).drop_duplicates()
         ind_weight_new = ind_mv.unstack().reindex(index_).fillna(method='ffill').stack(dropna=False)
-
+        ind_weight_new.name = SN.INDUSTRY_MV.value
         # fill weight and industry
         res_ = pd.merge(ind_weight_new.reset_index(), industry_exposure.reset_index(),
                         on=[KN.TRADE_DATE.value, SN.INDUSTRY_FLAG.value], how='right')
-        res_.set_index(['date', 'stock_id'], inplace=True)
+        res_ = res_.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value]).sort_index()
         # 去除无效市值
-        res_ = res_[res_[weight_mv_name] != 0]
+        res_ = res_[res_[SN.INDUSTRY_MV.value] != 0]
 
-        return res_[weight_mv_name]
+        return res_[SN.INDUSTRY_MV.value]
 
     def merge_labels(self, **kwargs) -> pd.DataFrame:
         """
-        :param kwargs: 股票标签数据
+        :param kwargs: 标签数据
         :return:
         """
-
         res = pd.concat(kwargs.values(), axis=1)
-
         return res
 
-    def LabelPool1(self):
+    def bm_labels(self,
+                  data: pd.DataFrame,
+                  ret_name: str,
+                  weight_name: str,
+                  bm_name: str) -> pd.Series(float):
+        """基准的合成为原始样本"""
+        result_path = os.path.join(self.local_path, f'{bm_name}.csv')
+        if os.path.exists(result_path):
+            bm_ret = pd.read_csv(result_path, index_col=[KN.TRADE_DATE.value])['BM']
+        else:
+            # Nan values will carry some weight so that the benchmark return is biased
+            bm_raw_data = data[[ret_name, weight_name]].dropna()
+            bm_ret = bm_raw_data.groupby(KN.TRADE_DATE.value).apply(lambda x: np.average(x[ret_name],
+                                                                                         weights=x[weight_name]))
+            bm_ret.name = "BM"
+            bm_ret.to_csv(result_path, index=True, header=True)
+        return bm_ret
 
-        result_path = os.path.join(FPN.label_pool_path.value, sys._getframe().f_code.co_name + '_result.csv')
+    def LabelPool(self) -> pd.DataFrame:
+
+        result_path = os.path.join(self.local_path, sys._getframe().f_code.co_name + '.csv')
         if os.path.exists(result_path):
             category_label = pd.read_csv(result_path, index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
         else:
             # read data
-            print(f"{dt.datetime.now().strftime('%X')}: Read the data of label")
+            print(f"{dt.datetime.now().strftime('%X')}: Construction the label pool")
 
-            price_data = pd.read_csv(self.PATH["price"])
-            industry_data = pd.read_csv(self.PATH["industry"])
-            composition_data = pd.read_csv(self.PATH["composition"])
-            industry_weight_data = pd.read_csv(self.PATH["index_weight"])
-            stock_mv_data = pd.read_csv(self.PATH["mv"])
+            data_dict = self.read_data()
+            price_data = data_dict['AStockData.csv'][self.Mapping["price"]['columns']]
+            ind_exp = data_dict['AStockData.csv'][self.Mapping["industry"]['columns']]
+            stock_mv_data = data_dict['AStockData.csv'][self.Mapping["mv"]['columns']] * 10000  # wan yuan->yuan
+            composition_data = data_dict['IndexMember.csv'][self.Mapping['composition']['columns']]
+            stock_w_data = data_dict['StockPool.csv'][self.Mapping['stock_w1']['columns']]
+            up_down_limit = data_dict['AStockData.csv'][self.Mapping['priceLimit']['columns']]
 
-            # set MultiIndex
-            price_data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-            industry_data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-            composition_data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-            industry_weight_data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-            stock_mv_data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
+            price_data = price_data.rename(columns={PVN.CLOSE_ADJ.value: PVN.CLOSE.value,
+                                                    PVN.OPEN_ADJ.value: PVN.OPEN.value,
+                                                    PVN.HIGH_ADJ.value: PVN.HIGH.value,
+                                                    PVN.LOW_ADJ.value: PVN.LOW.value})
 
-            # adj price
-            price_data[[PVN.OPEN.value,
-                        PVN.CLOSE.value]] = price_data[[PVN.OPEN.value,
-                                                        PVN.CLOSE.value]].mul(price_data[PVN.ADJ_FACTOR.value], axis=0)
+            print(f"{dt.datetime.now().strftime('%X')}: Calculate stock daily return label")
+            stock_ret_c = self.stock_ret(price_data, return_type=PVN.CLOSE.value)
+            stock_ret_o = self.stock_ret(price_data, return_type=PVN.OPEN.value)
 
-            # switch name
-            composition_data.rename(columns={SN.CSI_50_INDUSTRY_WEIGHT.value: SN.CSI_50.value,
-                                             SN.CSI_300_INDUSTRY_WEIGHT.value: SN.CSI_300.value,
-                                             SN.CSI_500_INDUSTRY_WEIGHT.value: SN.CSI_500.value}, inplace=True)
-
-            print(f"{dt.datetime.now().strftime('%X')}: calculate stock daily return label")
-            stock_return_close = self.stock_return(price_data, return_type=PVN.CLOSE.value)
-            stock_return_open = self.stock_return(price_data, return_type=PVN.OPEN.value)
-
-            print(f"{dt.datetime.now().strftime('%X')}: Generate the {SN.CSI_500_INDUSTRY_WEIGHT.value}")
-            industry_weight = self.industry_weight(industry_weight_data, industry_data,
-                                                   index_name=SN.CSI_500_INDUSTRY_WEIGHT.value)
+            print(f"{dt.datetime.now().strftime('%X')}: Set price limit label")
+            up_down_limit = up_down_limit.fillna(1) == 0
             ############################################################################################################
             # merge labels
             print(f"{dt.datetime.now().strftime('%X')}: Merge labels")
             category_label = self.merge_labels(
-                data_ret_close=stock_return_close,
-                data_ret_open=stock_return_open,
+                data_ret_close=stock_ret_c,
+                data_ret_open=stock_ret_o,
                 composition=composition_data,
-                industry_exposure=industry_data,
-                index_weight=industry_weight,
-                mv=stock_mv_data[PVN.LIQ_MV.value]
+                ind_exp=ind_exp,
+                mv=stock_mv_data[PVN.LIQ_MV.value],
+                stock_w=stock_w_data,
+                price_limit=up_down_limit
             )
 
             # sort
-            category_label.sort_index(inplace=True)
+            category_label = category_label.sort_index()
 
             category_label.to_csv(result_path)
         return category_label
 
-    def BenchMark(self,
-                  bm_index: str = '000300.SH',
-                  sta: str = '20130101',
-                  end: str = '20200401',
-                  price: str = 'open'):
-        """
-        返回基准当天收益
-        :param bm_index:
-        :param sta:
-        :param end:
-        :param price:
-        :return:
-        """
-        sql_ = self.Q.stock_index_SQL(bm_index=bm_index, date_sta=sta, date_end=end)
-        index_ = self.Q.query(sql_)
-        index_.set_index(KN.TRADE_DATE.value, inplace=True)
-        result = index_[price].shift(-1) / index_[price] - 1
-        return result
+    def strategyLabel(self) -> pd.DataFrame:
+        result_path = os.path.join(self.local_path, sys._getframe().f_code.co_name + '.csv')
+        if os.path.exists(result_path + '1'):
+            category_label = pd.read_csv(result_path, index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        else:
+            # read data
+            print(f"{dt.datetime.now().strftime('%X')}: Construction the label pool")
+
+            data_dict = self.read_data()
+            price_data = data_dict['AStockData.csv'][self.Mapping["price"]['columns']]
+            ind_exp = data_dict['AStockData.csv'][self.Mapping["industry"]['columns']]
+            stock_mv_data = data_dict['AStockData.csv'][self.Mapping["mv"]['columns']] * 10000  # wan yuan->yuan
+            stock_w_data = data_dict['StockPool.csv'][self.Mapping['stock_w2']['columns']]
+
+            price_data = price_data.rename(columns={PVN.CLOSE_ADJ.value: PVN.CLOSE.value,
+                                                    PVN.OPEN_ADJ.value: PVN.OPEN.value,
+                                                    PVN.HIGH_ADJ.value: PVN.HIGH.value,
+                                                    PVN.LOW_ADJ.value: PVN.LOW.value})
+
+            print(f"{dt.datetime.now().strftime('%X')}: Calculate stock daily return label")
+            stock_ret_o = self.stock_ret(price_data, return_type=PVN.OPEN.value)
+            stock_ret_o.name = KN.RETURN.value
+            print(f"{dt.datetime.now().strftime('%X')}: Calculate industry mv label")
+            stock_w_data = stock_w_data[stock_w_data['stockPool']]['stockWeight']
+            ind_mv = self.industry_mv(stock_w_data, ind_exp[SN.INDUSTRY_FLAG.value], stock_mv_data[PVN.LIQ_MV.value])
+            ind_w = self.industry_w(stock_w_data, ind_exp[SN.INDUSTRY_FLAG.value])
+            ############################################################################################################
+            # merge labels
+            print(f"{dt.datetime.now().strftime('%X')}: Merge labels")
+            category_label = self.merge_labels(
+                data_ret_open=stock_ret_o,
+                ind_mv=ind_mv,
+                ind_w=ind_w,
+                ind_exp=ind_exp,
+                mv=stock_mv_data[PVN.LIQ_MV.value],
+            )
+
+            # sort
+            category_label = category_label.sort_index()
+
+            category_label.to_csv(result_path)
+        return category_label
 
 
 if __name__ == '__main__':
-    # df_index = pd.read_csv(r"A:\数据\LabelPool\IndexStockWeight.csv")
-    # df_industry = pd.read_csv(r"A:\数据\LabelPool\IndustryLabel.csv")
-    # df_mv = pd.read_csv(r"A:\数据\LabelPool\MV.csv")
-    #
-    # df_industry.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-    # df_index.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-    # df_mv.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-
     A = LabelPool()
     A.LabelPool1()
-    pass

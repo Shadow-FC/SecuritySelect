@@ -33,8 +33,12 @@ class HighFrequencyFundFlowFactor(FactorBase):
     高频因子
     """
 
+    callAM = '09:30:00'
+    callPM = '15:00:00'
+
     def __init__(self):
         super(HighFrequencyFundFlowFactor, self).__init__()
+        self.range = lambda x: (x[KN.TRADE_TIME.value] >= self.callAM) & (x[KN.TRADE_TIME.value] < self.callPM)
 
     @classmethod
     def FundFlow001(cls,
@@ -130,13 +134,15 @@ class HighFrequencyFundFlowFactor(FactorBase):
         大买成交金额占比(MFD_buy_Nstd_R)
         """
         factor_name = sys._getframe().f_code.co_name + f'_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data = data.sort_index()
 
-        data['buy_Big'] = data['BuyBigOrderMeanStd_AM_120min'] + data['BuyBigOrderMeanStd_PM_120min']
-        data['big_buy_occupy'] = data['buy_Big'] / data[PVN.AMOUNT.value]
-        data[factor_name] = data['big_buy_occupy'].groupby(KN.STOCK_ID.value,
-                                                           group_keys=False).rolling(n, min_period=min(n, 2)).mean()
+        data['buyBig'] = data['BuyBigOrderMeanStd_AM_120min'] + data['BuyBigOrderMeanStd_PM_120min']
+        data['bigBuyOccupy'] = data['buyBig'] / data[PVN.AMOUNT.value]
+
+        data = cls().reindex(data)
+        data[factor_name] = data['bigBuyOccupy'].groupby(KN.STOCK_ID.value,
+                                                         group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
 
         F = FactorInfo()
         F.data = data[factor_name]
@@ -156,13 +162,15 @@ class HighFrequencyFundFlowFactor(FactorBase):
         大卖成交金额占比(MFD_sell_Nstd_R)
         """
         factor_name = sys._getframe().f_code.co_name + f'_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data = data.sort_index()
 
-        data['sale_Big'] = data['SaleBigOrderMeanStd_AM_120min'] + data['SaleBigOrderMeanStd_PM_120min']
-        data['big_sale_occupy'] = data['sale_Big'] / data[PVN.AMOUNT.value]
-        data[factor_name] = data['big_sale_occupy'].groupby(KN.STOCK_ID.value,
-                                                            group_keys=False).rolling(n, min_period=min(n, 2)).mean()
+        data['saleBig'] = data['SaleBigOrderMeanStd_AM_120min'] + data['SaleBigOrderMeanStd_PM_120min']
+        data['bigSaleOccupy'] = data['saleBig'] / data[PVN.AMOUNT.value]
+
+        data = cls().reindex(data)
+        data[factor_name] = data['bigSaleOccupy'].groupby(KN.STOCK_ID.value,
+                                                          group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
 
         F = FactorInfo()
         F.data = data[factor_name]
@@ -181,18 +189,19 @@ class HighFrequencyFundFlowFactor(FactorBase):
         """大买大卖成交金额占比差值(MFD_buy_sell_R_sub)"""
 
         factor_name = sys._getframe().f_code.co_name + f'_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data = data.sort_index()
 
-        data['buy_Big'] = data['BuyBigOrderMeanStd_AM_120min'] + data['BuyBigOrderMeanStd_PM_120min']
-        data['sale_Big'] = data['SaleBigOrderMeanStd_AM_120min'] + data['SaleBigOrderMeanStd_PM_120min']
+        data['buyBig'] = data['BuyBigOrderMeanStd_AM_120min'] + data['BuyBigOrderMeanStd_PM_120min']
+        data['saleBig'] = data['SaleBigOrderMeanStd_AM_120min'] + data['SaleBigOrderMeanStd_PM_120min']
 
-        data['big_buy_occupy'] = data['buy_Big'] / data[PVN.AMOUNT.value]
-        data['big_sale_occupy'] = data['sale_Big'] / data[PVN.AMOUNT.value]
-        data['diff'] = data['big_buy_occupy'] - data['big_sale_occupy']
+        data['bigBuyOccupy'] = data['buyBig'] / data[PVN.AMOUNT.value]
+        data['bigSaleOccupy'] = data['saleBig'] / data[PVN.AMOUNT.value]
+        data['diff'] = data['bigBuyOccupy'] - data['bigSaleOccupy']
 
+        data = cls().reindex(data)
         data[factor_name] = data['diff'].groupby(KN.STOCK_ID.value,
-                                                 group_keys=False).rolling(n, min_period=min(n, 2)).mean()
+                                                 group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
 
         F = FactorInfo()
         F.data = data[factor_name]
@@ -210,18 +219,19 @@ class HighFrequencyFundFlowFactor(FactorBase):
                     **kwargs):
         """大单成交金额占比(MFD_buy_sell_R_add)"""
         factor_name = sys._getframe().f_code.co_name + f'_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data = data.sort_index()
 
-        data['buy_Big'] = data['BuyBigOrderMeanStd_AM_120min'] + data['BuyBigOrderMeanStd_PM_120min']
-        data['sale_Big'] = data['SaleBigOrderMeanStd_AM_120min'] + data['SaleBigOrderMeanStd_PM_120min']
+        data['buyBig'] = data['BuyBigOrderMeanStd_AM_120min'] + data['BuyBigOrderMeanStd_PM_120min']
+        data['saleBig'] = data['SaleBigOrderMeanStd_AM_120min'] + data['SaleBigOrderMeanStd_PM_120min']
 
-        data['big_buy_occupy'] = data['buy_Big'] / data[PVN.AMOUNT.value]
-        data['big_sale_occupy'] = data['sale_Big'] / data[PVN.AMOUNT.value]
-        data['sub'] = data['big_buy_occupy'] + data['big_sale_occupy']
+        data['bigBuyOccupy'] = data['buyBig'] / data[PVN.AMOUNT.value]
+        data['bigSaleOccupy'] = data['saleBig'] / data[PVN.AMOUNT.value]
+        data['sub'] = data['bigBuyOccupy'] + data['bigSaleOccupy']
 
+        data = cls().reindex(data)
         data[factor_name] = data['sub'].groupby(KN.STOCK_ID.value,
-                                                group_keys=False).rolling(n, min_period=min(n, 2)).mean()
+                                                group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
 
         F = FactorInfo()
         F.data = data[factor_name]
@@ -252,9 +262,9 @@ class HighFrequencyFundFlowFactor(FactorBase):
                     n: int = 20,
                     **kwargs):
         """主买占比(buy_drive_prop)"""
-        factor_name = sys._getframe().f_code.co_name + f'_{period}_time_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
+        factor_name = sys._getframe().f_code.co_name + f'_{period}_{n}days'
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data = data.sort_index()
 
         if period == 'all':
             data['ratio'] = (data['BuyAll_AM_120min'] + data['BuyAll_PM_120min']) / data[PVN.AMOUNT.value]
@@ -263,14 +273,16 @@ class HighFrequencyFundFlowFactor(FactorBase):
         elif period == 'between':
             data['ratio'] = (data['BuyAll_AM_120min'] - data['BuyAll_AM_30min'] +
                              data['BuyAll_PM_120min'] - data['BuyAll_PM_30min']) / \
-                            (data[PVN.AMOUNT.value] - data['BuyAll_AM_30min'] - data['SaleAll_AM_30min'])
+                            (data[PVN.AMOUNT.value] - data['BuyAll_AM_30min'] - data['SaleAll_AM_30min'] -
+                             data['BuyAll_PM_30min'] - data['SaleAll_PM_30min'])
         elif period == 'close':
             data['ratio'] = data['buyamount'] / data[PVN.AMOUNT.value]
         else:
             return
 
+        data = cls().reindex(data)
         data[factor_name] = data['ratio'].groupby(KN.STOCK_ID.value,
-                                                  group_keys=False).rolling(n, min_period=min(n, 2)).mean()
+                                                  group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
 
         F = FactorInfo()
         F.data = data[factor_name]
@@ -316,16 +328,18 @@ class HighFrequencyFundFlowFactor(FactorBase):
 
         """剔除大卖的大买成交金额占比(HFD_buy_big_R)"""
         factor_name = sys._getframe().f_code.co_name + f'_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data = data.sort_index()
 
         data['buy_Big'] = data['BuyBigOrderMeanStd_AM_120min'] + data['BuyBigOrderMeanStd_PM_120min']
         data['sale_small'] = data['SaleAll_AM_120min'] + data['SaleAll_PM_120min'] - \
                              data['SaleBigOrderMeanStd_AM_120min'] - data['SaleBigOrderMeanStd_PM_120min']
 
         data['big_buy_occupy'] = (data['buy_Big'] + data['sale_small']) / data[PVN.AMOUNT.value]
+
+        data = cls().reindex(data)
         data[factor_name] = data['big_buy_occupy'].groupby(KN.STOCK_ID.value,
-                                                           group_keys=False).rolling(n, min_period=min(n, 2)).mean()
+                                                           group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
 
         F = FactorInfo()
         F.data = data[factor_name]
@@ -343,16 +357,18 @@ class HighFrequencyFundFlowFactor(FactorBase):
 
         """剔除大买的大卖成交金额占比(HFD_sell_big_R)"""
         factor_name = sys._getframe().f_code.co_name + f'_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data = data.sort_index()
 
         data['sale_Big'] = data['SaleBigOrderMeanStd_AM_120min'] + data['SaleBigOrderMeanStd_PM_120min']
         data['buy_small'] = data['BuyAll_AM_120min'] + data['BuyAll_PM_120min'] - \
                             data['BuyBigOrderMeanStd_AM_120min'] - data['BuyBigOrderMeanStd_PM_120min']
 
         data['big_sale_occupy'] = (data['sale_Big'] + data['buy_small']) / data[PVN.AMOUNT.value]
+
+        data = cls().reindex(data)
         data[factor_name] = data['big_sale_occupy'].groupby(KN.STOCK_ID.value,
-                                                            group_keys=False).rolling(n, min_period=min(n, 2)).mean()
+                                                            group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
 
         F = FactorInfo()
         F.data = data[factor_name]
@@ -362,48 +378,48 @@ class HighFrequencyFundFlowFactor(FactorBase):
 
         return F
 
-    @classmethod
-    def FundFlow027(cls,
-                    data: pd.DataFrame,
-                    n: int = 20,
-                    **kwargs):
+    # @classmethod
+    # def FundFlow027(cls,
+    #                 data: pd.DataFrame,
+    #                 n: int = 20,
+    #                 **kwargs):
+    #
+    #     """大买大卖成交金额占比(HFD_buy_sell_big_R)"""
+    #     factor_name = sys._getframe().f_code.co_name + f'_{n}days'
+    #     data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+    #     data = data.sort_index()
+    #
+    #     data['buy_Big'] = data['BuyBigOrderMeanStd_AM_120min'] + data['BuyBigOrderMeanStd_PM_120min']
+    #     data['sale_big'] = data['SaleBigOrderMeanStd_AM_120min'] + data['SaleBigOrderMeanStd_PM_120min']
+    #
+    #     data['big_occupy'] = (data['buy_Big'] + data['sale_big']) / data[PVN.AMOUNT.value]
+    #
+    #     data = cls().reindex(data)
+    #     data[factor_name] = data['big_occupy'].groupby(KN.STOCK_ID.value,
+    #                                                    group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
+    #
+    #     F = FactorInfo()
+    #     F.data = data[factor_name]
+    #     F.factor_type = 'FundFlow'
+    #     F.factor_category = cls().__class__.__name__
+    #     F.factor_name = factor_name
+    #
+    #     return F
 
-        """大买大卖成交金额占比(HFD_buy_sell_big_R)"""
-        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
-
-        data['buy_Big'] = data['BuyBigOrderMeanStd_AM_120min'] + data['BuyBigOrderMeanStd_PM_120min']
-        data['sale_big'] = data['SaleBigOrderMeanStd_AM_120min'] + data['SaleBigOrderMeanStd_PM_120min']
-
-        data['big_occupy'] = (data['buy_Big'] + data['sale_big']) / data[PVN.AMOUNT.value]
-        data[factor_name] = data['big_occupy'].groupby(KN.STOCK_ID.value,
-                                                       group_keys=False).rolling(n, min_period=min(n, 2)).mean()
-
-        F = FactorInfo()
-        F.data = data[factor_name]
-        F.factor_type = 'FundFlow'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = factor_name
-
-        return F
-
-    @classmethod
-    def FundFlow028(cls,
-                    data: pd.DataFrame,
-                    period: str = 'all',
-                    n: int = 20,
-                    **kwargs):
-
-        """尾盘成交占比(Vol_prop_tail)"""
-
-        F = FactorInfo()
-        F.data = data
-        F.factor_type = 'FundFlow'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
-
-        return F
+    # @classmethod
+    # def FundFlow028(cls,
+    #                 data: pd.DataFrame,
+    #                 **kwargs):
+    #
+    #     """尾盘成交占比(Vol_prop_tail)"""
+    #
+    #     F = FactorInfo()
+    #     F.data = data
+    #     F.factor_type = 'FundFlow'
+    #     F.factor_category = cls().__class__.__name__
+    #     F.factor_name = data.name
+    #
+    #     return F
 
     @classmethod
     def FundFlow029(cls,
@@ -413,14 +429,15 @@ class HighFrequencyFundFlowFactor(FactorBase):
 
         """开盘后净主买上午占比(buy_amt_open_am)"""
         factor_name = sys._getframe().f_code.co_name + f'_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data = data.sort_index()
 
         data['ratio'] = (data['BuyAll_AM_30min'] - data['SaleAll_AM_30min']) / (
                 data['BuyAll_AM_30min'] + data['SaleAll_AM_30min'])
 
+        data = cls().reindex(data)
         data[factor_name] = data['ratio'].groupby(KN.STOCK_ID.value,
-                                                  group_keys=False).rolling(n, min_period=min(n, 2)).mean()
+                                                  group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
 
         F = FactorInfo()
         F.data = data[factor_name]
@@ -440,23 +457,21 @@ class HighFrequencyFundFlowFactor(FactorBase):
         博弈因子(Stren):存在涨停主卖为零情况，会导致分母为0，根据数值特征范围将分母为零的计算设置为2
         """
         factor_name = sys._getframe().f_code.co_name + f'_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data = data.sort_index()
 
         data['buy_amount'] = data['BuyAll_AM_120min'] + data['BuyAll_PM_120min']
         data['sale_amount'] = data['SaleAll_AM_120min'] + data['SaleAll_PM_120min']
 
         # 升序
+        data = cls().reindex(data)
         data[['buy_amount_w',
               'sale_amount_w']] = data[['buy_amount',
                                         'sale_amount']].groupby(KN.STOCK_ID.value,
                                                                 group_keys=False).rolling(n,
-                                                                                          min_periods=min(n, 2)).apply(
-            lambda x: (x * cls.Half_time(n)).sum())
-        data[factor_name] = data['buy_amount_w'] / data['sale_amount_w']
-
-        # 无穷大值设置为2
-        data[factor_name][np.isinf(data[factor_name])] = 2
+                                                                                          min_periods=round(n * 0.8)).apply(
+            lambda x: (x * cls.Half_time(len(x))).sum())
+        data[factor_name] = data['buy_amount_w'] / (data['sale_amount_w'] + data['buy_amount_w'])
 
         F = FactorInfo()
         F.data = data[factor_name]
@@ -515,11 +530,11 @@ class HighFrequencyFundFlowFactor(FactorBase):
                     **kwargs):
         """W切割反转因子(Rev_W)"""
         factor_name = sys._getframe().f_code.co_name + f'_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data = data.sort_index()
 
         data['ret'] = data['4hPrice'].groupby(KN.STOCK_ID.value).pct_change()
-        data.dropna(inplace=True)
+        data = data.dropna()
         data = data.groupby(KN.STOCK_ID.value,
                             group_keys=False).apply(lambda x: cls.W_cut(x, 'AmountMean', 'ret', n))
         data[factor_name] = data['M_high'] - data['M_low']
@@ -539,11 +554,11 @@ class HighFrequencyFundFlowFactor(FactorBase):
                     **kwargs):
         """高分位W反转因子(Rev_W_HQ)"""
         factor_name = sys._getframe().f_code.co_name + f'_{n}days'
-        data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data.sort_index(inplace=True)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data = data.sort_index()
 
         data['ret'] = data['close'].groupby(KN.STOCK_ID.value).pct_change()
-        data.dropna(inplace=True)
+        data = data.dropna()
         data = data.groupby(KN.STOCK_ID.value,
                             group_keys=False).apply(lambda x: cls.W_cut(x, 'AmountQuantile_9', 'ret', n))
         data[factor_name] = data['M_high'] - data['M_low']
@@ -597,25 +612,52 @@ class HighFrequencyFundFlowFactor(FactorBase):
         F.factor_name = data.name
 
         return F
+
     ####################################################################################################################
     @classmethod
     def FundFlow001_data_raw(cls,
                              n: int = 20,
+                             method: str = 'mid',
                              **kwargs):
         """平均单笔成交金额(AMTperTRD)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{n}days"
 
-        def func(data: pd.DataFrame):
-            r = data.groupby(KN.STOCK_ID.value,
-                             group_keys=False).apply(lambda x: (x[PVN.AMOUNT.value]).sum() / (x['tradenum']).sum())
-            return r
+        if method == 'raw':
+            def func(d: pd.DataFrame) -> pd.Series(float):
+                d_sub = d[cls().range]
+                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
+                    lambda x: x[PVN.AMOUNT.value].sum() / x['tradenum'].sum())
+                return r
 
-        Q = cls().csv_HFD_data(data_name=[PVN.AMOUNT.value, 'tradenum'],
-                               func=func,
-                               file_path=FPN.HFD_Stock_M.value)
-        res_raw = pd.concat(Q)
-        res = res_raw.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).mean()
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+            Q = cls().csv_HFD_data(data_name=[PVN.AMOUNT.value, 'tradenum'],
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_M.value)
+            res = pd.concat(Q)
+
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=['tradeNumRetUpSum_0', 'tradeNumRetDownSum_0', 'tradeNumRetEqualSum_0'],
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeTradeNum',
+                                    stock_id=KN.STOCK_ID.value)
+            data2 = cls()._csv_data(data_name=['amount'],
+                                    file_path=FPN.HFD_Stock_Depth.value,
+                                    file_name='MarketData',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            data['tradeNumSum'] = data['tradeNumRetUpSum_0'] + data['tradeNumRetDownSum_0'] + data[
+                'tradeNumRetEqualSum_0']
+            res = data['amount'] / data['tradeNumSum']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
 
         return res
@@ -623,31 +665,60 @@ class HighFrequencyFundFlowFactor(FactorBase):
     @classmethod
     def FundFlow002_data_raw(cls,
                              n: int = 20,
-                             **kwargs):
+                             method: str = 'mid',
+                             **kwargs) -> pd.Series(float):
         """平均单笔流入金额占比(AMTperTRD_IN_R)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{n}days"
 
-        def inflow(d: pd.DataFrame):
-            d_inflow = d[d['ret'] > 0]
+        if method == 'raw':
+            def inflow(d: pd.DataFrame) -> float:
+                d_inflow = d[d[KN.RETURN.value] > 0]
 
-            d_inflow_amt, d_inflow_num = (d_inflow[PVN.AMOUNT.value]).sum(), (d_inflow['tradenum']).sum()
-            d_all_amt, d_all_num = (d[PVN.AMOUNT.value]).sum(), (d['tradenum']).sum()
+                d_inflow_amt, d_inflow_num = (d_inflow[PVN.AMOUNT.value]).sum(), (d_inflow['tradenum']).sum()
+                d_all_amt, d_all_num = (d[PVN.AMOUNT.value]).sum(), (d['tradenum']).sum()
 
-            if d_inflow_num != 0 and d_all_amt != 0:
-                inflow_r = d_inflow_amt * d_all_num / d_inflow_num / d_all_amt
-                return inflow_r
+                if d_inflow_num != 0 and d_all_amt != 0:
+                    inflow_r = d_inflow_amt * d_all_num / d_inflow_num / d_all_amt
+                    return inflow_r
 
-        def func(data: pd.DataFrame):
-            data["ret"] = data.groupby(KN.STOCK_ID.value, group_keys=False)[PVN.CLOSE.value].pct_change()
-            r = data.groupby(KN.STOCK_ID.value, group_keys=False).apply(inflow)
-            return r
+            def func(d: pd.DataFrame) -> pd.Series(float):
+                d_sub = d[cls().range]
+                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
+                                                       group_keys=False)[PVN.CLOSE.value].pct_change()
+                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(inflow)
+                return r
 
-        Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value, 'tradenum'],
-                               func=func,
-                               file_path=FPN.HFD_Stock_M.value)
-        res_raw = pd.concat(Q)
-        res = res_raw.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).mean()
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value, 'tradenum'],
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_M.value)
+
+            res = pd.concat(Q)
+
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=['amtRetUpSum_0', 'amtRetDownSum_0', 'amtRetEqualSum_0'],
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeAmtSum',
+                                    stock_id=KN.STOCK_ID.value)
+            data2 = cls()._csv_data(data_name=['tradeNumRetUpSum_0', 'tradeNumRetDownSum_0', 'tradeNumRetEqualSum_0'],
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeTradeNum',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+            data['amountSum'] = data['amtRetUpSum_0'] + data['amtRetDownSum_0'] + data['amtRetEqualSum_0']
+            data['tradeNumSum'] = data['tradeNumRetUpSum_0'] + data['tradeNumRetDownSum_0'] + data[
+                'tradeNumRetEqualSum_0']
+
+            res = data['amtRetUpSum_0'] * data['tradeNumSum'] / data['tradeNumRetUpSum_0'] / data['amountSum']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
 
         return res
@@ -655,30 +726,59 @@ class HighFrequencyFundFlowFactor(FactorBase):
     @classmethod
     def FundFlow003_data_raw(cls,
                              n: int = 20,
-                             **kwargs):
+                             method: str = 'mid',
+                             **kwargs) -> pd.Series(float):
         """平均单笔流出金额占比(AMTperTRD_OUT_R)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{n}days"
 
-        def outflow(d: pd.DataFrame):
-            d_outflow = d[d['ret'] < 0]
-            d_outflow_amt, d_outflow_num = (d_outflow[PVN.AMOUNT.value]).sum(), (d_outflow['tradenum']).sum()
-            d_all_amt, d_all_num = (d[PVN.AMOUNT.value]).sum(), (d['tradenum']).sum()
+        if method == 'raw':
+            def outflow(d: pd.DataFrame) -> float:
+                d_outflow = d[d[KN.RETURN.value] < 0]
+                d_outflow_amt, d_outflow_num = (d_outflow[PVN.AMOUNT.value]).sum(), (d_outflow['tradenum']).sum()
+                d_all_amt, d_all_num = (d[PVN.AMOUNT.value]).sum(), (d['tradenum']).sum()
 
-            if d_outflow_num != 0 and d_all_amt != 0:
-                outflow_r = d_outflow_amt * d_all_num / d_outflow_num / d_all_amt
-                return outflow_r
+                if d_outflow_num != 0 and d_all_amt != 0:
+                    outflow_r = d_outflow_amt * d_all_num / d_outflow_num / d_all_amt
+                    return outflow_r
 
-        def func(data: pd.DataFrame):
-            data["ret"] = data.groupby(KN.STOCK_ID.value, group_keys=False)[PVN.CLOSE.value].pct_change()
-            r = data.groupby([KN.STOCK_ID.value], group_keys=False).apply(outflow)
-            return r
+            def func(d: pd.DataFrame) -> pd.Series(float):
+                d_sub = d[cls().range]
+                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
+                                                       group_keys=False)[PVN.CLOSE.value].pct_change()
+                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(outflow)
+                return r
 
-        Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value, 'tradenum'],
-                               func=func,
-                               file_path=FPN.HFD_Stock_M.value)
-        res_raw = pd.concat(Q)
-        res = res_raw.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).mean()
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value, 'tradenum'],
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_M.value)
+
+            res = pd.concat(Q)
+
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=['amtRetUpSum_0', 'amtRetDownSum_0', 'amtRetEqualSum_0'],
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeAmtSum',
+                                    stock_id=KN.STOCK_ID.value)
+            data2 = cls()._csv_data(data_name=['tradeNumRetUpSum_0', 'tradeNumRetDownSum_0', 'tradeNumRetEqualSum_0'],
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeTradeNum',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+            data['amountSum'] = data['amtRetUpSum_0'] + data['amtRetDownSum_0'] + data['amtRetEqualSum_0']
+            data['tradeNumSum'] = data['tradeNumRetUpSum_0'] + data['tradeNumRetDownSum_0'] + data[
+                'tradeNumRetEqualSum_0']
+
+            res = data['amtRetDownSum_0'] * data['tradeNumSum'] / data['tradeNumRetDownSum_0'] / data['amountSum']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
 
         return res
@@ -686,31 +786,58 @@ class HighFrequencyFundFlowFactor(FactorBase):
     @classmethod
     def FundFlow004_data_raw(cls,
                              n: int = 20,
-                             **kwargs):
+                             method: str = 'mid',
+                             **kwargs) -> pd.Series(float):
         """平均单笔流入流出金额之比(AMTperTRD_IN_OUT)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{n}days"
 
-        def ratio(d: pd.DataFrame):
-            d_inflow, d_outflow = d[d['ret'] > 0], d[d['ret'] < 0]
+        if method == 'raw':
+            def ratio(d: pd.DataFrame) -> float:
+                d_inflow, d_outflow = d[d[KN.RETURN.value] > 0], d[d[KN.RETURN.value] < 0]
 
-            d_inflow_amt, d_inflow_num = (d_inflow[PVN.AMOUNT.value]).sum(), (d_inflow['tradenum']).sum()
-            d_outflow_amt, d_outflow_num = (d_outflow[PVN.AMOUNT.value]).sum(), (d_outflow['tradenum']).sum()
+                d_inflow_amt, d_inflow_num = (d_inflow[PVN.AMOUNT.value]).sum(), (d_inflow['tradenum']).sum()
+                d_outflow_amt, d_outflow_num = (d_outflow[PVN.AMOUNT.value]).sum(), (d_outflow['tradenum']).sum()
 
-            if d_inflow_num != 0 and d_outflow_amt != 0:
-                ratio_ = d_inflow_amt * d_outflow_num / d_inflow_num / d_outflow_amt
-                return ratio_
+                if d_inflow_num != 0 and d_outflow_amt != 0:
+                    ratio_ = d_inflow_amt * d_outflow_num / d_inflow_num / d_outflow_amt
+                    return ratio_
 
-        def func(data: pd.DataFrame):
-            data["ret"] = data.groupby(KN.STOCK_ID.value, group_keys=False)[PVN.CLOSE.value].pct_change()
-            r = data.groupby([KN.STOCK_ID.value], group_keys=False).apply(ratio)
-            return r
+            def func(d: pd.DataFrame) -> pd.Series(float):
+                d_sub = d[cls().range]
+                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
+                                                       group_keys=False)[PVN.CLOSE.value].pct_change()
+                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(ratio)
+                return r
 
-        Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value, 'tradenum'],
-                               func=func,
-                               file_path=FPN.HFD_Stock_M.value)
-        res_raw = pd.concat(Q)
-        res = res_raw.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).mean()
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value, 'tradenum'],
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_M.value)
+
+            res = pd.concat(Q)
+
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=['amtRetUpSum_0', 'amtRetDownSum_0', 'amtRetEqualSum_0'],
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeAmtSum',
+                                    stock_id=KN.STOCK_ID.value)
+            data2 = cls()._csv_data(data_name=['tradeNumRetUpSum_0', 'tradeNumRetDownSum_0', 'tradeNumRetEqualSum_0'],
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeTradeNum',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            res = data['amtRetUpSum_0'] * data['tradeNumRetDownSum_0'] / data['tradeNumRetUpSum_0'] / data[
+                'amtRetDownSum_0']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
 
         return res
@@ -719,28 +846,48 @@ class HighFrequencyFundFlowFactor(FactorBase):
     def FundFlow005_data_raw(cls,
                              n: int = 20,
                              q: float = 0.2,
-                             **kwargs):
+                             method: str = 'mid',
+                             **kwargs) -> pd.Series(float):
         """大单资金净流入金额(AMT_NetIN_bigOrder)"""
-        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{q}q_{n}days"
+        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{str(q).replace('.','')}q_{n}days"
 
-        def big_order(d: pd.DataFrame):
-            d_sub = d[d['amt_per_min'] >= d['amt_per_min'].quantile(1 - q)]
-            d_sub_inflow, d_sub_outflow = d_sub[d_sub['ret'] > 0], d_sub[d_sub['ret'] < 0]
-            netInflow = (d_sub_inflow[PVN.AMOUNT.value]).sum() - (d_sub_outflow[PVN.AMOUNT.value]).sum()
-            return netInflow
+        if method == 'raw':
+            def big_order(d: pd.DataFrame) -> float:
+                d_sub = d[d['amt_per_min'] >= d['amt_per_min'].quantile(1 - q)]
+                d_sub_inflow, d_sub_outflow = d_sub[d_sub[KN.RETURN.value] > 0], d_sub[d_sub[KN.RETURN.value] < 0]
+                netInflow = d_sub_inflow[PVN.AMOUNT.value].sum() - d_sub_outflow[PVN.AMOUNT.value].sum()
+                return netInflow
 
-        def func(data: pd.DataFrame):
-            data["ret"] = data.groupby(KN.STOCK_ID.value, group_keys=False)[PVN.CLOSE.value].pct_change()
-            data['amt_per_min'] = data[PVN.AMOUNT.value] / data['tradenum']
-            r = data.groupby(KN.STOCK_ID.value, group_keys=False).apply(big_order)
-            return r
+            def func(d: pd.DataFrame) -> pd.Series(float):
+                d_sub = d[cls().range]
+                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
+                                                       group_keys=False)[PVN.CLOSE.value].pct_change()
+                d_sub['amt_per_min'] = d_sub[PVN.AMOUNT.value] / d_sub['tradenum']
+                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(big_order)
+                return r
 
-        Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value, 'tradenum'],
-                               func=func,
-                               file_path=FPN.HFD_Stock_M.value)
-        res_raw = pd.concat(Q)
-        res = res_raw.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).mean()
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value, 'tradenum'],
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_M.value)
+
+            res = pd.concat(Q)
+
+        elif method == 'mid':
+            data = cls()._csv_data(data_name=['AMTInFlowBigOrder', 'AMTOutFlowBigOrder'],
+                                   file_path=FPN.HFD_MidData.value,
+                                   file_name='TradeSpecial1',
+                                   stock_id=KN.STOCK_ID.value)
+
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            res = data['AMTInFlowBigOrder'] - data['AMTOutFlowBigOrder']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
 
         return res
@@ -749,29 +896,56 @@ class HighFrequencyFundFlowFactor(FactorBase):
     def FundFlow006_data_raw(cls,
                              n: int = 20,
                              q: float = 0.2,
-                             **kwargs):
+                             method: str = 'mid',
+                             **kwargs) -> pd.Series(float):
         """大单资金净流入率(AMT_NetIN_bigOrder_R)"""
-        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{q}q_{n}days"
+        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{str(q).replace('.','')}q_{n}days"
 
-        def big_order(d: pd.DataFrame):
-            d_sub = d[d['amt_per_min'] >= d['amt_per_min'].quantile(1 - q)]
-            d_sub_inflow, d_sub_outflow = d_sub[d_sub['ret'] > 0], d_sub[d_sub['ret'] < 0]
-            netInflow_R = ((d_sub_inflow[PVN.AMOUNT.value]).sum() - (d_sub_outflow[PVN.AMOUNT.value]).sum()) / (
-                d[PVN.AMOUNT.value]).sum()
-            return netInflow_R
+        if method == 'raw':
+            def big_order(d: pd.DataFrame) -> float:
+                d_sub = d[d['amt_per_min'] >= d['amt_per_min'].quantile(1 - q)]
+                d_sub_inflow, d_sub_outflow = d_sub[d_sub[KN.RETURN.value] > 0], d_sub[d_sub[KN.RETURN.value] < 0]
+                netInflow_R = (d_sub_inflow[PVN.AMOUNT.value].sum() - d_sub_outflow[PVN.AMOUNT.value].sum()) / \
+                              d[PVN.AMOUNT.value].sum()
+                return netInflow_R
 
-        def func(data: pd.DataFrame):
-            data["ret"] = data.groupby(KN.STOCK_ID.value, group_keys=False)[PVN.CLOSE.value].pct_change()
-            data['amt_per_min'] = data[PVN.AMOUNT.value] / data['tradenum']
-            r = data.groupby(KN.STOCK_ID.value, group_keys=False).apply(big_order)
-            return r
+            def func(d: pd.DataFrame) -> pd.Series(float):
+                d_sub = d[cls().range]
+                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
+                                                       group_keys=False)[PVN.CLOSE.value].pct_change()
+                d_sub['amt_per_min'] = d_sub[PVN.AMOUNT.value] / d_sub['tradenum']
+                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(big_order)
+                return r
 
-        Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value, 'tradenum'],
-                               func=func,
-                               file_path=FPN.HFD_Stock_M.value)
-        res_raw = pd.concat(Q)
-        res = res_raw.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).mean()
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value, 'tradenum'],
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_M.value)
+
+            res = pd.concat(Q)
+
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=['AMTInFlowBigOrder', 'AMTOutFlowBigOrder'],
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeSpecial1',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data2 = cls()._csv_data(data_name=['amount'],
+                                    file_path=FPN.HFD_Stock_Depth.value,
+                                    file_name='MarketData',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            res = (data['AMTInFlowBigOrder'] - data['AMTOutFlowBigOrder']) / data['amount']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
 
         return res
@@ -784,16 +958,15 @@ class HighFrequencyFundFlowFactor(FactorBase):
             data_name=['BuyBigOrderMeanStd_AM_120min', 'BuyBigOrderMeanStd_PM_120min'],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='CashFlowIntraday',
-            stock_id='code')
+            stock_id=KN.STOCK_ID.value)
 
         data2 = cls()._csv_data(
             data_name=[PVN.AMOUNT.value],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='MarketData',
-            stock_id='code')
+            stock_id=KN.STOCK_ID.value)
 
-        res = pd.merge(data1, data2, on=['date', 'code'], how='inner')
-        res.rename(columns={'code': KN.STOCK_ID.value}, inplace=True)
+        res = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
 
         return res
 
@@ -805,16 +978,15 @@ class HighFrequencyFundFlowFactor(FactorBase):
             data_name=['SaleBigOrderMeanStd_AM_120min', 'SaleBigOrderMeanStd_PM_120min'],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='CashFlowIntraday',
-            stock_id='code')
+            stock_id=KN.STOCK_ID.value)
 
         data2 = cls()._csv_data(
             data_name=[PVN.AMOUNT.value],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='MarketData',
-            stock_id='code')
+            stock_id=KN.STOCK_ID.value)
 
-        res = pd.merge(data1, data2, on=['date', 'code'], how='inner')
-        res.rename(columns={'code': KN.STOCK_ID.value}, inplace=True)
+        res = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
 
         return res
 
@@ -827,16 +999,15 @@ class HighFrequencyFundFlowFactor(FactorBase):
                        'SaleBigOrderMeanStd_AM_120min', 'SaleBigOrderMeanStd_PM_120min'],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='CashFlowIntraday',
-            stock_id='code')
+            stock_id=KN.STOCK_ID.value)
 
         data2 = cls()._csv_data(
             data_name=[PVN.AMOUNT.value],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='MarketData',
-            stock_id='code')
+            stock_id=KN.STOCK_ID.value)
 
-        res = pd.merge(data1, data2, on=['date', 'code'], how='inner')
-        res.rename(columns={'code': KN.STOCK_ID.value}, inplace=True)
+        res = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
 
         return res
 
@@ -849,24 +1020,48 @@ class HighFrequencyFundFlowFactor(FactorBase):
     @classmethod
     def FundFlow013_data_raw(cls,
                              n: int = 20,
-                             **kwargs):
+                             method: str = 'mid',
+                             **kwargs) -> pd.Series(float):
         """开盘连续竞价成交占比(HFD_callVol_O_R)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{n}days"
 
-        def call_volume(d: pd.DataFrame):
-            call = d[d['time'] < '09:30:00']
-            return (call[PVN.AMOUNT.value]).sum() / (d[PVN.AMOUNT.value]).sum()
+        if method == 'raw':
+            def call_volume(d: pd.DataFrame) -> float:
+                call = d[d[KN.TRADE_TIME.value] < cls().callAM]
+                return call[PVN.AMOUNT.value].sum() / d[PVN.AMOUNT.value].sum()
 
-        def func(data: pd.DataFrame):
-            r = data.groupby(KN.STOCK_ID.value, group_keys=False).apply(call_volume)
-            return r
+            def func(d: pd.DataFrame) -> pd.Series(float):
+                r = d.groupby(KN.STOCK_ID.value, group_keys=False).apply(call_volume)
+                return r
 
-        Q = cls().csv_HFD_data(data_name=[PVN.AMOUNT.value],
-                               func=func,
-                               file_path=FPN.HFD_Stock_M.value)
-        res = pd.concat(Q)
-        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).mean()
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+            Q = cls().csv_HFD_data(data_name=[PVN.AMOUNT.value],
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_M.value)
+            res = pd.concat(Q)
+
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=['amtAM_call'],
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeAmtSum',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data2 = cls()._csv_data(data_name=['amount'],
+                                    file_path=FPN.HFD_Stock_Depth.value,
+                                    file_name='MarketData',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            res = data['amtAM_call'] / data['amount']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
 
         return res
@@ -874,7 +1069,8 @@ class HighFrequencyFundFlowFactor(FactorBase):
     @classmethod
     def FundFlow018_data_raw(cls,
                              period: str = 'all',
-                             **kwargs):
+                             method: str = 'mid',
+                             **kwargs) -> pd.DataFrame:
         """
         主买占比(buy_drive_prop)
         """
@@ -885,7 +1081,7 @@ class HighFrequencyFundFlowFactor(FactorBase):
                 name_list = ['BuyAll_AM_30min', 'SaleAll_AM_30min']
             elif period == 'between':
                 name_list = ['BuyAll_AM_30min', 'BuyAll_AM_120min', 'BuyAll_PM_30min', 'BuyAll_PM_120min',
-                             'SaleAll_AM_30min']
+                             'SaleAll_AM_30min', 'SaleAll_PM_30min']
             else:
                 name_list = ['BuyAll_AM_30min']
                 print(f'Input error:{period}')
@@ -894,71 +1090,133 @@ class HighFrequencyFundFlowFactor(FactorBase):
                 data_name=name_list,
                 file_path=FPN.HFD_Stock_CF.value,
                 file_name='CashFlowIntraday',
-                stock_id='code')
+                stock_id=KN.STOCK_ID.value)
 
             data2 = cls()._csv_data(
                 data_name=[PVN.AMOUNT.value],
                 file_path=FPN.HFD_Stock_CF.value,
                 file_name='MarketData',
-                stock_id='code')
+                stock_id=KN.STOCK_ID.value)
 
-            res = pd.merge(data1, data2, on=['date', 'code'], how='inner')
-            res.rename(columns={'code': KN.STOCK_ID.value}, inplace=True)
+            res = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
         else:
-            def tail_volume(d: pd.DataFrame):
-                d_sub = d[(d['time'] >= '14:27:00') & (d['time'] <= '14:56:00')]
-                return d_sub[['buyamount', PVN.AMOUNT.value]].sum()
+            if method == 'raw':
+                def tail_volume(d: pd.DataFrame) -> pd.DataFrame:
+                    d_sub = d[d[KN.TRADE_TIME.value] >= '14:30:00']
+                    return d_sub[['buyamount', PVN.AMOUNT.value]].sum()
 
-            def func(data: pd.DataFrame):
-                data.dropna(inplace=True)
-                r = data.groupby(KN.STOCK_ID.value, group_keys=False).apply(tail_volume)
-                return r
+                def func(d: pd.DataFrame) -> pd.DataFrame:
+                    d = d.dropna()
+                    r = d.groupby(KN.STOCK_ID.value, group_keys=False).apply(tail_volume)
+                    return r
 
-            Q = cls().csv_HFD_data(data_name=[PVN.AMOUNT.value, 'buyamount'],
-                                   func=func,
-                                   file_path=FPN.HFD_Stock_M.value)
-            res = pd.concat(Q)
-            res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
-            res.reset_index(inplace=True)
+                Q = cls().csv_HFD_data(data_name=[PVN.AMOUNT.value, 'buyamount'],
+                                       func=func,
+                                       file_path=FPN.HFD_Stock_M.value)
+                res = pd.concat(Q)
+            elif method == 'mid':
+                data1 = cls()._csv_data(data_name=['buyAmtSumPM_30min'],
+                                        file_path=FPN.HFD_MidData.value,
+                                        file_name='TradeBuyAmtSum',
+                                        stock_id=KN.STOCK_ID.value)
+
+                data2 = cls()._csv_data(data_name=['amtPM_30min'],
+                                        file_path=FPN.HFD_MidData.value,
+                                        file_name='TradeAmtSum',
+                                        stock_id=KN.STOCK_ID.value)
+
+                data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+                res = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+                res = res.rename(columns={"buyAmtSumPM_30min": "buyamount", "amtPM_30min": PVN.AMOUNT.value})
+
+            else:
+                print('Parameter is wrong!')
+                res = pd.Series()
+
+            res = cls().reindex(res)
+            res = res.reset_index()
         return res
 
     @classmethod
     def FundFlow019_data_raw(cls,
                              period: str = 'all',
                              n: int = 20,
+                             method: str = 'mid',
                              **kwargs):
         """主买强度(buy_strength)"""
-        factor_name = sys._getframe().f_code.co_name[: -9] + f'_{period}_time_{n}days'
+        factor_name = sys._getframe().f_code.co_name[: -9] + f'_{period}_{n}days'
+
         if period == 'all':
-            beg, end = '09:30:00', '14:56:00'
+            beg, end = '09:30:00', '15:00:00'
+            buyAmtSum = ["buyAmtSumAM_all", "buyAmtSumPM_all"]
+            buyAmtStd = ["buyAmtStd_all"]
         elif period == 'open':
             beg, end = '09:30:00', '09:59:00'
+            buyAmtSum = ["buyAmtSumAM_30min"]
+            buyAmtStd = ["buyAmtStd_open"]
         elif period == 'between':
-            beg, end = '10:00:00', '14:26:00'
+            beg, end = '10:00:00', '14:29:00'
+            buyAmtSum = ["buyAmtSumAM_all", "buyAmtSumAM_30min", "buyAmtSumPM_all", "buyAmtSumPM_30min"]
+            buyAmtStd = ["buyAmtStd_between"]
         elif period == 'close':
-            beg, end = '14:27:00', '14:56:00'
+            beg, end = '14:30:00', '15:00:00'
+            buyAmtSum = ["buyAmtSumPM_30min"]
+            buyAmtStd = ["buyAmtStd_close"]
         else:
-            beg, end = '09:30:00', '14:56:00'
+            beg, end = '09:30:00', '15:00:00'
+            buyAmtSum = ["buyAmtSumAM_all", "buyAmtSumPM_all"]
+            buyAmtStd = ["buyAmtStd_all"]
             print(f'Input error:{period}')
 
-        def tail_volume(d: pd.DataFrame):
-            d_sub = d[(d['time'] >= beg) & (d['time'] <= end)]
-            if d_sub['buyamount'].std() != 0:
-                return d_sub['buyamount'].mean() / d_sub['buyamount'].std()
+        if method == 'raw':
+            def tail_volume(d: pd.DataFrame):
+                d_sub = d[(d[KN.TRADE_TIME.value] >= beg) & (d[KN.TRADE_TIME.value] <= end)]
+                if d_sub['buyamount'].std() != 0:
+                    return d_sub['buyamount'].mean() / d_sub['buyamount'].std()
+
+            def func(d: pd.DataFrame):
+                d = d.dropna()
+                r = d.groupby(KN.STOCK_ID.value, group_keys=False).apply(tail_volume)
+                return r
+
+            Q = cls().csv_HFD_data(data_name=['buyamount'],
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_M.value)
+            res = pd.concat(Q)
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=buyAmtSum,
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeBuyAmtSum',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data2 = cls()._csv_data(data_name=buyAmtStd,
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeAmtStd',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            if period == 'all':
+                res = data[buyAmtSum].sum(axis=1) / 240 / data["buyAmtStd_all"]
+            elif period == 'open':
+                res = data[buyAmtSum].sum(axis=1) / 30 / data["buyAmtStd_open"]
+            elif period == 'between':
+                data["buyAM"] = data["buyAmtSumAM_all"] - data["buyAmtSumAM_30min"]
+                data["buyPM"] = data["buyAmtSumPM_all"] - data["buyAmtSumPM_30min"]
+                res = (data["buyAM"] + data["buyPM"]) / 180 / data["buyAmtStd_between"]
+            elif period == 'close':
+                res = data[buyAmtSum].sum(axis=1) / 30 / data["buyAmtStd_close"]
             else:
-                return np.nan
+                res = data[buyAmtSum].sum(axis=1) / 240 / data["buyAmtStd_all"]
+                print(f'Input error:{period}')
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
 
-        def func(data: pd.DataFrame):
-            data.dropna(inplace=True)
-            r = data.groupby(KN.STOCK_ID.value, group_keys=False).apply(tail_volume)
-            return r
-
-        Q = cls().csv_HFD_data(data_name=['buyamount'],
-                               func=func,
-                               file_path=FPN.HFD_Stock_M.value)
-        res = pd.concat(Q)
-        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_period=min(n, 2)).mean()
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
         return res
 
@@ -966,42 +1224,98 @@ class HighFrequencyFundFlowFactor(FactorBase):
     def FundFlow020_data_raw(cls,
                              period: str = 'all',
                              n: int = 20,
+                             method: str = 'mid',
                              **kwargs):
         """净主买强度(net_strength_stand)"""
-        factor_name = sys._getframe().f_code.co_name[: -9] + f'_{period}_time_{n}days'
+        factor_name = sys._getframe().f_code.co_name[: -9] + f'_{period}_{n}days'
+
         if period == 'all':
-            beg, end = '09:30:00', '14:56:00'
+            beg, end = '09:30:00', '15:00:00'
+            buyAmtSum = ["buyAmtSumAM_all", "buyAmtSumPM_all"]
+            sellAmtSum = ["sellAmtSumAM_all", "sellAmtSumPM_all"]
+            netAmtStd = ["netAmtStd_all"]
         elif period == 'open':
             beg, end = '09:30:00', '09:59:00'
+            buyAmtSum = ["buyAmtSumAM_30min"]
+            sellAmtSum = ["sellAmtSumAM_30min"]
+            netAmtStd = ["netAmtStd_open"]
         elif period == 'between':
-            beg, end = '10:00:00', '14:26:00'
+            beg, end = '10:00:00', '14:29:00'
+            buyAmtSum = ["buyAmtSumAM_all", "buyAmtSumAM_30min", "buyAmtSumPM_all", "buyAmtSumPM_30min"]
+            sellAmtSum = ["sellAmtSumAM_all", "sellAmtSumAM_30min", "sellAmtSumPM_all", "sellAmtSumPM_30min"]
+            netAmtStd = ["netAmtStd_between"]
         elif period == 'close':
-            beg, end = '14:27:00', '14:56:00'
+            beg, end = '14:30:00', '15:00:00'
+            buyAmtSum = ["buyAmtSumPM_30min"]
+            sellAmtSum = ["sellAmtSumPM_30min"]
+            netAmtStd = ["netAmtStd_close"]
         else:
-            beg, end = '09:30:00', '14:56:00'
+            beg, end = '09:30:00', '15:00:00'
+            buyAmtSum = ["buyAmtSumAM_all", "buyAmtSumPM_all"]
+            sellAmtSum = ["sellAmtSumAM_all", "sellAmtSumPM_all"]
+            netAmtStd = ["netAmtStd_all"]
             print(f'Input error:{period}')
 
-        def tail_volume(d: pd.DataFrame):
-            d_sub = d[(d['time'] >= beg) & (d['time'] <= end)]
-            d_sub['net'] = 2 * d_sub['buyamount'] - d_sub[PVN.AMOUNT.value]
-            if d_sub['net'].std() != 0:
-                return d_sub['net'].mean() / d_sub['net'].std()
-            else:
-                return np.nan
+        if method == 'raw':
+            def tail_volume(d: pd.DataFrame):
+                d_sub = d[(d[KN.TRADE_TIME.value] >= beg) &
+                          (d[KN.TRADE_TIME.value] <= end)]
+                d_sub['net'] = 2 * d_sub['buyamount'] - d_sub[PVN.AMOUNT.value]
+                if d_sub['net'].std() != 0:
+                    return d_sub['net'].mean() / d_sub['net'].std()
 
-        def func(data: pd.DataFrame):
-            try:
-                data.dropna(inplace=True)
-                r = data.groupby(KN.STOCK_ID.value, group_keys=False).apply(tail_volume)
+            def func(d: pd.DataFrame):
+                d = d.dropna()
+                r = d.groupby(KN.STOCK_ID.value, group_keys=False).apply(tail_volume)
                 return r
-            except Exception as e:
-                print(f"{data['date'].iloc[0]}-{e}")
-        Q = cls().csv_HFD_data(data_name=['buyamount', PVN.AMOUNT.value],
-                               func=func,
-                               file_path=FPN.HFD_Stock_M.value)
-        res = pd.concat(Q)
-        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_period=min(n, 2)).mean()
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+
+            Q = cls().csv_HFD_data(data_name=['buyamount', PVN.AMOUNT.value],
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_M.value)
+            res = pd.concat(Q)
+
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=buyAmtSum,
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeBuyAmtSum',
+                                    stock_id=KN.STOCK_ID.value)
+            data2 = cls()._csv_data(data_name=sellAmtSum,
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeSellAmtSum',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data3 = cls()._csv_data(data_name=netAmtStd,
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeAmtStd',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data_ = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+            data = pd.merge(data_, data3, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            if period == 'all':
+                res = (data[buyAmtSum].sum(axis=1) - data[sellAmtSum].sum(axis=1)) / 240 / data["netAmtStd_all"]
+            elif period == 'open':
+                res = (data[buyAmtSum].sum(axis=1) - data[sellAmtSum].sum(axis=1)) / 30 / data["netAmtStd_open"]
+            elif period == 'between':
+                data["buyAM"] = data["buyAmtSumAM_all"] - data["buyAmtSumAM_30min"]
+                data["buyPM"] = data["buyAmtSumPM_all"] - data["buyAmtSumPM_30min"]
+                data["sellAM"] = data["sellAmtSumAM_all"] - data["sellAmtSumAM_30min"]
+                data["sellPM"] = data["sellAmtSumPM_all"] - data["sellAmtSumPM_30min"]
+                res = (data["buyAM"] + data["buyPM"] - data['sellAM'] - data['sellPM']) / 180 / data[
+                    "netAmtStd_between"]
+            elif period == 'close':
+                res = (data[buyAmtSum].sum(axis=1) - data[sellAmtSum].sum(axis=1)) / 30 / data["netAmtStd_close"]
+            else:
+                res = (data[buyAmtSum].sum(axis=1) - data[sellAmtSum].sum(axis=1)) / 240 / data["netAmtStd_all"]
+                print(f'Input error:{period}')
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
         return res
 
@@ -1015,16 +1329,15 @@ class HighFrequencyFundFlowFactor(FactorBase):
                        'SaleAll_AM_120min', 'SaleAll_PM_120min'],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='CashFlowIntraday',
-            stock_id='code')
+            stock_id=KN.STOCK_ID.value)
 
         data2 = cls()._csv_data(
             data_name=[PVN.AMOUNT.value],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='MarketData',
-            stock_id='code')
+            stock_id=KN.STOCK_ID.value)
 
-        res = pd.merge(data1, data2, on=['date', 'code'], how='inner')
-        res.rename(columns={'code': KN.STOCK_ID.value}, inplace=True)
+        res = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
 
         return res
 
@@ -1038,65 +1351,85 @@ class HighFrequencyFundFlowFactor(FactorBase):
                        'BuyAll_AM_120min', 'BuyAll_PM_120min'],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='CashFlowIntraday',
-            stock_id='code')
+            stock_id=KN.STOCK_ID.value)
 
         data2 = cls()._csv_data(
             data_name=[PVN.AMOUNT.value],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='MarketData',
-            stock_id='code')
+            stock_id=KN.STOCK_ID.value)
 
-        res = pd.merge(data1, data2, on=['date', 'code'], how='inner')
-        res.rename(columns={'code': KN.STOCK_ID.value}, inplace=True)
-
-        return res
-
-    @classmethod
-    def FundFlow027_data_raw(cls,
-                             **kwargs):
-        """大买大卖成交金额占比(HFD_buy_sell_big_R)"""
-        data1 = cls()._csv_data(
-            data_name=['BuyBigOrderMeanStd_AM_120min', 'BuyBigOrderMeanStd_PM_120min',
-                       'SaleBigOrderMeanStd_AM_120min', 'SaleBigOrderMeanStd_PM_120min'],
-            file_path=FPN.HFD_Stock_CF.value,
-            file_name='CashFlowIntraday',
-            stock_id='code')
-
-        data2 = cls()._csv_data(
-            data_name=[PVN.AMOUNT.value],
-            file_path=FPN.HFD_Stock_CF.value,
-            file_name='MarketData',
-            stock_id='code')
-
-        res = pd.merge(data1, data2, on=['date', 'code'], how='inner')
-        res.rename(columns={'code': KN.STOCK_ID.value}, inplace=True)
+        res = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
 
         return res
 
-    @classmethod
-    def FundFlow028_data_raw(cls,
-                             n: int = 20,
-                             **kwargs):
-        """尾盘成交占比(Vol_prop_tail)"""
-        factor_name = sys._getframe().f_code.co_name[: -9] + f'_{n}days'
+    # @classmethod
+    # def FundFlow027_data_raw(cls,
+    #                          **kwargs):
+    #     """大买大卖成交金额占比(HFD_buy_sell_big_R)"""
+    #     data1 = cls()._csv_data(
+    #         data_name=['BuyBigOrderMeanStd_AM_120min', 'BuyBigOrderMeanStd_PM_120min',
+    #                    'SaleBigOrderMeanStd_AM_120min', 'SaleBigOrderMeanStd_PM_120min'],
+    #         file_path=FPN.HFD_Stock_CF.value,
+    #         file_name='CashFlowIntraday',
+    #         stock_id=KN.STOCK_ID.value)
+    #
+    #     data2 = cls()._csv_data(
+    #         data_name=[PVN.AMOUNT.value],
+    #         file_path=FPN.HFD_Stock_CF.value,
+    #         file_name='MarketData',
+    #         stock_id=KN.STOCK_ID.value)
+    #
+    #     res = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+    #
+    #     return res
 
-        def call_volume(d: pd.DataFrame):
-            vol_tail = d[d['time'] > '14:30:00']
-            return (vol_tail[PVN.AMOUNT.value]).sum() / (d[PVN.AMOUNT.value]).sum()
-
-        def func(data: pd.DataFrame):
-            r = data.groupby(KN.STOCK_ID.value, group_keys=False).apply(call_volume)
-            return r
-
-        Q = cls().csv_HFD_data(data_name=[PVN.AMOUNT.value],
-                               func=func,
-                               file_path=FPN.HFD_Stock_M.value)
-        res = pd.concat(Q)
-        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).mean()
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
-        res.name = factor_name
-
-        return res
+    # @classmethod
+    # def FundFlow028_data_raw(cls,
+    #                          n: int = 20,
+    #                          method: str = 'mid',
+    #                          **kwargs) -> pd.Series(float):
+    #     """尾盘成交占比(Vol_prop_tail)"""
+    #     factor_name = sys._getframe().f_code.co_name[: -9] + f'_{n}days'
+    #
+    #     if method == 'raw':
+    #         def call_volume(d: pd.DataFrame) -> float:
+    #             vol_tail = d[d[KN.TRADE_TIME.value] >= '14:30:00']
+    #             return vol_tail[PVN.AMOUNT.value].sum() / d[PVN.AMOUNT.value].sum()
+    #
+    #         def func(d: pd.DataFrame) -> pd.Series(float):
+    #             r = d.groupby(KN.STOCK_ID.value, group_keys=False).apply(call_volume)
+    #             return r
+    #
+    #         Q = cls().csv_HFD_data(data_name=[PVN.AMOUNT.value],
+    #                                func=func,
+    #                                file_path=FPN.HFD_Stock_M.value)
+    #         res = pd.concat(Q)
+    #     elif method == 'mid':
+    #         data1 = cls()._csv_data(data_name=['amtPM_30min'],
+    #                                 file_path=FPN.HFD_MidData.value,
+    #                                 file_name='TradeAmtSum',
+    #                                 stock_id=KN.STOCK_ID.value)
+    #
+    #         data2 = cls()._csv_data(data_name=['amount'],
+    #                                 file_path=FPN.HFD_Stock_Depth.value,
+    #                                 file_name='MarketData',
+    #                                 stock_id=KN.STOCK_ID.value)
+    #
+    #         data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+    #         data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+    #
+    #         res = data['amtPM_30min'] / data['amount']
+    #     else:
+    #         print('Parameter is wrong!')
+    #         res = pd.Series()
+    #
+    #     res[np.isinf(res)] = np.nan
+    #     res = cls().reindex(res)
+    #     res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
+    #     res.name = factor_name
+    #
+    #     return res
 
     @classmethod
     def FundFlow029_data_raw(cls,
@@ -1107,9 +1440,7 @@ class HighFrequencyFundFlowFactor(FactorBase):
             data_name=['BuyAll_AM_30min', 'SaleAll_AM_30min'],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='CashFlowIntraday',
-            stock_id='code')
-
-        res.rename(columns={'code': KN.STOCK_ID.value}, inplace=True)
+            stock_id=KN.STOCK_ID.value)
 
         return res
 
@@ -1121,29 +1452,53 @@ class HighFrequencyFundFlowFactor(FactorBase):
             data_name=['BuyAll_AM_120min', 'SaleAll_AM_120min', 'BuyAll_PM_120min', 'SaleAll_PM_120min'],
             file_path=FPN.HFD_Stock_CF.value,
             file_name='CashFlowIntraday',
-            stock_id='code')
-
-        data.rename(columns={'code': 'stock_id'}, inplace=True)
+            stock_id=KN.STOCK_ID.value)
 
         return data
 
     @classmethod
     def FundFlow033_data_raw(cls,
                              x_min: int = 5,
+                             n: int = 20,
+                             method: str = 'mid',
                              **kwargs):
         """开盘X分钟成交占比(Open_X_vol)"""
-        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{x_min}min_O"
+        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{x_min}min_O_{n}days"
 
-        H, M = divmod(x_min, 60)
-        end = (dt.time(9 + H, 30 + M)).strftime("%H:%M:%S")
+        if method == 'raw':
+            end = (dt.datetime(2020, 12, 31, 9, 30) + dt.timedelta(minutes=x_min)).strftime("%H:%M:%S")
 
-        def func(data: pd.DataFrame):
-            r = data.groupby([KN.STOCK_ID.value]).apply(lambda x: cls.Volume_Percentage(x, "09:30:00", end))
-            return r
+            def func(d: pd.DataFrame):
+                r = d.groupby(KN.STOCK_ID.value).apply(lambda x: cls.Volume_Percentage(x, cls().callAM, end))
+                return r
 
-        Q = cls().csv_HFD_data(data_name=[PVN.VOLUME.value], func=func)
-        res = pd.concat(Q)
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+            Q = cls().csv_HFD_data(data_name=[PVN.AMOUNT.value], func=func)
+
+            res = pd.concat(Q)
+
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=[f'amtAM_{x_min}min', 'amtAM_call'],
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeAmtSum',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data2 = cls()._csv_data(data_name=['amount'],
+                                    file_path=FPN.HFD_Stock_Depth.value,
+                                    file_name='MarketData',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            res = (data[f'amtAM_{x_min}min'] - data['amtAM_call']) / data['amount']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
 
         return res
@@ -1151,20 +1506,46 @@ class HighFrequencyFundFlowFactor(FactorBase):
     @classmethod
     def FundFlow034_data_raw(cls,
                              x_min: int = 5,
+                             n: int = 20,
+                             method: str = 'raw',
                              **kwargs):
         """收盘X分钟成交占比(Close_X_vol)"""
-        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{x_min}min_C"
+        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{x_min}min_C_{n}days"
 
-        H, M = divmod(120 - x_min, 60)
-        star = (dt.time(13 + H, M)).strftime("%H:%M:%S")
+        if method == 'raw':
+            star = (dt.datetime(2020, 12, 31, 15, 00) - dt.timedelta(minutes=x_min)).strftime("%H:%M:%S")
 
-        def func(data: pd.DataFrame):
-            r = data.groupby([KN.STOCK_ID.value]).apply(lambda x: cls.Volume_Percentage(x, star, "15:00:00"))
-            return r
+            def func(d: pd.DataFrame):
+                r = d.groupby([KN.STOCK_ID.value]).apply(lambda x: cls.Volume_Percentage(x, star, cls().callPM))
+                return r
 
-        Q = cls().csv_HFD_data(data_name=[PVN.VOLUME.value], func=func)
-        res = pd.concat(Q)
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+            Q = cls().csv_HFD_data(data_name=[PVN.AMOUNT.value], func=func)
+
+            res = pd.concat(Q)
+
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=[f'amtPM_{x_min}min'],
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name='TradeAmtSum',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data2 = cls()._csv_data(data_name=['amount'],
+                                    file_path=FPN.HFD_Stock_Depth.value,
+                                    file_name='MarketData',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            res = data[f'amtPM_{x_min}min'] / data['amount']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
 
         return res
@@ -1172,23 +1553,41 @@ class HighFrequencyFundFlowFactor(FactorBase):
     @classmethod
     def FundFlow035_data_raw(cls,
                              n: int = 20,
+                             method: str = 'mid',
                              **kwargs):
         """资金流向(CashFlow)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{n}days"
 
-        def func(data: pd.DataFrame):
-            data["close_diff"] = data.groupby(KN.STOCK_ID.value, group_keys=False)['close'].diff(1)
-            data.dropna(inplace=True)
-            r = data.groupby(KN.STOCK_ID.value,
-                             group_keys=False).apply(
-                lambda x: (np.sign(x['close_diff']) * x[PVN.AMOUNT.value]).sum() / (x[PVN.AMOUNT.value])).sum()
-            return r
+        if method == 'raw':
+            def func(d: pd.DataFrame):
+                d_sub = d[cls().range]
+                d_sub["closeDiff"] = d_sub.groupby(KN.STOCK_ID.value, group_keys=False)[PVN.CLOSE.value].diff(1)
+                r = d_sub.groupby(KN.STOCK_ID.value,
+                                  group_keys=False).apply(
+                    lambda x: (np.sign(x['closeDiff']) * x[PVN.AMOUNT.value]).sum() / (x[PVN.AMOUNT.value]).sum())
+                return r
 
-        Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value], func=func)
-        res = pd.concat(Q)
-        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).mean()
+            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value], func=func)
 
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+            res = pd.concat(Q)
+
+        elif method == 'mid':
+            data = cls()._csv_data(data_name=["CashFlow"],
+                                   file_path=FPN.HFD_MidData.value,
+                                   file_name='TradeSpecial1',
+                                   stock_id=KN.STOCK_ID.value)
+
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            res = data["CashFlow"]
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
 
         return res
@@ -1200,8 +1599,7 @@ class HighFrequencyFundFlowFactor(FactorBase):
         data = cls()._csv_data(data_name=['AmountMean', '4hPrice'],
                                file_path=FPN.HFD_Stock_Depth.value,
                                file_name='VwapFactor',
-                               stock_id='code')
-        data.rename(columns={'code': 'stock_id'}, inplace=True)
+                               stock_id=KN.STOCK_ID.value)
         return data
 
     @classmethod
@@ -1212,75 +1610,106 @@ class HighFrequencyFundFlowFactor(FactorBase):
         data1 = cls()._csv_data(data_name=['AmountQuantile_9'],
                                 file_path=FPN.HFD_Stock_CF.value,
                                 file_name='CashFlowStat',
-                                stock_id='code')
+                                stock_id=KN.STOCK_ID.value)
 
-        data2 = cls()._csv_data(data_name=['close'],
+        data2 = cls()._csv_data(data_name=[PVN.CLOSE.value],
                                 file_path=FPN.HFD_Stock_CF.value,
                                 file_name='MarketData',
-                                stock_id='code')
+                                stock_id=KN.STOCK_ID.value)
 
-        data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, 'code'], how='inner')
-        data.rename(columns={'code': 'stock_id'}, inplace=True)
+        data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
         return data
 
-    @classmethod
+    @classmethod  # 还未改
     def FundFlow046_data_raw(cls,
                              period: str = 'all',
                              depth: int = 5,
                              n: int = 20,
+                             method: str = 'mid',
                              **kwargs):
         """平均净委买变化率(bid_mean_R)"""
 
-        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{n}days"
+        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{depth}depth_{period}_{n}days"
 
-        bidvolume = [f'bidvolume{i}' for i in range(1, depth + 1)]
-        askvolume = [f'askvolume{i}' for i in range(1, depth + 1)]
-
+        # list 字段顺序不能颠倒
         if period == 'all':
-            beg, end = '09:30:00', '14:56:00'
+            beg, end = '09:30:00', '15:00:00'
+            bidVolSum = [f"bid{depth}VolSum_4h", f"bid{depth}VolSum_0h"]
+            askVolSum = [f"ask{depth}VolSum_4h", f"ask{depth}VolSum_0h"]
         elif period == 'open':
-            beg, end = '09:30:00', '09:59:00'
+            beg, end = '09:30:00', '10:00:00'
+            bidVolSum = [f"bid{depth}VolSum_0.5h", f"bid{depth}VolSum_0h"]
+            askVolSum = [f"ask{depth}VolSum_0.5h", f"ask{depth}VolSum_0h"]
         elif period == 'between':
-            beg, end = '10:00:00', '14:26:00'
+            beg, end = '10:00:00', '14:30:00'
+            bidVolSum = [f"bid{depth}VolSum_3.5h", f"bid{depth}VolSum_0.5h"]
+            askVolSum = [f"ask{depth}VolSum_3.5h", f"ask{depth}VolSum_0.5h"]
         elif period == 'close':
-            beg, end = '14:27:00', '14:56:00'
+            beg, end = '14:30:00', '15:00:00'
+            bidVolSum = [f"bid{depth}VolSum_4h", f"bid{depth}VolSum_3.5h"]
+            askVolSum = [f"ask{depth}VolSum_4h", f"ask{depth}VolSum_3.5h"]
         else:
-            beg, end = '09:30:00', '14:56:00'
+            beg, end = '09:30:00', '15:00:00'
+            bidVolSum = [f"bid{depth}VolSum_4h", f"bid{depth}VolSum_0h"]
+            askVolSum = [f"ask{depth}VolSum_4h", f"ask{depth}VolSum_0h"]
             print(f'Input error:{period}')
 
-        def func(data: pd.DataFrame, **kwargs_sub):  # TODO
-            try:
-                liq_stock = kwargs_sub['liq_stock']
-                data_sub = data[(data['time'] >= beg) & (data['time'] <= end)]
-                data_sub['order_diff'] = data_sub[bidvolume].sum(axis=1) - data_sub[askvolume].sum(axis=1)
-                order_diff = data_sub.groupby(KN.STOCK_ID.value)['order_diff'].last() - \
-                             data_sub.groupby(KN.STOCK_ID.value)['order_diff'].first()
-                liq_stock_sub = liq_stock[liq_stock[KN.TRADE_DATE.value] == data[KN.TRADE_DATE.value][0]]
-                liq_stock_sub.set_index(KN.STOCK_ID.value, inplace=True)
+        if method == 'raw':
+            bidvolume = [f'bidvolume{i}' for i in range(1, depth + 1)]
+            askvolume = [f'askvolume{i}' for i in range(1, depth + 1)]
+
+            def func(d: pd.DataFrame, **kwargs_sub):
+                liq_stock = kwargs_sub['liqStock']
+                d_sub = d[(d[KN.TRADE_TIME.value] >= beg) & (d[KN.TRADE_TIME.value] <= end)]
+                d_sub['orderDiff'] = d_sub[bidvolume].sum(axis=1) - d_sub[askvolume].sum(axis=1)
+                order_diff = d_sub.groupby(KN.STOCK_ID.value)['orderDiff'].last() - \
+                             d_sub.groupby(KN.STOCK_ID.value)['orderDiff'].first()
+                liq_stock_sub = liq_stock[liq_stock[KN.TRADE_DATE.value] == d[KN.TRADE_DATE.value][0]]
+                liq_stock_sub = liq_stock_sub.set_index(KN.STOCK_ID.value)
 
                 r_merge = pd.merge(order_diff, liq_stock_sub, left_index=True, right_index=True, how='left')
 
-                r_res = r_merge['order_diff'] / r_merge['liq_stock']
-            except Exception as e:
-                r_res = pd.Series(index=data['stock_id'].drop_duplicates())
-                print(f"{data['date'].iloc[0]}:{e}")
+                r_res = r_merge['orderDiff'] / r_merge['liqStock']
 
-            return r_res
+                return r_res
 
-        data_day = cls()._csv_data(data_name=[PVN.LIQ_MV.value, PVN.CLOSE.value])
+            data_day = cls()._csv_data(data_name=[PVN.LIQ_MV.value, PVN.CLOSE.value])
 
-        data_day['liq_stock'] = data_day[PVN.LIQ_MV.value] / data_day[PVN.CLOSE.value]
+            data_day['liqStock'] = data_day[PVN.LIQ_MV.value] / data_day[PVN.CLOSE.value]
 
-        Q = cls().csv_HFD_data(data_name=bidvolume + askvolume,
-                               func=func,
-                               file_path=FPN.HFD_Stock_Depth_1min.value,
-                               fun_kwargs={"liq_stock": data_day[[KN.TRADE_DATE.value, KN.STOCK_ID.value, 'liq_stock']]})
-        res = pd.concat(Q)
-        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).mean()
+            Q = cls().csv_HFD_data(data_name=bidvolume + askvolume,
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_Depth_1min.value,
+                                   fun_kwargs={
+                                       "liqStock": data_day[[KN.TRADE_DATE.value, KN.STOCK_ID.value, 'liqStock']]})
+            res = pd.concat(Q)
 
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=bidVolSum + askVolSum,
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name=f'Depth{depth}VolSum',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data2 = cls()._csv_data(data_name=[PVN.LIQ_MV.value, PVN.CLOSE.value])
+            data2['liqStock'] = data2[PVN.LIQ_MV.value] / data2[PVN.CLOSE.value]
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            data['bidDiff'] = data[bidVolSum[0]] - data[bidVolSum[1]]
+            data['askDiff'] = data[askVolSum[0]] - data[askVolSum[1]]
+
+            res = (data['bidDiff'] - data['askDiff']) / data['liqStock']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=round(n * 0.8)).mean()
         res.name = factor_name
-
         return res
 
     @classmethod
@@ -1288,57 +1717,91 @@ class HighFrequencyFundFlowFactor(FactorBase):
                              period: str = 'all',
                              depth: int = 5,
                              n: int = 20,
+                             method: str = 'mid',
                              **kwargs):
         """净委买变化率波动率(bid_R_std)"""
 
-        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{n}days"
-
-        bidvolume = [f'bidvolume{i}' for i in range(1, depth + 1)]
-        askvolume = [f'askvolume{i}' for i in range(1, depth + 1)]
+        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{depth}depth_{period}_{n}days"
 
         if period == 'all':
-            beg, end = '09:30:00', '14:56:00'
+            beg, end = '09:30:00', '15:00:00'
+            bidVolSum = [f"bid{depth}VolSum_4h", f"bid{depth}VolSum_0h"]
+            askVolSum = [f"ask{depth}VolSum_4h", f"ask{depth}VolSum_0h"]
         elif period == 'open':
-            beg, end = '09:30:00', '09:59:00'
+            beg, end = '09:30:00', '10:00:00'
+            bidVolSum = [f"bid{depth}VolSum_0.5h", f"bid{depth}VolSum_0h"]
+            askVolSum = [f"ask{depth}VolSum_0.5h", f"ask{depth}VolSum_0h"]
         elif period == 'between':
-            beg, end = '10:00:00', '14:26:00'
+            beg, end = '10:00:00', '14:30:00'
+            bidVolSum = [f"bid{depth}VolSum_3.5h", f"bid{depth}VolSum_0.5h"]
+            askVolSum = [f"ask{depth}VolSum_3.5h", f"ask{depth}VolSum_0.5h"]
         elif period == 'close':
-            beg, end = '14:27:00', '14:56:00'
+            beg, end = '14:30:00', '15:00:00'
+            bidVolSum = [f"bid{depth}VolSum_4h", f"bid{depth}VolSum_3.5h"]
+            askVolSum = [f"ask{depth}VolSum_4h", f"ask{depth}VolSum_3.5h"]
         else:
-            beg, end = '09:30:00', '14:56:00'
+            beg, end = '09:30:00', '15:00:00'
+            bidVolSum = [f"bid{depth}VolSum_4h", f"bid{depth}VolSum_0h"]
+            askVolSum = [f"ask{depth}VolSum_4h", f"ask{depth}VolSum_0h"]
             print(f'Input error:{period}')
 
-        def func(data: pd.DataFrame, **kwargs_sub):  # TODO
-            try:
-                liq_stock = kwargs_sub['liq_stock']
-                data_sub = data[(data['time'] >= beg) & (data['time'] <= end)]
-                data_sub['order_diff'] = data_sub[bidvolume].sum(axis=1) - data_sub[askvolume].sum(axis=1)
-                order_diff = data_sub.groupby(KN.STOCK_ID.value)['order_diff'].last() - \
-                             data_sub.groupby(KN.STOCK_ID.value)['order_diff'].first()
-                liq_stock_sub = liq_stock[liq_stock[KN.TRADE_DATE.value] == data[KN.TRADE_DATE.value][0]]
-                liq_stock_sub.set_index(KN.STOCK_ID.value, inplace=True)
+        if method == 'raw':
+
+            bidvolume = [f'bidvolume{i}' for i in range(1, depth + 1)]
+            askvolume = [f'askvolume{i}' for i in range(1, depth + 1)]
+
+            def func(d: pd.DataFrame, **kwargs_sub):
+                liq_stock = kwargs_sub['liqStock']
+                d_sub = d[(d[KN.TRADE_TIME.value] >= beg) & (d[KN.TRADE_TIME.value] <= end)]
+                d_sub['orderDiff'] = d_sub[bidvolume].sum(axis=1) - d_sub[askvolume].sum(axis=1)
+                order_diff = d_sub.groupby(KN.STOCK_ID.value)['orderDiff'].last() - \
+                             d_sub.groupby(KN.STOCK_ID.value)['orderDiff'].first()
+                liq_stock_sub = liq_stock[liq_stock[KN.TRADE_DATE.value] == d[KN.TRADE_DATE.value][0]]
+                liq_stock_sub = liq_stock_sub.set_index(KN.STOCK_ID.value)
 
                 r_merge = pd.merge(order_diff, liq_stock_sub, left_index=True, right_index=True, how='left')
 
-                r_res = r_merge['order_diff'] / r_merge['liq_stock']
-            except Exception as e:
-                r_res = pd.Series(index=data['stock_id'].drop_duplicates())
-                print(f"{data['date'].iloc[0]}:{e}")
+                r_res = r_merge['orderDiff'] / r_merge['liqStock']
 
-            return r_res
+                return r_res
 
-        data_day = cls()._csv_data(data_name=[PVN.LIQ_MV.value, PVN.CLOSE.value])
+            data_day = cls()._csv_data(data_name=[PVN.LIQ_MV.value, PVN.CLOSE.value])
 
-        data_day['liq_stock'] = data_day[PVN.LIQ_MV.value] / data_day[PVN.CLOSE.value]
+            data_day['liqStock'] = data_day[PVN.LIQ_MV.value] / data_day[PVN.CLOSE.value]
 
-        Q = cls().csv_HFD_data(data_name=bidvolume + askvolume,
-                               func=func,
-                               file_path=FPN.HFD_Stock_Depth_1min.value,
-                               fun_kwargs={"liq_stock": data_day[[KN.TRADE_DATE.value, KN.STOCK_ID.value, 'liq_stock']]})
-        res = pd.concat(Q)
-        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).std()
+            Q = cls().csv_HFD_data(data_name=bidvolume + askvolume,
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_Depth_1min.value,
+                                   fun_kwargs={
+                                       "liqStock": data_day[[KN.TRADE_DATE.value, KN.STOCK_ID.value, 'liqStock']]})
+            res = pd.concat(Q)
 
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=bidVolSum + askVolSum,
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name=f'Depth{depth}VolSum',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data2 = cls()._csv_data(data_name=[PVN.LIQ_MV.value, PVN.CLOSE.value])
+            data2['liqStock'] = data2[PVN.LIQ_MV.value] / data2[PVN.CLOSE.value]
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            data['bidDiff'] = data[bidVolSum[0]] - data[bidVolSum[1]]
+            data['askDiff'] = data[askVolSum[0]] - data[askVolSum[1]]
+
+            res = (data['bidDiff'] - data['askDiff']) / data['liqStock']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        if n >= 2:
+            res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(min(n, 5), min_periods=round(n * 0.8)).std()
         res.name = factor_name
 
         return res
@@ -1348,57 +1811,90 @@ class HighFrequencyFundFlowFactor(FactorBase):
                              period: str = 'all',
                              depth: int = 5,
                              n: int = 20,
+                             method: str = 'mid',
                              **kwargs):
         """平均净委买变化率偏度(bid_R_skew)"""
-
-        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{n}days"
-
-        bidvolume = [f'bidvolume{i}' for i in range(1, depth + 1)]
-        askvolume = [f'askvolume{i}' for i in range(1, depth + 1)]
+        factor_name = sys._getframe().f_code.co_name[: -9] + f"_{depth}depth_{period}_{n}days"
 
         if period == 'all':
-            beg, end = '09:30:00', '14:56:00'
+            beg, end = '09:30:00', '15:00:00'
+            bidVolSum = [f"bid{depth}VolSum_4h", f"bid{depth}VolSum_0h"]
+            askVolSum = [f"ask{depth}VolSum_4h", f"ask{depth}VolSum_0h"]
         elif period == 'open':
-            beg, end = '09:30:00', '09:59:00'
+            beg, end = '09:30:00', '10:00:00'
+            bidVolSum = [f"bid{depth}VolSum_0.5h", f"bid{depth}VolSum_0h"]
+            askVolSum = [f"ask{depth}VolSum_0.5h", f"ask{depth}VolSum_0h"]
         elif period == 'between':
-            beg, end = '10:00:00', '14:26:00'
+            beg, end = '10:00:00', '14:30:00'
+            bidVolSum = [f"bid{depth}VolSum_3.5h", f"bid{depth}VolSum_0.5h"]
+            askVolSum = [f"ask{depth}VolSum_3.5h", f"ask{depth}VolSum_0.5h"]
         elif period == 'close':
-            beg, end = '14:27:00', '14:56:00'
+            beg, end = '14:30:00', '15:00:00'
+            bidVolSum = [f"bid{depth}VolSum_4h", f"bid{depth}VolSum_3.5h"]
+            askVolSum = [f"ask{depth}VolSum_4h", f"ask{depth}VolSum_3.5h"]
         else:
-            beg, end = '09:30:00', '14:56:00'
+            beg, end = '09:30:00', '15:00:00'
+            bidVolSum = [f"bid{depth}VolSum_4h", f"bid{depth}VolSum_0h"]
+            askVolSum = [f"ask{depth}VolSum_4h", f"ask{depth}VolSum_0h"]
             print(f'Input error:{period}')
 
-        def func(data: pd.DataFrame, **kwargs_sub):  # TODO
-            try:
-                liq_stock = kwargs_sub['liq_stock']
-                data_sub = data[(data['time'] >= beg) & (data['time'] <= end)]
-                data_sub['order_diff'] = data_sub[bidvolume].sum(axis=1) - data_sub[askvolume].sum(axis=1)
-                order_diff = data_sub.groupby(KN.STOCK_ID.value)['order_diff'].last() - \
-                             data_sub.groupby(KN.STOCK_ID.value)['order_diff'].first()
-                liq_stock_sub = liq_stock[liq_stock[KN.TRADE_DATE.value] == data[KN.TRADE_DATE.value][0]]
-                liq_stock_sub.set_index(KN.STOCK_ID.value, inplace=True)
+        if method == 'raw':
+
+            bidvolume = [f'bidvolume{i}' for i in range(1, depth + 1)]
+            askvolume = [f'askvolume{i}' for i in range(1, depth + 1)]
+
+            def func(d: pd.DataFrame, **kwargs_sub):
+                liq_stock = kwargs_sub['liqStock']
+                d_sub = d[(d[KN.TRADE_TIME.value] >= beg) & (d[KN.TRADE_TIME.value] <= end)]
+                d_sub['orderDiff'] = d_sub[bidvolume].sum(axis=1) - d_sub[askvolume].sum(axis=1)
+                order_diff = d_sub.groupby(KN.STOCK_ID.value)['orderDiff'].last() - \
+                             d_sub.groupby(KN.STOCK_ID.value)['orderDiff'].first()
+                liq_stock_sub = liq_stock[liq_stock[KN.TRADE_DATE.value] == d[KN.TRADE_DATE.value][0]]
+                liq_stock_sub = liq_stock_sub.set_index(KN.STOCK_ID.value)
 
                 r_merge = pd.merge(order_diff, liq_stock_sub, left_index=True, right_index=True, how='left')
 
-                r_res = r_merge['order_diff'] / r_merge['liq_stock']
-            except Exception as e:
-                r_res = pd.Series(index=data['stock_id'].drop_duplicates())
-                print(f"{data['date'].iloc[0]}:{e}")
+                r_res = r_merge['orderDiff'] / r_merge['liqStock']
 
-            return r_res
+                return r_res
 
-        data_day = cls()._csv_data(data_name=[PVN.LIQ_MV.value, PVN.CLOSE.value])
+            data_day = cls()._csv_data(data_name=[PVN.LIQ_MV.value, PVN.CLOSE.value])
 
-        data_day['liq_stock'] = data_day[PVN.LIQ_MV.value] / data_day[PVN.CLOSE.value]
+            data_day['liqStock'] = data_day[PVN.LIQ_MV.value] / data_day[PVN.CLOSE.value]
 
-        Q = cls().csv_HFD_data(data_name=bidvolume + askvolume,
-                               func=func,
-                               file_path=FPN.HFD_Stock_Depth_1min.value,
-                               fun_kwargs={"liq_stock": data_day[[KN.TRADE_DATE.value, KN.STOCK_ID.value, 'liq_stock']]})
-        res = pd.concat(Q)
-        res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(n, min_periods=min(n, 2)).skew()
+            Q = cls().csv_HFD_data(data_name=bidvolume + askvolume,
+                                   func=func,
+                                   file_path=FPN.HFD_Stock_Depth_1min.value,
+                                   fun_kwargs={
+                                       "liqStock": data_day[[KN.TRADE_DATE.value, KN.STOCK_ID.value, 'liqStock']]})
+            res = pd.concat(Q)
 
-        res.index.names = [KN.TRADE_DATE.value, KN.STOCK_ID.value]
+        elif method == 'mid':
+            data1 = cls()._csv_data(data_name=bidVolSum + askVolSum,
+                                    file_path=FPN.HFD_MidData.value,
+                                    file_name=f'Depth{depth}VolSum',
+                                    stock_id=KN.STOCK_ID.value)
+
+            data2 = cls()._csv_data(data_name=[PVN.LIQ_MV.value, PVN.CLOSE.value])
+            data2['liqStock'] = data2[PVN.LIQ_MV.value] / data2[PVN.CLOSE.value]
+
+            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+            data['bidDiff'] = data[bidVolSum[0]] - data[bidVolSum[1]]
+            data['askDiff'] = data[askVolSum[0]] - data[askVolSum[1]]
+
+            res = (data['bidDiff'] - data['askDiff']) / data['liqStock']
+
+        else:
+            print('Parameter is wrong!')
+            res = pd.Series()
+
+        res[np.isinf(res)] = np.nan
+        res = cls().reindex(res)
+        if n >= 5:
+            res = res.groupby(KN.STOCK_ID.value, group_keys=False).rolling(min(n, 5), min_periods=round(n * 0.8)).skew()
         res.name = factor_name
 
         return res
@@ -1409,8 +1905,9 @@ class HighFrequencyFundFlowFactor(FactorBase):
                           time_end: str):
         data_copy = data.copy(deep=True)
         # 注意时间切片：左闭右开
-        data_copy_sub = data_copy[(data_copy['time'] >= time_star) & (data_copy['time'] < time_end)]
-        res = data_copy_sub['volume'].sum() / data_copy['volume'].sum()
+        data_copy_sub = data_copy[(data_copy[KN.TRADE_TIME.value] >= time_star) &
+                                  (data_copy[KN.TRADE_TIME.value] < time_end)]
+        res = data_copy_sub[PVN.AMOUNT.value].sum() / data_copy[PVN.AMOUNT.value].sum()
         return res
 
     # 半衰权重
@@ -1429,7 +1926,6 @@ class HighFrequencyFundFlowFactor(FactorBase):
               rank_name: str,
               cut_name: str,
               n: int):
-        print(d.index[0][1])
         d['ret_cum'] = d[cut_name].rolling(n).sum()
         for i in range(1, n):
             d[rank_name + f"_{i}"] = d[rank_name].shift(i)
@@ -1444,7 +1940,7 @@ class HighFrequencyFundFlowFactor(FactorBase):
         d['M_high'] = d[C].sum(axis=1)
         d['M_low'] = d['ret_cum'] - d['M_high']
 
-        d.dropna(inplace=True)
+        d = d.dropna()
         return d[['M_high', 'M_low']]
 
 

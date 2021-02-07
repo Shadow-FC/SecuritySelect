@@ -29,11 +29,12 @@ def Single_factor_test(params: dict,
     :param save: 是否保存检验结果
     :return:
     """
-    A = FactorValidityCheck()
+    A = FactorValidityCheck(hp=hp,
+                            stock_pool='StockPoolZD',
+                            label_pool='LabelPool')
 
     # load pool data
-    A.load_pool_data(stock_pool_name="StockPool1",  # StockPool1
-                     label_pool_name="LabelPool1")
+    A.load_pool_data()
 
     # load factor data
     A.load_factor(**params)
@@ -41,15 +42,12 @@ def Single_factor_test(params: dict,
     A.integration(**process)
 
     # Factor validity test
-    A.effectiveness(hp=hp,
-                    save=save)
-    print('Stop')
+    A.effectiveness(save=save, group_num=10)
 
 
 def main1(factor_name,
           hp,
           save: bool = False):
-
     df = pd.read_csv(f"A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorRawData\\TechnicalHighFrequencyFactor\\"
                      f"{factor_name}.csv", header=None)
     df.columns = ['date', 'stock_id', factor_name]
@@ -58,11 +56,12 @@ def main1(factor_name,
                 'db': 'HFD',
                 'factor_value': df,
                 'cal': False}
-    factor_process = {"outliers": '',  # mad
-                      "neu": '',  # mv+industry
-                      "stand": '',  # mv
-                      "switch_freq": False,
-                      "limit": 120}
+    factor_process = {"outliers": 'mad',  # mad
+                      "neu": 'mv+industry',  # mv+industry
+                      "stand": 'mv',  # mv
+                      # "switch_freq": False,
+                      # "limit": 120
+                      }
 
     print(f"\033[1;31m{dt.datetime.now().strftime('%X')}: {factor_name}\033[0m")
 
@@ -106,14 +105,55 @@ def main2(factor_name, hp, save: bool = False):
     #                    save=save)
 
 
+def HighFreqFactorTest(f_name: str, f: pd.DataFrame, hp: int = 5, save: bool = True):
+    factor_p = {"fact_name": f_name,
+                "factor_params": {"switch": False},
+                'db': 'TEC',
+                'factor_value': f,
+                'cal': False}
+    factor_process = {"outliers": 'mad',  # mad
+                      "neu": '',  # mv+industry
+                      "stand": 'z_score',  # mv
+                      }
+
+    print(f"\033[1;31m{dt.datetime.now().strftime('%X')}: {f_name}\033[0m")
+    Single_factor_test(params=factor_p,
+                       process=factor_process,
+                       hp=hp,
+                       save=save)
+
+
 if __name__ == '__main__':
 
-    # for i in range(6, 28):
-    #     if i in [10, 11]:
-    #         continue
-    #     factor = 'Momentum{:0>3}'.format(i)
-    #     main2(factor, 1)
+    hp = 5
+    #
+    factor_file_path = r'D:\DataBase'
+    factor_files = [folder for folder in os.listdir(factor_file_path) if folder.startswith('HighFrequency')]
+    for HighFreqFolder in factor_files:
+        HighFreqPath = os.path.join(factor_file_path, HighFreqFolder)
+        factor_list = os.listdir(HighFreqPath)
+        for factor in factor_list:
+            if factor not in ['Distribution008_1min_1days.csv', 'Distribution010_1min_1days.csv', 'Distribution015_1min_1days.csv',
+                              'FundFlow003_1days.csv', 'FundFlow004_1days.csv', 'FundFlow006_0.2q_1days.csv', 'FundFlow012_1days.csv',
+                              'FundFlow026_1days.csv', 'FundFlow027_1days.csv', 'FundFlow034_10min_C_1days.csv', 'FundFlow039_20days.csv',
+                              'FundFlow040_20days.csv', 'VolPrice008_0.2q_1days.csv', 'VolPrice009_1days.csv', 'VolPrice013_1min_1days.csv',
+                              'VolPrice017_1days.csv']:
+                continue
 
-    factor = 'HighFreq062'
-    main1(factor, hp=5, save=False)
+            factor_name = factor[:-4]
+            f_value = pd.read_csv(os.path.join(HighFreqPath, factor))
+            if '_1days' in factor_name:
+                f_value = f_value.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+                f_value = f_value.groupby(KN.STOCK_ID.value,
+                                          group_keys=False).rolling(hp, min_periods=round(hp * 0.8)).mean()
+                f_value = f_value.reset_index()
+                factor_name_new = factor_name.replace("_1days", f"_{hp}days")
+                f_value = f_value.rename(columns={factor_name: factor_name_new})
+            else:
+                factor_name_new = factor_name
+            try:
+                HighFreqFactorTest(factor_name_new, f_value, hp, True)
+            except Exception as e:
+                print(e)
+            print('Stop')
 

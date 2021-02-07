@@ -26,7 +26,7 @@ class TechnicalMomentFactor(FactorBase):
         """
         最高价格因子(HPTP):Max(P,N) / P
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -50,7 +50,7 @@ class TechnicalMomentFactor(FactorBase):
         """
         最高价格时间因子(HT):1-index(Max(P, N))/L
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -74,7 +74,7 @@ class TechnicalMomentFactor(FactorBase):
         """
         最低价格因子(LPTP):Max(P,N) / P
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -99,7 +99,7 @@ class TechnicalMomentFactor(FactorBase):
         """
         市场alpha因子
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -138,7 +138,7 @@ class TechnicalMomentFactor(FactorBase):
         """
         动量斜率(MTM_Slope)
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -166,7 +166,7 @@ class TechnicalMomentFactor(FactorBase):
         """
         路径动量因子(MTM_PathLen)
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -196,7 +196,7 @@ class TechnicalMomentFactor(FactorBase):
         动量CTC收益率(MTM_CTC):N日收盘价计算的收益率均值
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -221,7 +221,7 @@ class TechnicalMomentFactor(FactorBase):
         动量CTO收益率均值(MTM_CTO):N日日内收益率均值
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -248,7 +248,7 @@ class TechnicalMomentFactor(FactorBase):
         动量CTL收益率均值(MTM_CTL):N日收盘价与最低价收益率均值
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -276,7 +276,7 @@ class TechnicalMomentFactor(FactorBase):
         动量CTH收益率均值(MTM_CTH):N日收盘价与最高价收益率均值
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -304,7 +304,7 @@ class TechnicalMomentFactor(FactorBase):
         动量OTC收益率均值(MTM_OTC):N日开盘价与收盘价收益率均值
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -335,7 +335,7 @@ class TechnicalMomentFactor(FactorBase):
         动量CTHL收益率均值(MTM_CTHL)
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -373,7 +373,7 @@ class TechnicalMomentFactor(FactorBase):
         动量OTC收益率绝对值均值(MTM_OTC_abs):N日开盘价与收盘价收益率绝对值均值
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -404,7 +404,7 @@ class TechnicalMomentFactor(FactorBase):
         动量CTHL收益率绝对值均值(MTM_CTHL_abs)
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -440,7 +440,7 @@ class TechnicalMomentFactor(FactorBase):
         """
         最低价格时间因子(LT):1-index(Min(P, N))/L
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -465,7 +465,7 @@ class TechnicalMomentFactor(FactorBase):
         动量CTC收益率绝对值均值(MTM_CTC_abs):N日收盘价计算的收益率绝对值均值
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -490,7 +490,7 @@ class TechnicalMomentFactor(FactorBase):
         动量CTO收益率绝对值均值(MTM_CTO_abs):N日日内收益率绝对值均值
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -517,7 +517,7 @@ class TechnicalMomentFactor(FactorBase):
         动量CTL收益率绝对值均值(MTM_CTL_abs):N日收盘价与最低价收益率绝对值均值
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -545,7 +545,7 @@ class TechnicalMomentFactor(FactorBase):
         动量CTH收益率绝对值均值(MTM_CTH_abs):N日收盘价与最高价收益率绝对值均值
         :return:
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
@@ -571,13 +571,14 @@ class TechnicalMomentFactor(FactorBase):
         """
         收益率rank标准差(MTM_RankPrice_std)
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
         data['ret'] = data[close_price].groupby(KN.STOCK_ID.value).pct_change()
         data['rank'] = data['ret'].groupby(KN.TRADE_DATE.value).rank()
-        data[factor_name] = data['rank'].groupby(KN.TRADE_DATE.value, group_keys=False).rolling(n, min_periods=2).std()
+        data[factor_name] = data['rank'].groupby(KN.TRADE_DATE.value,
+                                                 group_keys=False).rolling(n, min_periods=2).std(ddof=1)
 
         F = FactorInfo()
         F.data = data[factor_name]
@@ -595,12 +596,13 @@ class TechnicalMomentFactor(FactorBase):
         """
         收益率标准差(MTM_RankRet_std)
         """
-        factor_name = sys._getframe().f_code.co_name + f'_{n}'
+        factor_name = sys._getframe().f_code.co_name + f'_{n}days'
         data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value], inplace=True)
         data.sort_index(inplace=True)
 
         data['ret'] = data[close_price].groupby(KN.STOCK_ID.value).pct_change()
-        data[factor_name] = data['ret'].groupby(KN.TRADE_DATE.value, group_keys=False).rolling(n, min_periods=2).std()
+        data[factor_name] = data['ret'].groupby(KN.TRADE_DATE.value, group_keys=False).rolling(n,
+                                                                                               min_periods=2).std(ddof=1)
 
         F = FactorInfo()
         F.data = data[factor_name]
@@ -615,7 +617,8 @@ class TechnicalMomentFactor(FactorBase):
     @classmethod
     def Momentum006_data_raw(cls) -> pd.DataFrame:
         """最高价格因子(HPTP)"""
-        data = cls()._csv_data(data_name=[PVN.CLOSE.value, PVN.ADJ_FACTOR.value], file_name='FactorPool1')
+        data = cls()._csv_data(data_name=[PVN.CLOSE.value, PVN.ADJ_FACTOR.value],
+                               file_name='FactorPool1')
         data[PVN.CLOSE.value] = data[PVN.CLOSE.value] * data[PVN.ADJ_FACTOR.value]
         return data
 
@@ -640,12 +643,12 @@ class TechnicalMomentFactor(FactorBase):
                                      index_name=index_name)
 
         data_stock[PVN.CLOSE.value] = data_stock[PVN.CLOSE.value] * data_stock[PVN.ADJ_FACTOR.value]
-        data_index.rename(columns={'close': 'index_close'}, inplace=True)
-        data_raw = pd.merge(data_stock, data_index, on=['date'], how='left')
+        data_index.rename(columns={PVN.CLOSE.value: 'index_close'}, inplace=True)
+        data_raw = pd.merge(data_stock, data_index, on=[KN.TRADE_DATE.value], how='left')
         res = data_raw[[KN.TRADE_DATE.value, KN.STOCK_ID.value, PVN.CLOSE.value, 'index_close']]
         return res
 
-    @classmethod  # TODO 行业指数
+    @classmethod
     def Momentum010_data_raw(cls) -> pd.DataFrame:
         """行业alpha因子"""
         return cls.Momentum009_data_raw()
@@ -668,7 +671,8 @@ class TechnicalMomentFactor(FactorBase):
     @classmethod
     def Momentum014_data_raw(cls) -> pd.DataFrame:
         """动量CTO收益率均值"""
-        data = cls()._csv_data(data_name=[PVN.CLOSE.value, PVN.OPEN.value, PVN.ADJ_FACTOR.value], file_name='FactorPool1')
+        data = cls()._csv_data(data_name=[PVN.CLOSE.value, PVN.OPEN.value, PVN.ADJ_FACTOR.value],
+                               file_name='FactorPool1')
         data[[PVN.CLOSE.value, PVN.OPEN.value]] = \
             data[[PVN.CLOSE.value, PVN.OPEN.value]].mul(data[PVN.ADJ_FACTOR.value], axis=0)
         return data
@@ -676,7 +680,8 @@ class TechnicalMomentFactor(FactorBase):
     @classmethod
     def Momentum015_data_raw(cls) -> pd.DataFrame:
         """动量CTL收益率均值"""
-        data = cls()._csv_data(data_name=[PVN.CLOSE.value, PVN.LOW.value, PVN.ADJ_FACTOR.value], file_name='FactorPool1')
+        data = cls()._csv_data(data_name=[PVN.CLOSE.value, PVN.LOW.value, PVN.ADJ_FACTOR.value],
+                               file_name='FactorPool1')
         data[[PVN.CLOSE.value, PVN.LOW.value]] = \
             data[[PVN.CLOSE.value, PVN.LOW.value]].mul(data[PVN.ADJ_FACTOR.value], axis=0)
         return data
@@ -684,7 +689,8 @@ class TechnicalMomentFactor(FactorBase):
     @classmethod
     def Momentum016_data_raw(cls) -> pd.DataFrame:
         """动量CTH收益率均值"""
-        data = cls()._csv_data(data_name=[PVN.CLOSE.value, PVN.HIGH.value, PVN.ADJ_FACTOR.value], file_name='FactorPool1')
+        data = cls()._csv_data(data_name=[PVN.CLOSE.value, PVN.HIGH.value, PVN.ADJ_FACTOR.value],
+                               file_name='FactorPool1')
         data[[PVN.CLOSE.value, PVN.HIGH.value]] = \
             data[[PVN.CLOSE.value, PVN.HIGH.value]].mul(data[PVN.ADJ_FACTOR.value], axis=0)
         return data
@@ -697,7 +703,8 @@ class TechnicalMomentFactor(FactorBase):
     @classmethod
     def Momentum018_data_raw(cls) -> pd.DataFrame:
         """动量CTHL收益率均值"""
-        data = cls()._csv_data(data_name=[PVN.CLOSE.value, PVN.HIGH.value, PVN.LOW.value, PVN.OPEN.value, PVN.ADJ_FACTOR.value],
+        data = cls()._csv_data(data_name=[PVN.CLOSE.value, PVN.HIGH.value, PVN.LOW.value,
+                                          PVN.OPEN.value, PVN.ADJ_FACTOR.value],
                                file_name='FactorPool1')
         data[[PVN.CLOSE.value, PVN.HIGH.value, PVN.LOW.value, PVN.OPEN.value]] = \
             data[[PVN.CLOSE.value, PVN.HIGH.value, PVN.LOW.value, PVN.OPEN.value]].mul(data[PVN.ADJ_FACTOR.value],

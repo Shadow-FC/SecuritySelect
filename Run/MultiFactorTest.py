@@ -2,6 +2,7 @@
 # @Time:   2020/10/15 16:05
 # @Author: FC
 # @Email:  18817289038@163.com
+
 import os
 import pandas as pd
 import time
@@ -99,8 +100,7 @@ if __name__ == '__main__':
     s = 0
     while True:
         if True:
-        # if dt.datetime.now() > dt.datetime(2020, 10, 22, 7, 30) and s == 0:#  dt.datetime.now() > dt.datetime(2020, 10, 22, 7, 30)
-            send_email(email, "开始进行因子有效性检验", f'{dt.datetime.now()}')
+            # send_email(email, "开始进行因子有效性检验", f'{dt.datetime.now()}')
             for fact_c, fact_names in factors_name.items():
                 fact_dict = {}
                 for fact_name in fact_names:
@@ -127,3 +127,7 @@ if __name__ == '__main__':
         else:
             print('Cycle')
             time.sleep(60 * 10)
+
+
+
+

@@ -22,8 +22,8 @@ class FactorPool(object):
         """
         Load strategy class from certain folder.
         """
+        Factor_class = {}
         for dirpath, dirnames, filenames in os.walk(path):
-            Factor_class = {}
             for filename in filenames:
                 # 剔除自己本身
                 if filename.startswith('__'):

@@ -16,7 +16,6 @@ import seaborn as sns
 from functools import reduce
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
-from Data.GetData import SQL
 
 from Object import send_email
 from StockPool.StockPool import StockPool
@@ -48,140 +47,8 @@ email = {"FC": {"user": "18817289038@163.com",
                 "host": "smtp.163.com"},
          }
 
-class GetData(object):
-    """
-    所有数据都去除空值
-    """
 
-    def __init__(self, factor_path: str = FPN.factor_ef.value):
-        self.data_path = factor_path
-        self.SP = StockPool()
-        self.LP = LabelPool()
-
-    def get_factor(self) -> pd.DataFrame:
-        """
-        因子数据外连接，内连接会损失很多数据
-        :return:
-        """
-        factors = None
-        try:
-            factor_name_list = os.listdir(self.data_path)
-            factor_container = []
-            # 目前只考虑csv文件格式
-            for factor_name in factor_name_list:
-                if factor_name[-3:] != 'csv':
-                    continue
-                data_path = os.path.join(self.data_path, factor_name)
-                factor_data = pd.read_csv(data_path, index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
-                factor_container.append(factor_data[factor_name[:-4]])
-
-            if not factor_container:
-                print(f"No factor data in folder!")
-            else:
-                factors = pd.concat(factor_container, axis=1)  # 因子数据外连接
-        except FileNotFoundError:
-            print(f"Path error, no folder name in {FPN.factor_ef.value}!")
-
-        return factors
-
-    # 有效个股
-    def get_effect_stock(self) -> pd.Index:
-        stock_index = self.SP.StockPool1()
-        return stock_index
-
-    # 指数各行业市值
-    def get_index_mv(self,
-                     mv_name: str = PVN.LIQ_MV.value,
-                     index_name: str = SN.CSI_500_INDUSTRY_WEIGHT.value) -> pd.Series:
-        industry_data = pd.read_csv(self.LP.PATH["industry"], index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
-        stock_mv_data = pd.read_csv(self.LP.PATH["mv"], index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
-        industry_weight_data = pd.read_csv(self.LP.PATH["index_weight"],
-                                           index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-        index_mv = self.LP.industry_mv(industry_weight_data, industry_data, stock_mv_data, index_name, mv_name)
-        return index_mv.dropna()
-
-    # 指数各行业权重
-    def get_ind_weight(self,
-                       index_name: str = SN.CSI_500_INDUSTRY_WEIGHT.value):
-        industry_data = pd.read_csv(self.LP.PATH["industry"], index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
-        industry_weight_data = pd.read_csv(self.LP.PATH["index_weight"],
-                                           index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
-        index_weight = self.LP.industry_weight(industry_weight_data, industry_data, index_name)
-        return index_weight.dropna()
-
-    # 个股收益
-    def stock_return(self, price: str = PVN.OPEN.value) -> pd.Series:
-        price_data = pd.read_csv(self.LP.PATH["price"], index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-        # adj price
-        price_data[price] = price_data[price].mul(price_data[PVN.ADJ_FACTOR.value], axis=0)
-        stock_return = self.LP.stock_return(price_data, return_type=price, label=True)
-        stock_return.name = KN.STOCK_RETURN.value
-        return stock_return
-
-    # 行业标识
-    def get_industry_flag(self) -> pd.Series:
-        industry_data = pd.read_csv(self.LP.PATH["industry"], index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-        return industry_data[SN.INDUSTRY_FLAG.value].dropna()
-
-    # 个股市值
-    def get_mv(self, mv_type: str = PVN.LIQ_MV.value) -> pd.Series:
-        stock_mv_data = pd.read_csv(self.LP.PATH["mv"], index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-        return stock_mv_data[mv_type].dropna()
-
-    def get_InputData(self,
-                      price: str = PVN.OPEN.value,
-                      mv: str = PVN.LIQ_MV.value) -> dict:
-        """
-        :param price:
-        :param mv:
-        :return: 有效因子，个股收益，行业标签，市值
-        """
-
-        res_path = os.path.join(FPN.factor_ef.value, sys._getframe().f_code.co_name)
-        if os.listdir(res_path):
-            try:
-                csv_list = os.listdir(res_path)
-                res = {}
-                for csv_name in csv_list:
-                    res[csv_name[:-4]] = pd.read_csv(os.path.join(res_path, csv_name),
-                                                     index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            except Exception as e:
-                print(f"Read file error: {e}")
-                res = {}
-        else:
-            stock_ef = self.get_effect_stock()
-
-            fac_exp = self.get_factor()
-            stock_ret = self.stock_return(price)  # 收益率作为标签
-            ind_exp = self.get_industry_flag()
-            mv = self.get_mv(mv)
-
-            ind_mv = self.get_index_mv()
-            ind_weight = self.get_ind_weight()
-
-            ef_index = reduce(lambda x, y: x.intersection(y),
-                              [fac_exp.index, stock_ret.index, ind_exp.index, mv.index, stock_ef,
-                               ind_mv.index, ind_weight.index])
-
-            res = {
-                "fac_exp": fac_exp.reindex(ef_index).dropna(),
-                "stock_ret": stock_ret,  # 收益率保证每个交易日都有数据，方便后面不同调仓期计算持有期收益率（防止跳空）
-                "ind_exp": ind_exp.reindex(ef_index).dropna(),
-                "mv": mv.reindex(ef_index).dropna(),
-
-                "ind_mv": ind_mv.reindex(ef_index).dropna(),
-                "ind_weight": ind_weight.reindex(ef_index).dropna()
-            }
-            for name_, value_ in res.items():
-                value_.to_csv(os.path.join(res_path, name_ + '.csv'), header=True)
-        return res
-
-
-class Strategy(object):
+class PortfolioModel(object):
     """
     优化模型输入数据存放格式为字典形式：{"time": values}
     除因子名称外，其他输入参数的名称同一为系统定义的名称，该名称定在constant脚本下
@@ -202,7 +69,6 @@ class Strategy(object):
         self.RISK = RiskModel()
         self.FP = FactorProcess()
         self.LP = LabelPool()
-        self.Q = SQL()
 
         self.fac_exp = fac_exp  # 因子暴露
         self.stock_ret = stock_ret  # 股票收益标签
@@ -268,7 +134,7 @@ class Strategy(object):
                          **kwargs):
         """
         当期因子暴露与下期个股收益流通市值加权最小二乘法回归得到下期因子收益预测值
-        下期因子收益预测值与下期因子暴露相乘得到因子收益作为当天对下期的预测值
+        下期因子收益预测值与下期因子暴露相乘得到个股收益作为当天对下期的预测值
         对于当期存在因子缺失不做完全删除，以当期有效因子进行计算
         :return:
         """
@@ -577,17 +443,17 @@ class Strategy(object):
         columns_ef = data_copy.count()[data_copy.count() > data_copy.shape[0] / 2].index  # 过滤样本不足因子
         data_copy = data_copy[columns_ef].dropna()  # 个股数据不足剔除
 
-        if not {PVN.LIQ_MV.value, KN.STOCK_RETURN.value, SN.INDUSTRY_FLAG.value}.issubset(columns_ef) \
-                or {PVN.LIQ_MV.value, KN.STOCK_RETURN.value, SN.INDUSTRY_FLAG.value}.issuperset(columns_ef) \
+        if not {PVN.LIQ_MV.value, KN.RETURN.value, SN.INDUSTRY_FLAG.value}.issubset(columns_ef) \
+                or {PVN.LIQ_MV.value, KN.RETURN.value, SN.INDUSTRY_FLAG.value}.issuperset(columns_ef) \
                 or data_copy.shape[0] <= sample_length:
             res = type('res', (object,), dict(params=pd.Series(index=self.fact_name),
                                               resid=pd.Series(index=data_copy.index)))
         else:
             X = pd.get_dummies(
-                data_copy.loc[:, data_copy.columns.difference([PVN.LIQ_MV.value, KN.STOCK_RETURN.value])],
+                data_copy.loc[:, data_copy.columns.difference([PVN.LIQ_MV.value, KN.RETURN.value])],
                 columns=[SN.INDUSTRY_FLAG.value], prefix='', prefix_sep='')
 
-            Y = data_copy[KN.STOCK_RETURN.value]
+            Y = data_copy[KN.RETURN.value]
 
             W = data_copy[PVN.LIQ_MV.value]
 
@@ -655,6 +521,10 @@ class Strategy(object):
         self.Nav()
         pass
 
+    # 分层抽样法
+    def sampling(self):
+        pass
+
     @staticmethod
     def _holding_return(ret: pd.Series,
                         hp: int = 1) -> pd.Series:
@@ -695,10 +565,8 @@ if __name__ == '__main__':
                       "hp": 20
                       }
 
-        B = Strategy(**parameters)
+        B = PortfolioModel(**parameters)
         B.main()
     except Exception as e:
         # send_email(email, "迭代出错！", "")
         print(e)
-        pass
-    print("s")

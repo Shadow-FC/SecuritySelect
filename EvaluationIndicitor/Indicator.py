@@ -18,14 +18,14 @@ class Indicator(object):
     """
     时序上收益类指标的计算用到的是对数收益率，该收益率在截面上不具备可加性
     """
-    cycle = {"D": 365,
+    cycle = {"D": 252,
              "W": 52,
              "M": 12,
              "Y": 1}
 
     # 累计收益率
-    def accumulative_return(self, nav: pd.Series):
-        ret = np.log(nav[-1] / nav[0])
+    def accumulative_return(self, nav: pd.Series) -> float:
+        ret = nav[-1] / nav[0] - 1
         return ret
 
     # 年化累计收益率
@@ -38,7 +38,7 @@ class Indicator(object):
         if period == 0:
             return 0
         else:
-            ret_a = np.exp(self.accumulative_return(nav)) ** (self.cycle[freq] / period)
+            ret_a = (self.accumulative_return(nav) + 1) ** (self.cycle[freq] / period) - 1
             return ret_a
 
     def odds(self, nav: pd.Series, bm: pd.Series) -> float:
@@ -46,7 +46,7 @@ class Indicator(object):
         return sum(nav > bm) / len(nav)
 
     def std_a(self, nav: pd.Series, freq: str = 'D') -> float:
-        std_a = np.std(nav, ddof=1) * (self.cycle[freq] ** .5)
+        std_a = nav.std() * (self.cycle[freq] ** .5)
         return std_a
 
     def max_retreat(self, nav: pd.Series):
@@ -57,7 +57,11 @@ class Indicator(object):
         x = (float(nav[i]) / nav[j]) - 1
         return x
 
-
     def shape_a(self, nav: pd.Series, freq: str = "D") -> float:
         shape_a = (self.return_a(nav, freq=freq) - 0.03) / self.std_a(nav, freq="D")
         return shape_a
+
+    #  因子方向
+    def direction(self, nav: pd.Series):
+
+        pass

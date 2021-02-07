@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import os
 import copy
-from typing import Callable, Dict, Any
+from typing import Callable, Dict, Any, Union
 
 from Data.GetData import SQL
 from constant import (
@@ -62,7 +62,7 @@ class FactorBase(object):
             lambda x: x.sort_values(
                 by=[KN.TRADE_DATE.value, SN.REPORT_DATE.value]).drop_duplicates(subset=[KN.TRADE_DATE.value],
                                                                                 keep='last'))
-        data_sub.reset_index(inplace=True)
+        data_sub = data_sub.reset_index()
 
         # 交易日填充
         data_trade_date = data_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(_reindex, name)
@@ -71,16 +71,16 @@ class FactorBase(object):
         # 历史数据有限填充因子值
         res[name] = res[name].groupby(KN.STOCK_ID.value, group_keys=False).apply(lambda x: x.ffill(limit=limit))
 
-        res.dropna(subset=[name], inplace=True)
+        res = res.dropna(subset=[name])
         if 'index' in res.columns:
-            res.drop(columns='index', inplace=True)
+            res = res.drop(columns='index')
         return res
 
     # 读取因子计算所需常用数据
     def _csv_data(self,
                   data_name: list,
-                  file_path: str = FPN.factor_inputData.value,
-                  file_name: str = "FactorPool1",
+                  file_path: str = FPN.Input_data_server.value,
+                  file_name: str = "AStockData",
                   date: str = KN.TRADE_DATE.value,
                   stock_id: str = KN.STOCK_ID.value):
         res = pd.read_csv(os.path.join(file_path, file_name + '.csv'),
@@ -93,7 +93,7 @@ class FactorBase(object):
                   file_path: str = FPN.factor_inputData.value,
                   file_name: str = 'IndexInfo',
                   index_name: str = '',
-                  date: str = KN.TRADE_DATE.value,):
+                  date: str = KN.TRADE_DATE.value, ):
         index_data = pd.read_csv(os.path.join(file_path, file_name + '.csv'),
                                  usecols=[date, 'index_name'] + data_name)
         res = index_data[index_data['index_name'] == index_name]
@@ -120,14 +120,16 @@ class FactorBase(object):
             i += 1
             if file_name[-3:] == 'csv':
                 try:
+                    # file_name = np.random.choice(file_names, 1)[0]  # 随机抽样
+                    # file_name = '2017-03-30.csv'
                     data_df = pd.read_csv(os.path.join(Path, file_name), usecols=['code', 'time'] + data_name)
                 except Exception as e:
                     continue
                 data_df['date'] = file_name[:-4]
-                data_df.rename(columns={'code': 'stock_id'}, inplace=True)
+                # data_df.rename(columns={'code': 'stock_id'}, inplace=True)
                 res = func(data_df, **fun_kwargs)
                 data_dict[file_name[:-4]] = res
-            # if i == 3:
+            # if i == 2:
             #     break
 
         return data_dict
@@ -145,13 +147,27 @@ class FactorBase(object):
 
         data_copy = copy.deepcopy(data_)
         data_copy['M'] = data_copy[SN.REPORT_DATE.value].apply(lambda x: x[5:7])
-        data_copy.set_index([SN.REPORT_DATE.value, KN.STOCK_ID.value], inplace=True)
-        data_copy.sort_index(inplace=True)
+        data_copy = data_copy.set_index([SN.REPORT_DATE.value, KN.STOCK_ID.value])
+        data_copy = data_copy.sort_index()
 
         res = data_copy[[name, 'M']].groupby(KN.STOCK_ID.value).apply(_pros_ttm, name)
 
         res.index = res.index.swaplevel(0, 1)
         res.name = name
+        return res
+
+    def reindex(self, data: Union[pd.DataFrame, pd.Series]) -> pd.Series:
+        date_series = self.Q.trade_date_csv()[KN.TRADE_DATE.value]
+        date_index, code_index = data.index.levels[0], data.index.levels[1]
+        date_sta, date_end = min(date_index), max(date_index)
+
+        date_effect = date_series[(date_series >= date_sta) & (date_series <= date_end)]
+
+        new_index = pd.MultiIndex.from_product([date_effect, code_index],
+                                               names=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
+
+        res = data.reindex(new_index.sort_values())
+
         return res
 
 

@@ -182,7 +182,8 @@ class SQL(object):
                                                  end=date_end)
         return sql_date
 
-    def trade_date_csv(self, file_path: str = FPN.Trade_Date.value, file_name: str = 'TradeDate.csv'):
+    def trade_date_csv(self, file_path: str = FPN.Trade_Date.value, file_name: str = 'ATradeDate.csv'):
+        # 默认升序
         trade_date = pd.read_csv(os.path.join(file_path, file_name))
         return trade_date
 

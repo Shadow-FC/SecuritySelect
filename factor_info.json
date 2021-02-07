@@ -1,0 +1,4312 @@
+{
+    "Volatility001": {
+        "Series": 1,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "std_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股最近N个月内日收益率序列的标准差",
+        "Factor_Source": "20170327-华泰证券-华泰多因子系列之六：华泰单因子测试之波动率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility002": {
+        "Series": 2,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "id1_std_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "特质波动率1:个股最近N个月内日收益率序列对中证全指日收益率序列进行一元线性回归的残差的标准差",
+        "Factor_Source": "20170327-华泰证券-华泰多因子系列之六：华泰单因子测试之波动率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility003": {
+        "Series": 3,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "id2_std_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "特质波动率2:个股最近N个月内日收益率序列对中证全指日收益率、规模因子日收益率、BP因子日收益率序列进行多元线性回归的残差的标准差",
+        "Factor_Source": "20170327-华泰证券-华泰多因子系列之六：华泰单因子测试之波动率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility004": {
+        "Series": 4,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "id2_std_up_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "特质波动率2计算过程中回归残差的上行波动率",
+        "Factor_Source": "20170327-华泰证券-华泰多因子系列之六：华泰单因子测试之波动率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility005": {
+        "Series": 5,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "id2_std_down_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "特质波动率2计算过程中回归残差的下行波动率",
+        "Factor_Source": "20170327-华泰证券-华泰多因子系列之六：华泰单因子测试之波动率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility006": {
+        "Series": 6,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "id2_std_umd_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "特质波动率2计算过程中回归残差的上行波动率减下行波动率",
+        "Factor_Source": "20170327-华泰证券-华泰多因子系列之六：华泰单因子测试之波动率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility007": {
+        "Series": 7,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "id2_std_upd_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "特质波动率2计算过程中回归残差的上行波动率加下行波动率",
+        "Factor_Source": "20170327-华泰证券-华泰多因子系列之六：华泰单因子测试之波动率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility008": {
+        "Series": 8,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "high_r_std_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去N个月个股每日最高价除以前一日收盘价(日内最大涨幅)的标准差",
+        "Factor_Source": "20170327-华泰证券-华泰多因子系列之六：华泰单因子测试之波动率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility009": {
+        "Series": 9,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "low_r_std_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去N个月个股每日最低价除以前一日收盘价(日内最大跌幅)的标准差",
+        "Factor_Source": "20170327-华泰证券-华泰多因子系列之六：华泰单因子测试之波动率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility010": {
+        "Series": 10,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "hml_r_std_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去N个月个股每日最高价除以前一日收盘价(日内最大涨幅)的标准差减去过去N个月个股每日最低价除以前一日收盘价(日内最大跌幅)的标准差",
+        "Factor_Source": "20170327-华泰证券-华泰多因子系列之六：华泰单因子测试之波动率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility011": {
+        "Series": 11,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "hpl_r_std_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去N个月个股每日最高价除以前一日收盘价(日内最大涨幅)的标准差加上过去N个月个股每日最低价除以前一日收盘价(日内最大跌幅)的标准差",
+        "Factor_Source": "20170327-华泰证券-华泰多因子系列之六：华泰单因子测试之波动率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility012": {
+        "Series": 12,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "HighLow_NM",
+        "Factor_Name_CN": "",
+        "Factor_Description": "N个月最高价/最低价",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": "N取值1,3,6"
+    },
+    "Volatility013": {
+        "Series": 13,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "波动率因子",
+        "Factor_Name_EN": "Volume_STD_NM",
+        "Factor_Name_CN": "",
+        "Factor_Description": "N个月成交量标准差",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": "N取值1,3,6"
+    },
+    "Solvency001": {
+        "Series": 1,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "CurrentRatio",
+        "Factor_Name_CN": "流动比率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Solvency002": {
+        "Series": 2,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "QuickRatio",
+        "Factor_Name_CN": "速动比率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Solvency003": {
+        "Series": 3,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "CashRatio",
+        "Factor_Name_CN": "现金比率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Solvency004": {
+        "Series": 4,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "TangibleAsset_to_Equity",
+        "Factor_Name_CN": "有形净值债务率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Solvency005": {
+        "Series": 5,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "EBIT",
+        "Factor_Name_CN": "利息保障倍数",
+        "Factor_Description": "EBIT/利息费用",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Solvency006": {
+        "Series": 6,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "Int_to_Asset",
+        "Factor_Name_CN": "有息负债率",
+        "Factor_Description": "有息负债/总资产",
+        "Factor_Source": "20200224-光大证券-多因子系列报告之三十：有息负债，解读企业杠杆的选股信息",
+        "Remarks": "债券有息负债：短期借款+长期借款+应付债券"
+    },
+    "Solvency007": {
+        "Series": 7,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt1_CFPA",
+        "Factor_Name_CN": "偿债能力指标一",
+        "Factor_Description": "",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency008": {
+        "Series": 8,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt2_CFPA",
+        "Factor_Name_CN": "偿债能力指标二",
+        "Factor_Description": "",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency009": {
+        "Series": 9,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt3_CFPA",
+        "Factor_Name_CN": "偿债能力指标三",
+        "Factor_Description": "",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency010": {
+        "Series": 10,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt1_CFPA_qoq",
+        "Factor_Name_CN": "偿债能力变化率一",
+        "Factor_Description": "(当期指标值-上期指标值)/abs(上期指标值)",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency011": {
+        "Series": 11,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt2_CFPA_qoq",
+        "Factor_Name_CN": "偿债能力变化率二",
+        "Factor_Description": "(当期指标值-上期指标值)/abs(上期指标值)",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency012": {
+        "Series": 12,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt3_CFPA_qoq",
+        "Factor_Name_CN": "偿债能力变化率三",
+        "Factor_Description": "(当期指标值-上期指标值)/abs(上期指标值)",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency013": {
+        "Series": 13,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt1_CFPA_qoq_abs",
+        "Factor_Name_CN": "偿债能力稳定性1一",
+        "Factor_Description": "-Abs(偿债能力变化率一)",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency014": {
+        "Series": 14,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt2_CFPA_qoq_abs",
+        "Factor_Name_CN": "偿债能力稳定性1二",
+        "Factor_Description": "-ABS(偿债能力变化率二)",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency015": {
+        "Series": 15,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt3_CFPA_qoq_abs",
+        "Factor_Name_CN": "偿债能力稳定性1一",
+        "Factor_Description": "-Abs(偿债能力变化率三)",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency016": {
+        "Series": 16,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt1_CFPA_std",
+        "Factor_Name_CN": "偿债能力稳定性2一",
+        "Factor_Description": "过去8个季度偿债能力指标的标准差取负",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency017": {
+        "Series": 17,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt2_CFPA_std",
+        "Factor_Name_CN": "偿债能力稳定性2二",
+        "Factor_Description": "过去8个季度偿债能力指标的标准差取负",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency018": {
+        "Series": 18,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "ShortDebt3_CFPA_std",
+        "Factor_Name_CN": "偿债能力稳定性2三",
+        "Factor_Description": "过去8个季度偿债能力指标的标准差取负",
+        "Factor_Source": "20200423-光大证券-多因子系列报告之三十二：现金偿债因子，规避企业潜在财务风险",
+        "Remarks": ""
+    },
+    "Solvency019": {
+        "Series": 19,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "IT_qoq_Z",
+        "Factor_Name_CN": "所得税变化率标准化",
+        "Factor_Description": "(当期所得税-上期所得税)/ABS(上期所得税)\nIT_qoq_Z=(A-MEAN(A,8))/std(A,8)",
+        "Factor_Source": "20200807-光大证券-多因子系列报告之三十六：成长企业新视角，税收科目全解析",
+        "Remarks": ""
+    },
+    "Solvency020": {
+        "Series": 20,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "PTCF_qoq_Z",
+        "Factor_Name_CN": "各项税费变化率标准化",
+        "Factor_Description": "A=(当期支付的各项税费-上期支付的各项税费)/ABS(上期支付的各项税费)；\nPTCF_qoq_Z=(A-MEAN(A,8))/std(A,8)",
+        "Factor_Source": "20200807-光大证券-多因子系列报告之三十六：成长企业新视角，税收科目全解析",
+        "Remarks": ""
+    },
+    "Solvency021": {
+        "Series": 21,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "OT_qoq_Z",
+        "Factor_Name_CN": "税金及附加变化率标准化",
+        "Factor_Description": "A=(当期税金及附加-上期税金及附加)/ABS(上期税金及附加)；\nOT_qoq_Z=(A-MEAN(A,8))/std(A,8)",
+        "Factor_Source": "20200807-光大证券-多因子系列报告之三十六：成长企业新视角，税收科目全解析",
+        "Remarks": ""
+    },
+    "Solvency022": {
+        "Series": 22,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "OT2NP_qoq_Z",
+        "Factor_Name_CN": "税金及附加占比变化率标准化",
+        "Factor_Description": "A=(当期税金及附加/净利润-上期税金及附加/净利润)/ABS(上期税金及附加/净利润)；\nOT2NA_qoq_Z=(A-MEAN(A,8))/std(A,8)",
+        "Factor_Source": "20200807-光大证券-多因子系列报告之三十六：成长企业新视角，税收科目全解析",
+        "Remarks": ""
+    },
+    "Solvency023": {
+        "Series": 23,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "偿债能力因子",
+        "Factor_Name_EN": "PT2NA_Z",
+        "Factor_Name_CN": "应交税费率变化率标准化",
+        "Factor_Description": "PT2NA_Z=(应交税费/净资产-MEAN(应交税费/净资产,8))/std(应交税费/净资产,8)",
+        "Factor_Source": "20200807-光大证券-多因子系列报告之三十六：成长企业新视角，税收科目全解析",
+        "Remarks": ""
+    },
+    "Growth001": {
+        "Series": 1,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "Sales_G_Q_LR",
+        "Factor_Name_CN": "当季营业收入(最新财报)同比增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": ""
+    },
+    "Growth002": {
+        "Series": 2,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "Sales_G_TTM",
+        "Factor_Name_CN": "营业收入(TTM)同比增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": ""
+    },
+    "Growth003": {
+        "Series": 3,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "Sales_G_3Y_TTM",
+        "Factor_Name_CN": "营业收入(TTM)三年复合同比增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": "3年基本无效"
+    },
+    "Growth004": {
+        "Series": 4,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "Profit_G_Q_LR",
+        "Factor_Name_CN": "当季净利润(最新财报)同比增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": ""
+    },
+    "Growth005": {
+        "Series": 5,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "Profit_G_TTM",
+        "Factor_Name_CN": "净利润(TTM)同比增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": ""
+    },
+    "Growth006": {
+        "Series": 6,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "Profit_G_3Y_TTM",
+        "Factor_Name_CN": "净利润(TTM)三年复合增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": ""
+    },
+    "Growth007": {
+        "Series": 7,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "OCF_G_Q_LR",
+        "Factor_Name_CN": "当季经营性现金流(最新财报)同比增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": ""
+    },
+    "Growth008": {
+        "Series": 8,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "OCF_G_TTM",
+        "Factor_Name_CN": "经营性现金流(TTM)同比增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": ""
+    },
+    "Growth009": {
+        "Series": 9,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "OCF_G_3Y_TTM",
+        "Factor_Name_CN": "经营性现金流(TTM)三年复合增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": ""
+    },
+    "Growth010": {
+        "Series": 10,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "ROE_G_Q_LR",
+        "Factor_Name_CN": "当季ROE(最新财报)同比增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": ""
+    },
+    "Growth011": {
+        "Series": 11,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "ROE_G_TTM",
+        "Factor_Name_CN": "ROE(TTM)同比增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": ""
+    },
+    "Growth012": {
+        "Series": 12,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "ROE_G_3Y_TTM",
+        "Factor_Name_CN": "ROE(TTM)三年复合增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20161031-华泰证券-华泰多因子系列之三：华泰单因子测试之成长类因子",
+        "Remarks": ""
+    },
+    "Growth013": {
+        "Series": 13,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "BPS_G_LR",
+        "Factor_Name_CN": "每股净资产增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Growth014": {
+        "Series": 14,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "EPS_G_TTM",
+        "Factor_Name_CN": "EPS增长率_TTM",
+        "Factor_Description": "",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Growth015": {
+        "Series": 15,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "ROA_G_TTM",
+        "Factor_Name_CN": "ROA(TTM)同比增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Growth016": {
+        "Series": 16,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "TA_G_TTM",
+        "Factor_Name_CN": "总资产增长率(TTM)",
+        "Factor_Description": "",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Growth017": {
+        "Series": 17,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "NP_Acc",
+        "Factor_Name_CN": "净利润加速度",
+        "Factor_Description": "NP_N=a*t^2+b*t+c",
+        "Factor_Source": "20180527-光大证券-多因子系列报告之十二：成长因子重构与优化，稳健加速为王",
+        "Remarks": "N最佳取值8(季度)"
+    },
+    "Growth018": {
+        "Series": 18,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "NP_Stable",
+        "Factor_Name_CN": "净利润稳健利润增速",
+        "Factor_Description": "过去一段时间内净利润增速均值比上净利润增速标准差",
+        "Factor_Source": "20180527-光大证券-多因子系列报告之十二：成长因子重构与优化，稳健加速为王",
+        "Remarks": "N最佳取值8(季度)"
+    },
+    "Growth019": {
+        "Series": 19,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "NP_SD",
+        "Factor_Name_CN": "净利润稳健加速度",
+        "Factor_Description": "净利润稳健利润增速指标的一阶差分",
+        "Factor_Source": "20180527-光大证券-多因子系列报告之十二：成长因子重构与优化，稳健加速为王",
+        "Remarks": ""
+    },
+    "Growth020": {
+        "Series": 20,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "OP_ACC",
+        "Factor_Name_CN": "营业利润加速度",
+        "Factor_Description": "NP_N=a*t^2+b*t+c",
+        "Factor_Source": "20180527-光大证券-多因子系列报告之十二：成长因子重构与优化，稳健加速为王",
+        "Remarks": "N最佳取值8(季度)"
+    },
+    "Growth021": {
+        "Series": 21,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "OP_Stable",
+        "Factor_Name_CN": "营业利润稳健利润增速",
+        "Factor_Description": "过去一段时间内营业利润增速均值比上营业利润增速标准差",
+        "Factor_Source": "20180527-光大证券-多因子系列报告之十二：成长因子重构与优化，稳健加速为王",
+        "Remarks": ""
+    },
+    "Growth022": {
+        "Series": 22,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "OP_SD",
+        "Factor_Name_CN": "营业利润稳健加速度",
+        "Factor_Description": "营业利润稳健利润增速指标的一阶差分",
+        "Factor_Source": "20180527-光大证券-多因子系列报告之十二：成长因子重构与优化，稳健加速为王",
+        "Remarks": ""
+    },
+    "Growth023": {
+        "Series": 23,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "OR_ACC",
+        "Factor_Name_CN": "营业收入加速度",
+        "Factor_Description": "NP_N=a*t^2+b*t+c",
+        "Factor_Source": "20180527-光大证券-多因子系列报告之十二：成长因子重构与优化，稳健加速为王",
+        "Remarks": ""
+    },
+    "Growth024": {
+        "Series": 24,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "OR_Stable",
+        "Factor_Name_CN": "营业收入稳健利润增速",
+        "Factor_Description": "过去一段时间内营业收入增速均值比上营业收入增速标准差",
+        "Factor_Source": "20180527-光大证券-多因子系列报告之十二：成长因子重构与优化，稳健加速为王",
+        "Remarks": ""
+    },
+    "Growth025": {
+        "Series": 25,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "OR_SD",
+        "Factor_Name_CN": "营业收入稳健加速度",
+        "Factor_Description": "营业收入稳健利润增速指标的一阶差分",
+        "Factor_Source": "20180527-光大证券-多因子系列报告之十二：成长因子重构与优化，稳健加速为王",
+        "Remarks": ""
+    },
+    "Growth026": {
+        "Series": 26,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "TA_G_LR_std",
+        "Factor_Name_CN": "总资产增长率波动率",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": "8个季度"
+    },
+    "Growth027": {
+        "Series": 27,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "LA_G_TTM",
+        "Factor_Name_CN": "流动资产增长率(TTM)",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": "8个季度"
+    },
+    "Growth028": {
+        "Series": 28,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "TA_G_LR",
+        "Factor_Name_CN": "总资产增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": "8个季度"
+    },
+    "Growth029": {
+        "Series": 29,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "ILA_G_LR",
+        "Factor_Name_CN": "非流动资产增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": "8个季度"
+    },
+    "Growth030": {
+        "Series": 30,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "LA_G_std",
+        "Factor_Name_CN": "流动资产增长率波动率",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": "8个季度"
+    },
+    "Growth031": {
+        "Series": 31,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "ILA_G_TTM",
+        "Factor_Name_CN": "非流动资产增长率(TTM)",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": "8个季度"
+    },
+    "Growth032": {
+        "Series": 32,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "TA_G_TTM_std",
+        "Factor_Name_CN": "总资产增长率波动率(TTM)",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": ""
+    },
+    "Growth033": {
+        "Series": 33,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "ILA_G_TTM_std",
+        "Factor_Name_CN": "非流动资产增长率波动率(TTM)",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": ""
+    },
+    "Growth034": {
+        "Series": 34,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "NP_G",
+        "Factor_Name_CN": "净利润率",
+        "Factor_Description": "(本期净利润 - 去年同期净利润) / ABS(去年同期净利润)",
+        "Factor_Source": "20180128-招商证券-因子模型系列之六：成长类单因子有效性考察",
+        "Remarks": ""
+    },
+    "Growth035": {
+        "Series": 35,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "MOper_G",
+        "Factor_Name_CN": "主营业务收入增长率",
+        "Factor_Description": "(本期主营业务收入 - 去年同期主营业务收入) / ABS(去年同期主营业务收入)",
+        "Factor_Source": "20180128-招商证券-因子模型系列之六：成长类单因子有效性考察",
+        "Remarks": ""
+    },
+    "Growth036": {
+        "Series": 36,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "LA_G_LR_std",
+        "Factor_Name_CN": "流动资产增长率波动率",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": ""
+    },
+    "Growth037": {
+        "Series": 37,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "LA_G_TTM_std",
+        "Factor_Name_CN": "流动资产增长率波动率(TTM)",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": ""
+    },
+    "Growth038": {
+        "Series": 38,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "ILA_G_LR_std",
+        "Factor_Name_CN": "非流动资产增长率波动率",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": ""
+    },
+    "Growth039": {
+        "Series": 39,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "LA_G_LR",
+        "Factor_Name_CN": "流动资产增长率",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": ""
+    },
+    "Growth040": {
+        "Series": 40,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "ILA_G_std",
+        "Factor_Name_CN": "非流动资产增长率波动率",
+        "Factor_Description": "",
+        "Factor_Source": "20190910-海通证券-选股因子系列研究（五十四）：资产增长稳定性与资本结构变化",
+        "Remarks": "8个季度"
+    },
+    "Growth041": {
+        "Series": 41,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "成长因子",
+        "Factor_Name_EN": "MAR_G",
+        "Factor_Name_CN": "毛利润率",
+        "Factor_Description": "(本期毛利润 – 上期毛利润)/ 上期营业收入",
+        "Factor_Source": "20200310-财通证券-“星火”多因子专题报告（十二）：从质量到质量增长，挖掘公司基本面改善带来的Alpha",
+        "Remarks": ""
+    },
+    "Momentum001": {
+        "Series": 1,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "HAlpha",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股60个月收益与上证综指线性回归的截矩项",
+        "Factor_Source": "20161220-华泰证券-华泰多因子系列之四：华泰单因子测试之动量类因子",
+        "Remarks": "考虑收益计算的频率"
+    },
+    "Momentum002": {
+        "Series": 2,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "return_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股最近N个月收益率",
+        "Factor_Source": "20161220-华泰证券-华泰多因子系列之四：华泰单因子测试之动量类因子",
+        "Remarks": "N取值1,3,6,12"
+    },
+    "Momentum003": {
+        "Series": 3,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "wgt_return_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股最近N个月内以每日换手率作为权重对每日收益率求算术平均值",
+        "Factor_Source": "20161220-华泰证券-华泰多因子系列之四：华泰单因子测试之动量类因子",
+        "Remarks": "N取值1,3,6,12"
+    },
+    "Momentum004": {
+        "Series": 4,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "exp_wgt_return_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股最近N个月内以每日换手率乘以函数exp(-x_i/N/4)作为权重对每日收益率求算术平均值x_i为该日距离截面日的天数(排除非交易日)",
+        "Factor_Source": "20161220-华泰证券-华泰多因子系列之四：华泰单因子测试之动量类因子",
+        "Remarks": "N取值1,3,6,12"
+    },
+    "Momentum005": {
+        "Series": 5,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "Momentum_NM_MAX",
+        "Factor_Name_CN": "",
+        "Factor_Description": "最近N个月的日收益率的最大值",
+        "Factor_Source": "20161220-华泰证券-华泰多因子系列之四：华泰单因子测试之动量类因子",
+        "Remarks": "N取值1"
+    },
+    "Momentum006": {
+        "Series": 6,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "MTM_N_P",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去一段时间价格平均值比上当天收盘价",
+        "Factor_Source": "20190615-光大证券-多因子系列报告之二十二：再论动量因子",
+        "Remarks": "N取值20,60,120,240"
+    },
+    "Sentiment001": {
+        "Series": 1,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_NP",
+        "Factor_Name_CN": "",
+        "Factor_Description": "一致预期归母净利润/分析师报告中直接披露",
+        "Factor_Source": "20181214-华泰证券-华泰多因子系列之九：华泰单因子测试之一致预期因子",
+        "Remarks": ""
+    },
+    "Sentiment002": {
+        "Series": 2,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_EPS",
+        "Factor_Name_CN": "",
+        "Factor_Description": "一致预期EPS/分析师报告中直接披露",
+        "Factor_Source": "20181214-华泰证券-华泰多因子系列之九：华泰单因子测试之一致预期因子",
+        "Remarks": ""
+    },
+    "Sentiment003": {
+        "Series": 3,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_EP",
+        "Factor_Name_CN": "",
+        "Factor_Description": "一致预期EP/分析师报告中直接披露",
+        "Factor_Source": "20181214-华泰证券-华泰多因子系列之九：华泰单因子测试之一致预期因子",
+        "Remarks": ""
+    },
+    "Sentiment004": {
+        "Series": 4,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_BP",
+        "Factor_Name_CN": "",
+        "Factor_Description": "一致预期BP/分析师报告中直接披露",
+        "Factor_Source": "20181214-华泰证券-华泰多因子系列之九：华泰单因子测试之一致预期因子",
+        "Remarks": ""
+    },
+    "Sentiment005": {
+        "Series": 5,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_ROE",
+        "Factor_Name_CN": "",
+        "Factor_Description": "一致预期ROE/分析师报告中直接披露",
+        "Factor_Source": "20181214-华泰证券-华泰多因子系列之九：华泰单因子测试之一致预期因子",
+        "Remarks": ""
+    },
+    "Sentiment006": {
+        "Series": 6,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "Residual_Ret",
+        "Factor_Name_CN": "",
+        "Factor_Description": "1.FF构建三因子;\n2.个股收益与三因子回归,计算均衡收益U;\n3.根据分析师一致预期各年末个股收益和年化增长率,计算未来1到10年的预期收益;\n4.计算预期会计收益;\n5.计算三阶段增长模型;\n6.计算CFN;\n7.Residual_Ret=RE-U-CF\n\n",
+        "Factor_Source": "20191203-广发证券-多因子Alpha系列报告之（三十九）：分析师一致预期下的反转策略研究",
+        "Remarks": ""
+    },
+    "Sentiment007": {
+        "Series": 7,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_NP_change_NM",
+        "Factor_Name_CN": "",
+        "Factor_Description": "一致预期净利润变化率NM/分析师报告中直接披露",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": "N取值1,2,3"
+    },
+    "Sentiment008": {
+        "Series": 8,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_EPS_change_NM",
+        "Factor_Name_CN": "",
+        "Factor_Description": "一致预期净EPS变化率NM/分析师报告中直接披露",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": "N取值1,3"
+    },
+    "Sentiment009": {
+        "Series": 9,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_OPE",
+        "Factor_Name_CN": "",
+        "Factor_Description": "一致预期营业收入/分析师报告中直接披露",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Sentiment010": {
+        "Series": 10,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_OPE_change_NM",
+        "Factor_Name_CN": "",
+        "Factor_Description": "一致预期营业收入变化/分析师报告中直接披露",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": "N取值1,3"
+    },
+    "Sentiment011": {
+        "Series": 11,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_Average_Score",
+        "Factor_Name_CN": "",
+        "Factor_Description": "平均评级",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Sentiment012": {
+        "Series": 12,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_Rating_change",
+        "Factor_Name_CN": "",
+        "Factor_Description": "评级变化",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": "N取值1,3"
+    },
+    "Sentiment013": {
+        "Series": 13,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "分析师情绪因子",
+        "Factor_Name_EN": "CON_TargetReturn",
+        "Factor_Name_CN": "",
+        "Factor_Description": "一致预期目标价/收盘价-1",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "HighFreq001": {
+        "Series": 1,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "OCVP_T",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去T日日内集合竞价阶段成交量/日内总成交量",
+        "Factor_Source": "20170901-光大证券-多因子系列报告之五：见微知著，成交量占比高频因子解析",
+        "Remarks": "时间加权"
+    },
+    "HighFreq002": {
+        "Series": 2,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "BCVP_T",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去T日日内尾盘5分钟内成交量/日内总成交量",
+        "Factor_Source": "20170901-光大证券-多因子系列报告之五：见微知著，成交量占比高频因子解析",
+        "Remarks": "时间加权"
+    },
+    "HighFreq003": {
+        "Series": 3,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "OBCVP",
+        "Factor_Name_CN": "",
+        "Factor_Description": "w*OCVP_T+(1-w)*BCVP_T",
+        "Factor_Source": "20170901-光大证券-多因子系列报告之五：见微知著，成交量占比高频因子解析",
+        "Remarks": "OCVP：BCVP=9:1"
+    },
+    "HighFreq004": {
+        "Series": 4,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "vol_amtopm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去T日日内上午成交量/下午成交量的加权平均",
+        "Factor_Source": "20171123-光大证券-多因子系列报告之八：高频因子，日内分时成交量蕴藏玄机",
+        "Remarks": ""
+    },
+    "HighFreq005": {
+        "Series": 5,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "TCV",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去T日日内5分钟实体K线对应成交量总和/当天总成交量的加权平均",
+        "Factor_Source": "20180103-光大证券-多因子系列报告之九：一致交易因子，挖掘集体行为背后的收益",
+        "Remarks": "实体K线满足：|Close-Open|<a*|High-Low|"
+    },
+    "HighFreq006": {
+        "Series": 6,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "PCV",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去T日日内5分钟上涨实体K线对应成交量总和/当天总成交量的加权平均",
+        "Factor_Source": "20180103-光大证券-多因子系列报告之九：一致交易因子，挖掘集体行为背后的收益",
+        "Remarks": "上涨实体K线满足：|Close-Open|<a*|High-Low| and Close>Open"
+    },
+    "HighFreq007": {
+        "Series": 7,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "NCV",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去T日日内5分钟下跌实体K线对应成交量总和/当天总成交量的加权平均",
+        "Factor_Source": "20180103-光大证券-多因子系列报告之九：一致交易因子，挖掘集体行为背后的收益",
+        "Remarks": "下跌实体K线满足：|Close-Open|<a*|High-Low| and Close<Open"
+    },
+    "HighFreq008": {
+        "Series": 8,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "std_hfd",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股收益波动",
+        "Factor_Source": "20170909-海通证券-选股因子系列研究（二十五）：高频因子之已实现波动分解",
+        "Remarks": ""
+    },
+    "HighFreq009": {
+        "Series": 9,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "error_hfd",
+        "Factor_Name_CN": "",
+        "Factor_Description": "FF残差波动",
+        "Factor_Source": "20170909-海通证券-选股因子系列研究（二十五）：高频因子之已实现波动分解",
+        "Remarks": ""
+    },
+    "HighFreq010": {
+        "Series": 10,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "system_hfd",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股收益减FF残差后波动",
+        "Factor_Source": "20170909-海通证券-选股因子系列研究（二十五）：高频因子之已实现波动分解",
+        "Remarks": ""
+    },
+    "HighFreq011": {
+        "Series": 11,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "error_to_std",
+        "Factor_Name_CN": "",
+        "Factor_Description": "FF残差波动比上收益波动",
+        "Factor_Source": "20170909-海通证券-选股因子系列研究（二十五）：高频因子之已实现波动分解",
+        "Remarks": ""
+    },
+    "HighFreq012": {
+        "Series": 12,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "std_hfd_up",
+        "Factor_Name_CN": "",
+        "Factor_Description": "高频上行波动:个股收益大于零波动",
+        "Factor_Source": "20170909-海通证券-选股因子系列研究（二十五）：高频因子之已实现波动分解",
+        "Remarks": ""
+    },
+    "HighFreq013": {
+        "Series": 13,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "std_hfd_down",
+        "Factor_Name_CN": "",
+        "Factor_Description": "高频下行波动:个股收益小于零波动",
+        "Factor_Source": "20170909-海通证券-选股因子系列研究（二十五）：高频因子之已实现波动分解",
+        "Remarks": ""
+    },
+    "HighFreq014": {
+        "Series": 14,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "std_hfd_up_occupy",
+        "Factor_Name_CN": "",
+        "Factor_Description": "高频上行波动占比:个股收益大于零平方和比上收益平方和",
+        "Factor_Source": "20170909-海通证券-选股因子系列研究（二十五）：高频因子之已实现波动分解",
+        "Remarks": ""
+    },
+    "HighFreq015": {
+        "Series": 15,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "std_hfd_down_occupy",
+        "Factor_Name_CN": "",
+        "Factor_Description": "高频下行波动:个股收益小于零平方和比上收益平方和",
+        "Factor_Source": "20170909-海通证券-选股因子系列研究（二十五）：高频因子之已实现波动分解",
+        "Remarks": ""
+    },
+    "HighFreq016": {
+        "Series": 16,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "amtpertrd",
+        "Factor_Name_CN": "",
+        "Factor_Description": "平均单笔成交金额=当日成交金额/成交笔数",
+        "Factor_Source": "20190416-海通证券-选股因子系列研究（四十六）：日内分时成交中的玄机",
+        "Remarks": ""
+    },
+    "HighFreq017": {
+        "Series": 17,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Amtpertrd_inflow",
+        "Factor_Name_CN": "",
+        "Factor_Description": "平均单笔流入金额=当日流出金额/流入成交笔数",
+        "Factor_Source": "20190416-海通证券-选股因子系列研究（四十六）：日内分时成交中的玄机",
+        "Remarks": ""
+    },
+    "HighFreq018": {
+        "Series": 18,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Amtpertrd_outflow",
+        "Factor_Name_CN": "",
+        "Factor_Description": "平均单笔流出金额=当日流出金额/流出成交笔数",
+        "Factor_Source": "20190416-海通证券-选股因子系列研究（四十六）：日内分时成交中的玄机",
+        "Remarks": ""
+    },
+    "HighFreq019": {
+        "Series": 19,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "apt_inflow_ratio",
+        "Factor_Name_CN": "",
+        "Factor_Description": "平均单笔流入金额占比=Amtpertrd_inflow/amtpertrd",
+        "Factor_Source": "20190416-海通证券-选股因子系列研究（四十六）：日内分时成交中的玄机",
+        "Remarks": ""
+    },
+    "HighFreq020": {
+        "Series": 20,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "apt_outflow_ratio",
+        "Factor_Name_CN": "",
+        "Factor_Description": "平均单笔流出金额占比=Amtpertrd_outflow/amtpertrd",
+        "Factor_Source": "20190416-海通证券-选股因子系列研究（四十六）：日内分时成交中的玄机",
+        "Remarks": ""
+    },
+    "HighFreq021": {
+        "Series": 21,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "apt_netinflow_ratio",
+        "Factor_Name_CN": "",
+        "Factor_Description": "平均单笔流入流出金额之比=apt_inflow_ratio/apt_outflow_ratio",
+        "Factor_Source": "20190416-海通证券-选股因子系列研究（四十六）：日内分时成交中的玄机",
+        "Remarks": ""
+    },
+    "HighFreq022": {
+        "Series": 22,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "HFD_skew",
+        "Factor_Name_CN": "",
+        "Factor_Description": "高频偏度:略",
+        "Factor_Source": "20200730-海通证券-选股因子系列研究（六十九）：高频因子的现实与幻想",
+        "Remarks": ""
+    },
+    "HighFreq023": {
+        "Series": 23,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "HFD_std_down",
+        "Factor_Name_CN": "",
+        "Factor_Description": "下行波动占比:略",
+        "Factor_Source": "20200730-海通证券-选股因子系列研究（六十九）：高频因子的现实与幻想",
+        "Remarks": ""
+    },
+    "HighFreq024": {
+        "Series": 24,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "HFD_cor_p_v",
+        "Factor_Name_CN": "",
+        "Factor_Description": "量价相关性:略",
+        "Factor_Source": "20200730-海通证券-选股因子系列研究（六十九）：高频因子的现实与幻想",
+        "Remarks": ""
+    },
+    "HighFreq025": {
+        "Series": 25,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "HFD_reverse",
+        "Factor_Name_CN": "",
+        "Factor_Description": "改进反转:略",
+        "Factor_Source": "20200730-海通证券-选股因子系列研究（六十九）：高频因子的现实与幻想",
+        "Remarks": ""
+    },
+    "HighFreq026": {
+        "Series": 26,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "HFD_promote_increase",
+        "Factor_Name_CN": "",
+        "Factor_Description": "大单推动涨幅:略",
+        "Factor_Source": "20200730-海通证券-选股因子系列研究（六十九）：高频因子的现实与幻想",
+        "Remarks": ""
+    },
+    "Company001": {
+        "Series": 1,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "First_Percent",
+        "Factor_Name_CN": "",
+        "Factor_Description": "第一大股东持股比例",
+        "Factor_Source": "20170731-光大证券-多因子系列报告之四：别开生面，公司治理因子详解",
+        "Remarks": "正向因子"
+    },
+    "Company002": {
+        "Series": 2,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "Two_Ten_Percent",
+        "Factor_Name_CN": "",
+        "Factor_Description": "第二至十大股东持股比例",
+        "Factor_Source": "20170731-光大证券-多因子系列报告之四：别开生面，公司治理因子详解",
+        "Remarks": "负向因子"
+    },
+    "Company003": {
+        "Series": 3,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "Mc_percent",
+        "Factor_Name_CN": "",
+        "Factor_Description": "流通股比例",
+        "Factor_Source": "20170731-光大证券-多因子系列报告之四：别开生面，公司治理因子详解",
+        "Remarks": "正向因子"
+    },
+    "Company004": {
+        "Series": 4,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "Shareholder_Number",
+        "Factor_Name_CN": "",
+        "Factor_Description": "上市公司股东数量",
+        "Factor_Source": "20170731-光大证券-多因子系列报告之四：别开生面，公司治理因子详解",
+        "Remarks": "负向因子"
+    },
+    "Company005": {
+        "Series": 5,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "Ind_director_num",
+        "Factor_Name_CN": "",
+        "Factor_Description": "独立董事占比",
+        "Factor_Source": "20170731-光大证券-多因子系列报告之四：别开生面，公司治理因子详解",
+        "Remarks": "正向因子"
+    },
+    "Company006": {
+        "Series": 6,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "Director_num",
+        "Factor_Name_CN": "",
+        "Factor_Description": "董事会委员数量",
+        "Factor_Source": "20170731-光大证券-多因子系列报告之四：别开生面，公司治理因子详解",
+        "Remarks": "正向因子"
+    },
+    "Company007": {
+        "Series": 7,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "Mana_income",
+        "Factor_Name_CN": "",
+        "Factor_Description": "管理层薪酬",
+        "Factor_Source": "20170731-光大证券-多因子系列报告之四：别开生面，公司治理因子详解",
+        "Remarks": "正向因子"
+    },
+    "Company008": {
+        "Series": 8,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "Mana_share_num",
+        "Factor_Name_CN": "",
+        "Factor_Description": "管理层持股数量",
+        "Factor_Source": "20170731-光大证券-多因子系列报告之四：别开生面，公司治理因子详解",
+        "Remarks": "正向因子"
+    },
+    "Company009": {
+        "Series": 9,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "Deal_Method",
+        "Factor_Name_CN": "",
+        "Factor_Description": "受证监会、交易所等处罚情况",
+        "Factor_Source": "20170731-光大证券-多因子系列报告之四：别开生面，公司治理因子详解",
+        "Remarks": "负向因子"
+    },
+    "Company010": {
+        "Series": 10,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "Stock_Incentive",
+        "Factor_Name_CN": "",
+        "Factor_Description": "是否实施股权激励",
+        "Factor_Source": "20170731-光大证券-多因子系列报告之四：别开生面，公司治理因子详解",
+        "Remarks": "正向因子"
+    },
+    "Company011": {
+        "Series": 11,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "专利因子",
+        "Factor_Name_CN": "",
+        "Factor_Description": "",
+        "Factor_Source": "20200410-光大证券-多因子系列报告之三十一：专利数据中有哪些Alpha？",
+        "Remarks": "我觉得他在胡扯"
+    },
+    "Company012": {
+        "Series": 12,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "payable_emp_G_all",
+        "Factor_Name_CN": "",
+        "Factor_Description": "应付职工薪酬规模(总量)增速(TTM)",
+        "Factor_Source": "20141210-海通证券-选股因子系列研究（九）：上市公司薪酬那点事",
+        "Remarks": ""
+    },
+    "Company013": {
+        "Series": 13,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "payable_emp_G_average",
+        "Factor_Name_CN": "",
+        "Factor_Description": "应付职工薪酬规模(人均)增速(TTM)",
+        "Factor_Source": "20141210-海通证券-选股因子系列研究（九）：上市公司薪酬那点事",
+        "Remarks": ""
+    },
+    "Company014": {
+        "Series": 14,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "paid_emp_G_all",
+        "Factor_Name_CN": "",
+        "Factor_Description": "已付职工薪酬规模(总量)增速(TTM)",
+        "Factor_Source": "20141210-海通证券-选股因子系列研究（九）：上市公司薪酬那点事",
+        "Remarks": ""
+    },
+    "Company015": {
+        "Series": 15,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "paid_emp_G_average",
+        "Factor_Name_CN": "",
+        "Factor_Description": "已付职工薪酬规模(人均)增速(TTM)",
+        "Factor_Source": "20141210-海通证券-选股因子系列研究（九）：上市公司薪酬那点事",
+        "Remarks": ""
+    },
+    "Company016": {
+        "Series": 16,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "fundamental_comprehensive",
+        "Factor_Name_CN": "",
+        "Factor_Description": "基本面综合因子:AVERAGE(ROE+dROE+dCFO+EPS+dLEVER+LIQUID+dMARGIN+dTURN)",
+        "Factor_Source": "20170726-海通证券-选股因子系列研究（二十三）：历史财务信息对股票收益的预测能力",
+        "Remarks": "dROE:净资产收益率同比增长率"
+    },
+    "Company017": {
+        "Series": 17,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "degree",
+        "Factor_Name_CN": "",
+        "Factor_Description": "1.计算全部A股两两之间过去N个交易日的收益率相关系数,保留绝对值在某一阈值智商的结果,构建股价相关性网络；\n2.计算与公司i有关联关系的公司数量",
+        "Factor_Source": "20190824-海通证券-选股因子系列研究（五十三）：上市公司股价关系网因子",
+        "Remarks": ""
+    },
+    "Company018": {
+        "Series": 18,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "centrality",
+        "Factor_Name_CN": "",
+        "Factor_Description": "1.计算全部A股两两之间过去N个交易日的收益率相关系数,保留绝对值在某一阈值智商的结果,构建股价相关性网络；\n2.计算公司i出现在任意两个公司k与j之间的最短路劲上的频率",
+        "Factor_Source": "20190824-海通证券-选股因子系列研究（五十三）：上市公司股价关系网因子",
+        "Remarks": ""
+    },
+    "Company019": {
+        "Series": 19,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "公司因子",
+        "Factor_Name_EN": "spillover",
+        "Factor_Name_CN": "",
+        "Factor_Description": "1.计算全部A股两两之间过去N个交易日的收益率相关系数,保留绝对值在某一阈值之上的结果,构建股价相关性网络；\n2.计算与公司i有关联关系的公司过去N日的平均涨幅",
+        "Factor_Source": "20190824-海通证券-选股因子系列研究（五十三）：上市公司股价关系网因子",
+        "Remarks": ""
+    },
+    "Value001": {
+        "Series": 1,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "EP_TTM",
+        "Factor_Name_CN": "市盈率倒数",
+        "Factor_Description": "净利润(TTM)/总市值",
+        "Factor_Source": "20160929-华泰证券-华泰多因子系列之二：华泰单因子测试之估值类因子",
+        "Remarks": ""
+    },
+    "Value002": {
+        "Series": 2,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "EP_cut_TTM",
+        "Factor_Name_CN": "扣非市盈率倒数",
+        "Factor_Description": "扣非后净利润(TTM)/总市值",
+        "Factor_Source": "20160929-华泰证券-华泰多因子系列之二：华泰单因子测试之估值类因子",
+        "Remarks": ""
+    },
+    "Value003": {
+        "Series": 3,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "BP_LR",
+        "Factor_Name_CN": "市净率倒数(最新财报)",
+        "Factor_Description": "净资产(最新财报)/总市值",
+        "Factor_Source": "20160929-华泰证券-华泰多因子系列之二：华泰单因子测试之估值类因子",
+        "Remarks": ""
+    },
+    "Value004": {
+        "Series": 4,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "SP_TTM",
+        "Factor_Name_CN": "市销率倒数(TTM)",
+        "Factor_Description": "营业收入(TTM)/总市值",
+        "Factor_Source": "20160929-华泰证券-华泰多因子系列之二：华泰单因子测试之估值类因子",
+        "Remarks": ""
+    },
+    "Value005": {
+        "Series": 5,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "NCFP_TTM",
+        "Factor_Name_CN": "市现率倒数(TTM)",
+        "Factor_Description": "净现金流(TTM)/总市值",
+        "Factor_Source": "20160929-华泰证券-华泰多因子系列之二：华泰单因子测试之估值类因子",
+        "Remarks": ""
+    },
+    "Value006": {
+        "Series": 6,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "OCFP_TTM",
+        "Factor_Name_CN": "市现率倒数(经营现金流，TTM)",
+        "Factor_Description": "经营现金流(TTM)/总市值",
+        "Factor_Source": "20160929-华泰证券-华泰多因子系列之二：华泰单因子测试之估值类因子",
+        "Remarks": ""
+    },
+    "Value007": {
+        "Series": 7,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "FCFP_LR",
+        "Factor_Name_CN": "市现率倒数(自由现金流，最新财报)",
+        "Factor_Description": "自由现金流(最新年报)/总市值",
+        "Factor_Source": "20160929-华泰证券-华泰多因子系列之二：华泰单因子测试之估值类因子",
+        "Remarks": ""
+    },
+    "Value008": {
+        "Series": 8,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "DP_TTM",
+        "Factor_Name_CN": "股息率倒数",
+        "Factor_Description": "近12个月现金红利(按除息日计)/总市值",
+        "Factor_Source": "20160929-华泰证券-华泰多因子系列之二：华泰单因子测试之估值类因子",
+        "Remarks": ""
+    },
+    "Value009": {
+        "Series": 9,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "EV2EBITDA_LR",
+        "Factor_Name_CN": "企业价值倍数倒数(最新财报，扣除现金)",
+        "Factor_Description": "企业价值(扣除现金)/EBITDA(最新财报)",
+        "Factor_Source": "20160929-华泰证券-华泰多因子系列之二：华泰单因子测试之估值类因子",
+        "Remarks": ""
+    },
+    "Value010": {
+        "Series": 10,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "PEG_TTM",
+        "Factor_Name_CN": "市盈率增长倒数",
+        "Factor_Description": "(总市值/净利润(TTM))/(净利润(TTM)同比增长率)",
+        "Factor_Source": "20160929-华泰证券-华泰多因子系列之二：华泰单因子测试之估值类因子",
+        "Remarks": ""
+    },
+    "Value011": {
+        "Series": 11,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "BP_TTM",
+        "Factor_Name_CN": "市净率倒数(TTM)",
+        "Factor_Description": "净资产(TTM)/总市值",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Value012": {
+        "Series": 12,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "E2P_TTM",
+        "Factor_Name_CN": "市盈率倒数(归属母公司净利润)",
+        "Factor_Description": "归属母公司股东权益(TTM)/总市值",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Value013": {
+        "Series": 13,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "EP_LR",
+        "Factor_Name_CN": "市盈率倒数(最新财报)",
+        "Factor_Description": "净利润(最新年报)/总市值",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Value014": {
+        "Series": 14,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "FCFP_TTM",
+        "Factor_Name_CN": "市现率倒数(自由现金流，TTM)",
+        "Factor_Description": "自由现金流(TTM)/总市值",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Value015": {
+        "Series": 15,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "估值因子",
+        "Factor_Name_EN": "SP_LR",
+        "Factor_Name_CN": "市销率倒数(最新财报)",
+        "Factor_Description": "营业收入(最新年报)/总市值",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Attention001": {
+        "Series": 1,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "关注度因子",
+        "Factor_Name_EN": "REPORT_NUMBER",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股季度报告数",
+        "Factor_Source": "20181214-华泰证券-华泰多因子系列之九：华泰单因子测试之一致预期因子",
+        "Remarks": ""
+    },
+    "Attention002": {
+        "Series": 2,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "关注度因子",
+        "Factor_Name_EN": "AUTHOR_NUMBER",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股季度关注研究员数",
+        "Factor_Source": "20181214-华泰证券-华泰多因子系列之九：华泰单因子测试之一致预期因子",
+        "Remarks": ""
+    },
+    "Attention003": {
+        "Series": 3,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "关注度因子",
+        "Factor_Name_EN": "ORGAN_NUMBER",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股季度机构覆盖数",
+        "Factor_Source": "20181214-华泰证券-华泰多因子系列之九：华泰单因子测试之一致预期因子",
+        "Remarks": ""
+    },
+    "Attention004": {
+        "Series": 4,
+        "Factor_Category_1": "市场因子",
+        "Factor_Category_2": "关注度因子",
+        "Factor_Name_EN": "BUY_NUMBER",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股季度买入评级报告数",
+        "Factor_Source": "20181214-华泰证券-华泰多因子系列之九：华泰单因子测试之一致预期因子",
+        "Remarks": ""
+    },
+    "TechIndex001": {
+        "Series": 1,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "ACD",
+        "Factor_Name_CN": "",
+        "Factor_Description": "收集派发指标:将市场分为两股收集(买入)及派发(估出)的力量/\nLC=REF(CLOSE,1);\nDIF=CLOSE-IF(CLOSE>LC,MIN(LOW,LC),MAX(HIGH,LC));\nACD=SUM(IF(CLOSE=LC,0,DIF),0);\nMAACD=EWA(ACD,N)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": "取过去N天的平均值；N取值6,12"
+    },
+    "TechIndex002": {
+        "Series": 2,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "ADTM",
+        "Factor_Name_CN": "",
+        "Factor_Description": "动态买卖气指标:用开盘价的向上波动幅度和向下波动幅度的距离差值来描述人气高低的指标/\nDTM=IF(O<=REF(O,1),0,MAX((H-O),(O-REF(O,1))));\nDBM=IF(O>=REF(O,1),0,MAX((O-L),(O-REF(O,1))));\nSTM=SUM(DTM,P);\nSBM=SUM(DBM,P);\nADTM=IF(STM>SBM,(STM-SBM)/STM,IF(STM=SBM,0,(STM-SBM)/SBM))",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex003": {
+        "Series": 3,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "AD",
+        "Factor_Name_CN": "",
+        "Factor_Description": "将每日的成交量通过价格加权累计,用以计算成交量的动量/\nCUMAD=SUM(SUM((CLOSE-LOW)-(HIGH-CLOSE))/(HIGH-LOW)*VOL,0),N)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": "取过去N天的累加值；N取值6,20"
+    },
+    "TechIndex004": {
+        "Series": 4,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "AR-BR",
+        "Factor_Name_CN": "",
+        "Factor_Description": "AR指标是反映市场当前情况下多空双方力量发展对比的结果;\nBR指标也是反映当前情况下多空双方力量争斗的结果/\nAR=SUM(HIGH-OPEN,M)/SUM(OPEN-LOW,M)*100;\nBR=SUM(MAX(0,HIGH-REF(CLOSE,1)),M)/SUM(MAX(0,REF(CLOSE,1)-LOW),M)*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex005": {
+        "Series": 5,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "ARC",
+        "Factor_Name_CN": "",
+        "Factor_Description": "变化率指数均值:股票的价格变化率RC指标的均值,用以判断前一段交易周期内股票的平均价格变化率/\nRC=C/REF(C,m);\nARC=SMA(REF(RC,1),m,1)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex006": {
+        "Series": 6,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Aroon",
+        "Factor_Name_CN": "",
+        "Factor_Description": "计算自价格达到近期最高值和最低值以来所经过的期间数,帮助投资者预测证券价格趋势、强弱以及趋势的反转等/\nAroon上升数=[(计算期天数-最高价后的天数)/计算期天数]*100;\nAroon下降数=[(计算期天数-最低价后的天数)/计算期天数]*100;\nAroon指标=Aroon上升数-Aroon下降数",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex007": {
+        "Series": 7,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "ASI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "累计振动升降指标:以开盘、最高、最低、收盘价与前一交易日的各种价格相比较作为计算因子,研判市场的方向性/\nLC=REF(C,1);\nAA=ABS(H-LC);BB=ABS(L-LC);\nCC=ABS(H-REF(L,1));\nDD=ABS(LC-REF(O,1));\nR=IF(AA>BBANDAA>CC,AA+BB/2+DD/4,IF(BB>CCANDBB>AA,BB+AA/2+DD/4,CC+DD/4));\nX=(C-LC+(C-O)/2+LC-REF(O,1));\nSI=16*X/R*MAX(AA,BB);\nASI=SUM(SI,0);\nCUMASI=SUM(ASI,N)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": "取过去N天的累计值；N取值20"
+    },
+    "TechIndex008": {
+        "Series": 8,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "ATR",
+        "Factor_Name_CN": "",
+        "Factor_Description": "平均真实波幅:显示市场变化率的指标/\nTR1=MAX(MAX((HIGH-LOW),ABS(REF(CLOSE,1)-HIGH)),ABS(REF(CLOSE,1)-LOW));\nATR=MA(TR1,m)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex009": {
+        "Series": 9,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "BBI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "多空指数:将不同日数移动平均线加权平均之后的综合指标/\nBBI=(MA(CLOSE,M1)+MA(CLOSE,M2)+MA(CLOSE,M3)+MA(CLOSE,M4))/4",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex010": {
+        "Series": 10,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "BIAS",
+        "Factor_Name_CN": "",
+        "Factor_Description": "乖偏率:反映一定时期内股价与其移动平均数偏离程度的指标/\nBIAS=(CLOSE-MA(CLOSE,P1))/MA(CLOSE,P1)*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex011": {
+        "Series": 11,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "CCI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "顺势指标:测量股价是否已超出常态分布范围/\nTYP=(HIGH+LOW+CLOSE)/3;\nCCI=(TYP-MA(TYP,M))/(0.015*AVEDEV(TYP,M))",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex012": {
+        "Series": 12,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Chaikin_Oscillator",
+        "Factor_Name_CN": "",
+        "Factor_Description": "佳庆指标:基于AD曲线的指数移动均线而计算得到/\nAD=VOLx[(CLOSE-LOW)-(HIGH-CLOSE)]/(HIGH-LOW);\nChaikin_Oscillator=EMA(AD,10)-EMA(AD,3)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex013": {
+        "Series": 13,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Chaikin_Volatility",
+        "Factor_Name_CN": "",
+        "Factor_Description": "佳庆波动率指标:根据波动率预测股票未来的趋势/\nChaikin_Volatility=(10日HIGH-LOW的EMA–10日前HIGH-LOW的EMA)/10\n日前HIGH-LOW的EMA*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex014": {
+        "Series": 14,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Chande",
+        "Factor_Name_CN": "",
+        "Factor_Description": "钱德动量摆动指标/\nCZ1=IF(CLOSE-REF(CLOSE,1)>0,CLOSE-REF(CLOSE,1),0);\nCZ2=IF(CLOSE-REF(CLOSE,1)<0,ABS(CLOSE-REF(CLOSE,1)),0);\nSU=SUM(CZ1,N);\nSD=SUM(CZ2,N);\nCMO=(SU-SD)/(SU+SD)*100\n",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex015": {
+        "Series": 15,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Coppock_Curve",
+        "Factor_Name_CN": "",
+        "Factor_Description": "估波指标:通过计算月度价格的变化速率的加权平均值来测量市场的动量,属于长线指标/\nR(n1)=(CLOSE-REF(CLOSE,N1))/REF(CLOSE,N1)*100;\nR(n2)=(CLOSE-REF(CLOSE,N2))/REF(CLOSE,N2)*100;\nRC(n1,n2)=R(n1)+R(n2);\nCoppock(n1,n2,n3)=WMA[RC(n1,n2),n3]",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex016": {
+        "Series": 16,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "CR",
+        "Factor_Name_CN": "",
+        "Factor_Description": "能量指标/\nMID=(HIGH+LOW+CLOSE)/3;\nCR=SUM(MAX(0,HIGH-REF(MID,1)),M)/SUM(MAX(0,REF(MID,1)-L),M)*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex017": {
+        "Series": 17,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "DBCD",
+        "Factor_Name_CN": "",
+        "Factor_Description": "异同离差乖离率:先计算乖离率BIAS,然后计算不同日的乖离率之间的离差,最后对离差进行指数移动平滑处理/\nBIAS=(C-MA(C,P))/MA(C,P);\nDIF=(BIAS-REF(BIAS,N));\nDBCD=SMA(DIF,W,1)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex018": {
+        "Series": 18,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "DDI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "方向标准离差指数/\nDMZ=IF((H+L)<=(REF(H,1)+REF(L,1)),0,MAX(ABS(H-REF(H,1)),ABS(L-REF(L,1))));\nDMF=IF((H+L)>=(REF(H,1)+REF(L,1)),0,MAX(ABS(H-REF(H,1)),ABS(L-REF(L,1))));\nDIZ=SUM(DMZ,N)/(SUM(DMZ,N)+SUM(DMF,N));\nDIF=SUM(DMF,N)/(SUM(DMF,N)+SUM(DMZ,N));\nDDI=DIZ-DIF",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex019": {
+        "Series": 19,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "DMI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "动向指标:通过分析股票价格在涨跌过程中买卖双方力量均衡点的变化情况,从而提供对趋势判断依据的一种技术指标/\nTR1=SUM(MAX(MAX(HIGH-LOW,ABS(HIGH-REF(CLOSE,1))),ABS(LOW-REF(CLOSE,1))),P)HD=HIGH-REF(HIGH,1)LD=REF(LOW,1)-LOW",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex020": {
+        "Series": 20,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "DPTB",
+        "Factor_Name_CN": "",
+        "Factor_Description": "大盘同步指标/\nCOUNT((C>OANDINDEXC>INDEXO)OR(C<OANDINDEXC<INDEXO),m)/m",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex021": {
+        "Series": 21,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Ease_of_Movement",
+        "Factor_Name_CN": "",
+        "Factor_Description": "简易波动指标:将价格与成交量的变化结合成一个波动指标来反映股价或指数的变动状况/\nEase_of_Movement=EMA(((HIGH+LOW)/2-(REF(HIGH,1)+REF(LOW,1))/2)*(HIGH-LOW)/Vol)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex022": {
+        "Series": 22,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Elder",
+        "Factor_Name_CN": "",
+        "Factor_Description": "透视指标/\n多头力道=最高价-n期内收盘价的EMA空头力道=最低价--n期内收盘价的EMAElder透视指标=(多头力道-空头力道)/收盘价",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex023": {
+        "Series": 23,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Hurst",
+        "Factor_Name_CN": "",
+        "Factor_Description": "反映的是一长串相互联系事件的结果。今天发生的事将影响未来,过去的事也会影响现在/\n略",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex024": {
+        "Series": 24,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "JDQS",
+        "Factor_Name_CN": "",
+        "Factor_Description": "阶段强势指标/\nA=COUNT(C>OANDINDEXC<INDEXO,m)B=COUNT(INDEXC<INDEXO,m)D=A/B",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex025": {
+        "Series": 25,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "KDJ",
+        "Factor_Name_CN": "",
+        "Factor_Description": "随机指标/\nRSV=(CLOSE-LLV(LOW,N))/(HHV(HIGH,N)-LLV(LOW,N))*100K=SMA(RSV,P1,1)D=SMA(K,P2,1)J=3*K-2*D",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex026": {
+        "Series": 26,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Klinger",
+        "Factor_Name_CN": "",
+        "Factor_Description": "成交量摆动指标:该指标在决定长期资金流量趋势的同时保持了对于短期资金流量的敏感性,因而可以用于预测短期价格拐点/\nMeanPrice=AVERAGE(CLOSE+HIGH+LOW);\nVolume_D=IF(MeanPrice>REF(MeanPrice,1),Volume,-Volume);\nK1=EWA(Volume_D,34);\nK2=EWA(Volume_D,55);\nKlinger=EWA(K2-K1,6)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex027": {
+        "Series": 27,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "MA/CLOSE",
+        "Factor_Name_CN": "",
+        "Factor_Description": "均线价格比",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex028": {
+        "Series": 28,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "MA_reg",
+        "Factor_Name_CN": "",
+        "Factor_Description": "均价线性回归系数/\n取近n个交易日的对应的MA值做对n个周期的序数的普通最小二乘的线性回归。取股价关于周期序数的系数作为因子",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex029": {
+        "Series": 29,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "MACD",
+        "Factor_Name_CN": "",
+        "Factor_Description": "指数平滑异动平均线/\nDIFF=EMA(CLOSE,S)-EMA(CLOSE,P)DEA=EMA(DIFF,M)MACD=2*(DIFF-DEA)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex030": {
+        "Series": 30,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Mass_Index",
+        "Factor_Name_CN": "",
+        "Factor_Description": "梅斯线:寻找飙涨股或者极度弱势股的重要趋势反转点/\nMass_Index=EMA(HIGH-LOW,9)/EMA(EMA(HIGH-LOW,9),9)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex031": {
+        "Series": 31,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "MFI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "资金流量指标/\nTYP=(HIGH+LOW+CLOSE)/3V1=SUM(IF(TYP>REF(TYP,1),TYP*VOL,0),N)/SUM(IF(TYP<REF(TYP,1),TYP*VOL,0),N)MFI=100-(100/(1+V1))",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex032": {
+        "Series": 32,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "MICD",
+        "Factor_Name_CN": "",
+        "Factor_Description": "异同离差动力指数/\nMTM=CLOSE-REF(CLOSE,1);MTMMA=SMA(MI,N,1);DIF=MA(REF(MTMMA,1),N1)-MA(REF(MTMMA,1),N2)MICD=SMA(DIF,10,1)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex033": {
+        "Series": 33,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Money_Flow",
+        "Factor_Name_CN": "",
+        "Factor_Description": "资金流量/\nMoney_Flow=(CLOSE+HIGH+LOW)/3*SUM(Vol,N)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": "取过去N天的累计值；N取值20"
+    },
+    "TechIndex034": {
+        "Series": 34,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "MTM",
+        "Factor_Name_CN": "",
+        "Factor_Description": "动量指标:从股票的恒速原理出发,考察股价的涨跌速度,以股价涨跌速度的变化分析股价趋势的指标/\nMTM=C-REF(C,m)MTMMA=SMA(A,m,1)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex035": {
+        "Series": 35,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "OBV",
+        "Factor_Name_CN": "",
+        "Factor_Description": "能量潮:通过统计成交量变动的趋势来推测股价趋势/\nOBV=SUM(IF(CLOSE>REF(CLOSE,1),VOL,IF(CLOSE<REF(CLOSE,1),-VOL,0)),0)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex036": {
+        "Series": 36,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "PSY",
+        "Factor_Name_CN": "",
+        "Factor_Description": "心理线:将一定时期内投资者趋向买方或卖方的心理事实转化为数值,从而判断股价的未来趋势/\nPSY=COUNT(CLOSE>REF(CLOSE,1),M)/M*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex037": {
+        "Series": 37,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "PVI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "正成交量指标:辨别目前市场行情是处于多头行情还是空头行情,并追踪市场资金流向/\nPV=IF((CLOSE>REF(CLOSE,1)),(CLOSE-REF(CLOSE,1))/REF(CLOSE,1)*REF(PVI,1),REF(PVI,1),))",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex038": {
+        "Series": 38,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "PVT",
+        "Factor_Name_CN": "",
+        "Factor_Description": "价量趋势指标/\nPVT=(CLOSE—REF(CLOSE,N))/REF(CLOSE,N)×VOL",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex039": {
+        "Series": 39,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "RCCD",
+        "Factor_Name_CN": "",
+        "Factor_Description": "异同离差变化率指数/\nRC=C/REF(C,m)ARC1=SMA(REF(RC,1),m,1)DIF=MA(REF(ARC1,1),p1)-MA(REF(ARC1,1),p2)RCCD=SMA(DIF,m,1)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex040": {
+        "Series": 40,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "RC",
+        "Factor_Name_CN": "",
+        "Factor_Description": "变化率指数/\nRC=C/REF(C,m)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex041": {
+        "Series": 41,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "ROC",
+        "Factor_Name_CN": "",
+        "Factor_Description": "变动速率:以今天之价格比较其N天前之价格的变化率/\nROC=(CLOSE-REF(CLOSE,N))/REF(CLOSE,N)*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": "采用12天及25天可达相当的效果"
+    },
+    "TechIndex042": {
+        "Series": 42,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "RSI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "相对强弱指标:衡量证券自身内在相对强度的指标/\nRSI=SMA(MAX(CLOSE-LC,0),N1,1)/SMA(ABS(CLOSE-LC),N1,1)*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex043": {
+        "Series": 43,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "RVI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "相对波动率指数:用于预测波动率的方向,其通过计算波动率而不是价格的变化来预测价格的强度/\nUP=IF(CLOSE>REF(CLOSE,1),STD(CLOSE,N),0)DOWN=IF(CLOSE<=REF(CLOSE,1),STD(CLOSE,N),0)AUP=SMA(UP,N,1)ADOWN=SMA(DOWN,N,1)RVI=AUP/(AUP+ADOWN)*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex044": {
+        "Series": 44,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "SRMI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "修正动量指标/\nSRMI=IF(C<REF(C,m),(C-REF(C,m))/REF(C,m),IF(C=REF(C,m),0,(C-REF(C,m))/C))",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex045": {
+        "Series": 45,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "StochRSI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "随机强弱指数/\nRSI=SMA(MAX(CLOSE-LC,0),N1,1)/SMA(ABS(CLOSE-LC),N1,1)*100StochRSI=(当日RSI-周期内最小RSI)/(周期内最大RSI-周期内最小RSI)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex046": {
+        "Series": 46,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "TEMA",
+        "Factor_Name_CN": "",
+        "Factor_Description": "三重指数移动平均线/\n取时间n内的收盘价,取对数后分别计算其一至三重指数加权平均。TEMA=3*一重指数加权平均-3*二重指数加权平均+三重指数加权平均",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex047": {
+        "Series": 47,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "TRIX",
+        "Factor_Name_CN": "",
+        "Factor_Description": "三重指数平滑平均线:,对一条平均线进行三次平滑处理,再根据这条移动平均线的变动情况来预测股价的长期走势/\nTRIX=(EMA(EMA(EMA(log(CLOSE))))-Ref(EMA(EMA(EMA(log(CLOSE)))),1))/Ref(EMA(EMA(EMA(log(CLOSE)))),1)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex048": {
+        "Series": 48,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "TRI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "区间指数:正规化了的真实波动区间/\nX1=IF((CLOSE>REF(CLOSE,1)),T/(CLOSE-REF(CLOSE,1)),T)\nX2=X1-MIN(X1)\nTRI=EMA(X2/(HIGH-LOW)*100,N)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex049": {
+        "Series": 49,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "Ulcer",
+        "Factor_Name_CN": "",
+        "Factor_Description": "略",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex050": {
+        "Series": 50,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "UOS",
+        "Factor_Name_CN": "",
+        "Factor_Description": "终极波动指标/\nTH=MAX(HGIH,REF(CLOSE,1))\nTL=MIN(LOW,REF(CLOSE,1))\nACC1=(CLOSE-SUM(TL,N1))/SUM(TH-TL,N1)\nACC2=(CLOSE-SUM(TL,N2))/SUM(TH-TL,N2)\nACC3=(CLOSE-SUM(TL,N3))/SUM(TH-TL,N3)\nUOS=(ACC1*N2*N3+ACC2*N1*N3+ACC3*N1*N2)*100/(N1*N2+N1*N3+N2*N3)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex051": {
+        "Series": 51,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "VEMA",
+        "Factor_Name_CN": "",
+        "Factor_Description": "VEMA=EMA(Vol)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex052": {
+        "Series": 52,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "VMACD",
+        "Factor_Name_CN": "",
+        "Factor_Description": "量指数平滑异同平均线/\nDIFF=EMA(VOL,S)-EMA(VOL,P)\nDEA=EMA(DIFF,M)\nVMACD=DIFF-DEA",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex053": {
+        "Series": 53,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "VOSC",
+        "Factor_Name_CN": "",
+        "Factor_Description": "移动平均成交量指标:通过对成交量的长期移动平均线和短期移动平均线之间的比较,分析成交量的运行趋势和及时研判趋势转变方向/\nVOSC=(MA(Vol,M)-MA(Vol,P))/MA(Vol,S)*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex054": {
+        "Series": 54,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "VROC",
+        "Factor_Name_CN": "",
+        "Factor_Description": "量变动速率:应用成交量的移动比较来测量成交量运动趋向,达到事先探测成交量供需的强弱,进而分析成交量的发展趋势及其将来是否有转势的意愿/\n(VOL-REF(VOL,M))/REF(VOL,M)*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex055": {
+        "Series": 55,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "VRSI",
+        "Factor_Name_CN": "",
+        "Factor_Description": "量相对强弱/\nVRSI=SMA(MAX(VOL-REF(VOL,1),0),M,1)/SMA(ABS(VOL-REF(VOL,1)),M,1)*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex056": {
+        "Series": 56,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "VR",
+        "Factor_Name_CN": "",
+        "Factor_Description": "成交量比率:通过分析股价上升日成交额(或成交量,下同)与股价下降日成交额比值,从而掌握市场买卖气势的中期技术指标/\nLC=REF(CLOSE,1)\nVR=SUM(IF(CLOSE>LC,VOL,0),M)/SUM(IF(CLOSE<=LC,VOL,0),M)*100",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex057": {
+        "Series": 57,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "VSTD",
+        "Factor_Name_CN": "成交量方差",
+        "Factor_Description": "VAR(SUM(Volume,N))",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": "取过去N天的累计值；N取值20"
+    },
+    "TechIndex058": {
+        "Series": 58,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "W%R",
+        "Factor_Name_CN": "威廉指标",
+        "Factor_Description": "通过分析股价波动变化中的峰与谷决定买卖时机/\nRSV=(HHV(HIGH,N)-CLOSE)/(HHV(HIGH,N)-LLV(LOW,N))*100\nW%R=SMA(RSV,P1,1)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex059": {
+        "Series": 59,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "price_reg",
+        "Factor_Name_CN": "价格线性回归系数",
+        "Factor_Description": "取近n个交易日的收盘价对n个周期的序数做普通最小二乘的线性回归。取股价关于周期序数的系数作为因子",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex060": {
+        "Series": 60,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "price_abs_var",
+        "Factor_Name_CN": "price_abs_var",
+        "Factor_Description": "MA(ABS(CLOSE-MA(CLOSE,M)),M)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": ""
+    },
+    "TechIndex061": {
+        "Series": 61,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "vol_ema",
+        "Factor_Name_CN": "成交金额",
+        "Factor_Description": "vol_ema=EWA(Volume,N)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": "N取值20"
+    },
+    "TechIndex062": {
+        "Series": 62,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "vol_var",
+        "Factor_Name_CN": "成交金额方差",
+        "Factor_Description": "vol_var=VAR(Volume,N)",
+        "Factor_Source": "20140902-广发证券-多因子Alpha系列报告之（二十一）：ALPHA因子何处寻觅，掘金海量技术指标",
+        "Remarks": "N取值20"
+    },
+    "Liquidity001": {
+        "Series": 1,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "流动性因子",
+        "Factor_Name_EN": "turn_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股最近N个月内日均换手率",
+        "Factor_Source": "20170109-华泰证券-华泰多因子系列之五：华泰单因子测试之换手率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Liquidity002": {
+        "Series": 2,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "流动性因子",
+        "Factor_Name_EN": "bias_turn_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股最近N个月内日均换手率除以最近2年内日均换手率,再减去1",
+        "Factor_Source": "20170109-华泰证券-华泰多因子系列之五：华泰单因子测试之换手率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Liquidity003": {
+        "Series": 3,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "流动性因子",
+        "Factor_Name_EN": "std_turn_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股最近N个月内日换手率序列的标准差",
+        "Factor_Source": "20170109-华泰证券-华泰多因子系列之五：华泰单因子测试之换手率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Liquidity004": {
+        "Series": 4,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "流动性因子",
+        "Factor_Name_EN": "bias_std_turn_Nm",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股最近N个月内日换手率序列的标准差除以最近2年内日换手率序列的标准差,再减去1",
+        "Factor_Source": "20170109-华泰证券-华泰多因子系列之五：华泰单因子测试之换手率类因子",
+        "Remarks": "N取值1,3,6"
+    },
+    "Liquidity005": {
+        "Series": 5,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "流动性因子",
+        "Factor_Name_EN": "VA_FC_NM",
+        "Factor_Name_CN": "",
+        "Factor_Description": "个股最近N个月内买卖循环率",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": "N取值1,3,6"
+    },
+    "Liquidity006": {
+        "Series": 6,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "流动性因子",
+        "Factor_Name_EN": "Amihud",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去N天每日收益率绝对值比上成交量的均值",
+        "Factor_Source": "20171122-光大证券-多因子系列报告之七：基于K线最短路径构造的非流动性因子",
+        "Remarks": "衡量单位成交量对市场收益率的冲击,考虑非线性加权计算方式"
+    },
+    "Liquidity007": {
+        "Series": 7,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "流动性因子",
+        "Factor_Name_EN": "Amihud_fix",
+        "Factor_Name_CN": "",
+        "Factor_Description": "过去N天每日无向收益率比上成交量的均值/\n无向收益率:2*(High-Low)-|Open-Close|",
+        "Factor_Source": "20171122-光大证券-多因子系列报告之七：基于K线最短路径构造的非流动性因子",
+        "Remarks": "无向收益率：当根K线最短路径,需要日内高频数据,考虑非线性加权计算方式"
+    },
+    "Liquidity008": {
+        "Series": 8,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "流动性因子",
+        "Factor_Name_EN": "net_turn",
+        "Factor_Name_CN": "",
+        "Factor_Description": "净换手率=(个股全天主动买入量-全天主动卖出量)/流通股本",
+        "Factor_Source": "20131031-海通证券-选股因子研究系列（五）：寻找股价驱动新因子之净换手率",
+        "Remarks": ""
+    },
+    "Liquidity009": {
+        "Series": 9,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "流动性因子",
+        "Factor_Name_EN": "turn_amplitude",
+        "Factor_Name_CN": "换手率波幅",
+        "Factor_Description": "个股最近一段时间日换手率最高值-最低值",
+        "Factor_Source": "20190924-海通证券-选股因子系列研究（五十五）：价量波动幅度",
+        "Remarks": ""
+    },
+    "Size001": {
+        "Series": 1,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "市值因子",
+        "Factor_Name_EN": "LMV",
+        "Factor_Name_CN": "",
+        "Factor_Description": "流通市值",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Size002": {
+        "Series": 2,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "市值因子",
+        "Factor_Name_EN": "LMVtoMV",
+        "Factor_Name_CN": "",
+        "Factor_Description": "流通市值/总市值",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Size003": {
+        "Series": 3,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "市值因子",
+        "Factor_Name_EN": "Ln_LMV",
+        "Factor_Name_CN": "",
+        "Factor_Description": "流通市值对数",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Size004": {
+        "Series": 4,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "市值因子",
+        "Factor_Name_EN": "Ln_MV",
+        "Factor_Name_CN": "",
+        "Factor_Description": "总市值对数",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Size005": {
+        "Series": 5,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "市值因子",
+        "Factor_Name_EN": "MV",
+        "Factor_Name_CN": "",
+        "Factor_Description": "总市值",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Quality001": {
+        "Series": 1,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "收益质量因子",
+        "Factor_Name_EN": "Opr_Inc_to_Debt_Q",
+        "Factor_Name_CN": "",
+        "Factor_Description": "单季度经营活动净收益/利润总额",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Quality002": {
+        "Series": 2,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "收益质量因子",
+        "Factor_Name_EN": "Opr_Inc_to_Debt",
+        "Factor_Name_CN": "",
+        "Factor_Description": "当年累计经营活动净收益/利润总额",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Quality003": {
+        "Series": 3,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "收益质量因子",
+        "Factor_Name_EN": "Opr_Inc_to_Debt_TTM2",
+        "Factor_Name_CN": "",
+        "Factor_Description": "经营活动净收益/利润总额TTM",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Quality004": {
+        "Series": 4,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "收益质量因子",
+        "Factor_Name_EN": "Pro_deducted_to_Pro_Q",
+        "Factor_Name_CN": "",
+        "Factor_Description": "单季度扣除非净利润/净利润",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Quality005": {
+        "Series": 5,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "收益质量因子",
+        "Factor_Name_EN": "Pro_deducted_to_Pro",
+        "Factor_Name_CN": "",
+        "Factor_Description": "当年累计扣非净利润/净利润",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Quality006": {
+        "Series": 6,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "收益质量因子",
+        "Factor_Name_EN": "Tax_to_EBT",
+        "Factor_Name_CN": "",
+        "Factor_Description": "当年累计所得税/利润总额",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Quality007": {
+        "Series": 7,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "收益质量因子",
+        "Factor_Name_EN": "Tax_to_EBT_TTM",
+        "Factor_Name_CN": "",
+        "Factor_Description": "税项/利润总额TTM",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Quality008": {
+        "Series": 8,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "收益质量因子",
+        "Factor_Name_EN": "APR",
+        "Factor_Name_CN": "应计利润占比",
+        "Factor_Description": "应计利润/营业利润",
+        "Factor_Source": "20181103-光大证券-多因子系列报告之十七：以质取胜，EBQC综合质量因子详解",
+        "Remarks": "应计利润 = 营业利润 - 经营性现金流量净额 "
+    },
+    "Quality009": {
+        "Series": 9,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "收益质量因子",
+        "Factor_Name_EN": "APRD",
+        "Factor_Name_CN": "应计利润占比变动",
+        "Factor_Description": "当期应计利润占比-上期应计利润占比",
+        "Factor_Source": "20181103-光大证券-多因子系列报告之十七：以质取胜，EBQC综合质量因子详解",
+        "Remarks": "应计利润 = 营业利润 - 经营性现金流量净额 "
+    },
+    "Quality010": {
+        "Series": 10,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "收益质量因子",
+        "Factor_Name_EN": "CSR",
+        "Factor_Name_CN": "收现比",
+        "Factor_Description": "销售商品提供劳务收到的现金/营业收入",
+        "Factor_Source": "20181103-光大证券-多因子系列报告之十七：以质取胜，EBQC综合质量因子详解",
+        "Remarks": "应计利润 = 营业利润 - 经营性现金流量净额 "
+    },
+    "Quality011": {
+        "Series": 11,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "收益质量因子",
+        "Factor_Name_EN": "CSRD",
+        "Factor_Name_CN": "收现比变动",
+        "Factor_Description": "当期收现比-上期收现比",
+        "Factor_Source": "20181103-光大证券-多因子系列报告之十七：以质取胜，EBQC综合质量因子详解",
+        "Remarks": "应计利润 = 营业利润 - 经营性现金流量净额 "
+    },
+    "CashFlow001": {
+        "Series": 1,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "现金流量因子",
+        "Factor_Name_EN": "qfa_ocftosales",
+        "Factor_Name_CN": "",
+        "Factor_Description": "单季度经营性现金流量净额/营业收入",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "CashFlow002": {
+        "Series": 2,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "现金流量因子",
+        "Factor_Name_EN": "ocftoor",
+        "Factor_Name_CN": "",
+        "Factor_Description": "当年累计经营性现金流量净额/营业收入",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "CashFlow003": {
+        "Series": 3,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "现金流量因子",
+        "Factor_Name_EN": "ocftoor_TTM2",
+        "Factor_Name_CN": "",
+        "Factor_Description": "经营性现金流量净额/营业收入TTM",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "CashFlow004": {
+        "Series": 4,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "现金流量因子",
+        "Factor_Name_EN": "ocftocf_qfa",
+        "Factor_Name_CN": "",
+        "Factor_Description": "单季度经营性现金流量净额占比",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "CashFlow005": {
+        "Series": 5,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "现金流量因子",
+        "Factor_Name_EN": "ocftocf",
+        "Factor_Name_CN": "",
+        "Factor_Description": "当年累计经营性现金流量净额占比",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "CashFlow006": {
+        "Series": 6,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "现金流量因子",
+        "Factor_Name_EN": "ocftoassets",
+        "Factor_Name_CN": "",
+        "Factor_Description": "当年累计总资产现金回收率",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "CashFlow007": {
+        "Series": 7,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "现金流量因子",
+        "Factor_Name_EN": "ocftodividend",
+        "Factor_Name_CN": "",
+        "Factor_Description": "当年累计现金股利保障倍数",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit001": {
+        "Series": 1,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROE_Q_avg",
+        "Factor_Name_CN": "单季度ROE(平均)",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit002": {
+        "Series": 2,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROE_Q_avg_deducted",
+        "Factor_Name_CN": "单季度ROE(平均/扣非)",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit003": {
+        "Series": 3,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROE_basic",
+        "Factor_Name_CN": "当年累计ROE-财报公布值(加权)",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit004": {
+        "Series": 4,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROE_avg",
+        "Factor_Name_CN": "当年累计ROE(平均)",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit005": {
+        "Series": 5,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROE_diluted",
+        "Factor_Name_CN": "当年累计ROE(摊薄)",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit006": {
+        "Series": 6,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROE_exbasic",
+        "Factor_Name_CN": "当年累计ROE(扣非/加权)",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit007": {
+        "Series": 7,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROE_deducted",
+        "Factor_Name_CN": "当年累计ROE(扣非/平均)",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit008": {
+        "Series": 8,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROE_exdiluted",
+        "Factor_Name_CN": "当年累计ROE(扣非/摊薄)",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit009": {
+        "Series": 9,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROE_TTM2",
+        "Factor_Name_CN": "ROE的TTM值(算法类似摊薄)",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit010": {
+        "Series": 10,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROA_Q_avg",
+        "Factor_Name_CN": "单季度总资产净利率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit011": {
+        "Series": 11,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROA",
+        "Factor_Name_CN": "当年累计总资产净利率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit012": {
+        "Series": 12,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROA2",
+        "Factor_Name_CN": "当年累计总资产报酬率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit013": {
+        "Series": 13,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROA_TTM",
+        "Factor_Name_CN": "总资产净利率TTM",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit014": {
+        "Series": 14,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROA2_TTM",
+        "Factor_Name_CN": "总资产报酬率TTM",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit015": {
+        "Series": 15,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "GrossProM_Q",
+        "Factor_Name_CN": "单季度销售毛利率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit016": {
+        "Series": 16,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "GrossProM",
+        "Factor_Name_CN": "当年累计销售毛利率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit017": {
+        "Series": 17,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "GrossProM_TTM",
+        "Factor_Name_CN": "销售毛利率TTM",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit018": {
+        "Series": 18,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "NetProM_Q",
+        "Factor_Name_CN": "单季度销售净利率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit019": {
+        "Series": 19,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "NetProM",
+        "Factor_Name_CN": "当年累计销售净利率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit020": {
+        "Series": 20,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "NetProM_TTM",
+        "Factor_Name_CN": "销售净利率TTM",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit021": {
+        "Series": 21,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "NPtoCE_Q",
+        "Factor_Name_CN": "当年累计成本费用利润率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit022": {
+        "Series": 22,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "NPtoCE_Q",
+        "Factor_Name_CN": "单季度成本费用利润率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit023": {
+        "Series": 23,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROIC",
+        "Factor_Name_CN": "投入资本回报率",
+        "Factor_Description": "(税后利润+财务费用)/(净资产+有息负债)",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit024": {
+        "Series": 24,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROIC_TTM",
+        "Factor_Name_CN": "投入资本回报率TTM",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Profit025": {
+        "Series": 25,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "DPR_TTM",
+        "Factor_Name_CN": "股利支付率_TTM",
+        "Factor_Description": "",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Profit026": {
+        "Series": 26,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "NP",
+        "Factor_Name_CN": "当期净利润率",
+        "Factor_Description": "",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Profit027": {
+        "Series": 27,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "NP_TTM",
+        "Factor_Name_CN": "净利润率(TTM)",
+        "Factor_Description": "",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Profit028": {
+        "Series": 28,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "OPM",
+        "Factor_Name_CN": "营业利润率",
+        "Factor_Description": "",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Profit029": {
+        "Series": 29,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "OPM_TTM",
+        "Factor_Name_CN": "营业利润率(TTM)",
+        "Factor_Description": "",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Profit030": {
+        "Series": 30,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "LPNP_N",
+        "Factor_Name_CN": "线性纯化净利润因子",
+        "Factor_Description": "过去N个季度净利润与营业外收入,非流动资产处置净损失,取得投资收益收到的现金,处置固定资产、无形资产和其他长期资产收回的现金净额进行带截距项的回归取残差",
+        "Factor_Source": "20180909-光大证券-多因子系列报告之十五：创新基本面因子，提纯净利数据中的选股信息",
+        "Remarks": "解释变量选取可以根据解释变量可以从解释力度较强的因子中进行挑选；此外还可以通过分布回归的方式"
+    },
+    "Profit031": {
+        "Series": 31,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "NPM_T",
+        "Factor_Name_CN": "净利润率(同比)",
+        "Factor_Description": "本期净利润 / 本期主营业务收入 - 上期净利润 / 上期主营业务收入",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Operate001": {
+        "Series": 1,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "营运能力因子",
+        "Factor_Name_EN": "InvTurn",
+        "Factor_Name_CN": "存货周转率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Operate002": {
+        "Series": 2,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "营运能力因子",
+        "Factor_Name_EN": "CATurn",
+        "Factor_Name_CN": "流动资产周转率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Operate003": {
+        "Series": 3,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "营运能力因子",
+        "Factor_Name_EN": "AssetsTurn",
+        "Factor_Name_CN": "总资产周转率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Operate004": {
+        "Series": 4,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "营运能力因子",
+        "Factor_Name_EN": "ARturn",
+        "Factor_Name_CN": "应收账款周转率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Operate005": {
+        "Series": 5,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "营运能力因子",
+        "Factor_Name_EN": "APturn",
+        "Factor_Name_CN": "应付账款周转率",
+        "Factor_Description": "",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Operate006": {
+        "Series": 6,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "营运能力因子",
+        "Factor_Name_EN": "TA_Turn_TTM",
+        "Factor_Name_CN": "总资产周转率(TTM)",
+        "Factor_Description": "",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Operate007": {
+        "Series": 7,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "营运能力因子",
+        "Factor_Name_EN": "RROC_N",
+        "Factor_Name_CN": "营业能力改善因子",
+        "Factor_Description": "过去N个季度标准化营业成本与标准化营业收入进行带截距项回归取残差",
+        "Factor_Source": "20180806-光大证券-多因子系列报告之十四：创新基本面因子，财务数据间线性关系初窥",
+        "Remarks": ""
+    },
+    "Operate009": {
+        "Series": 9,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "营运能力因子",
+        "Factor_Name_EN": "OCFA",
+        "Factor_Name_CN": "产能利用率因子",
+        "Factor_Description": "营业总成本与固定资产进行带截距项的回归取残差",
+        "Factor_Source": "20181101-光大证券-多因子系列报告之十六：创新基本面因子，捕捉产能利用率中的讯号",
+        "Remarks": ""
+    },
+    "Operate010": {
+        "Series": 10,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "营运能力因子",
+        "Factor_Name_EN": "TA_Turn_TTM_T",
+        "Factor_Name_CN": "总资产周转率(TTM,同比)",
+        "Factor_Description": "",
+        "Factor_Source": "20180128-招商证券-因子模型系列之五：财务杠杆类与流动性类单因子有效性考察",
+        "Remarks": ""
+    },
+    "Structure001": {
+        "Series": 1,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "资本结构因子",
+        "Factor_Name_EN": "debttoassets",
+        "Factor_Name_CN": "",
+        "Factor_Description": "资产负债率",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Structure002": {
+        "Series": 2,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "资本结构因子",
+        "Factor_Name_EN": "catoassets",
+        "Factor_Name_CN": "",
+        "Factor_Description": "流动资产/总资产",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "Structure003": {
+        "Series": 3,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "资本结构因子",
+        "Factor_Name_EN": "currentdebttodebt",
+        "Factor_Name_CN": "",
+        "Factor_Description": "流动负债/负债合计",
+        "Factor_Source": "20180525-华泰证券-华泰多因子系列之八：华泰单因子测试之财务质量因子",
+        "Remarks": ""
+    },
+    "FundFlow001": {
+        "Series": 1,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_buyamt_d",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力流入额(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow002": {
+        "Series": 2,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_buyvol_d",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力流入量(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow003": {
+        "Series": 3,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_buyord",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力流入单数(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow004": {
+        "Series": 4,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_buyamt_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力主动买入额(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow005": {
+        "Series": 5,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_buyvol_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力主动买入量(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow006": {
+        "Series": 6,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_sellamt_d",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力流出额(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow007": {
+        "Series": 7,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_sellvol_d",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力流出量(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow008": {
+        "Series": 8,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_sellord",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力流出单数(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow009": {
+        "Series": 9,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_sellamt_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力主动卖出额(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow010": {
+        "Series": 10,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_sellvol_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力主动卖出量(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow011": {
+        "Series": 11,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_netbuyamt",
+        "Factor_Name_CN": "",
+        "Factor_Description": "净买入额(机构净买入+大户净买入+中户净买入+散户净买入)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构净买入、大户净买入、中户净买入和散户净买入参考WIND数据库"
+    },
+    "FundFlow012": {
+        "Series": 12,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_netbuyvol",
+        "Factor_Name_CN": "",
+        "Factor_Description": "净买入量(机构净买入+大户净买入+中户净买入+散户净买入)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构净买入、大户净买入、中户净买入和散户净买入参考WIND数据库"
+    },
+    "FundFlow013": {
+        "Series": 13,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_netbuyamt_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "净主动买入额",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": ""
+    },
+    "FundFlow014": {
+        "Series": 14,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_netbuyvol_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "净主动买入量",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": ""
+    },
+    "FundFlow015": {
+        "Series": 15,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mf_amt",
+        "Factor_Name_CN": "",
+        "Factor_Description": "净主动买入额(全单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": ""
+    },
+    "FundFlow016": {
+        "Series": 16,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mf_amt_ratio",
+        "Factor_Name_CN": "",
+        "Factor_Description": "净主动买入率(金额):净主动买入额/成交额",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": ""
+    },
+    "FundFlow017": {
+        "Series": 17,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowproportion_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "净主动买入额占比:净主动买入额/流通市值",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": ""
+    },
+    "FundFlow018": {
+        "Series": 18,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mf_vol",
+        "Factor_Name_CN": "",
+        "Factor_Description": "净主动买入量(全单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": ""
+    },
+    "FundFlow019": {
+        "Series": 19,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_volinflowrate_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "净主动买入率(量):净主动买入量/成交股数",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": ""
+    },
+    "FundFlow020": {
+        "Series": 20,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mf_vol_ratio",
+        "Factor_Name_CN": "",
+        "Factor_Description": "净主动买入量占比:净主动买入量/流动股数",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": ""
+    },
+    "FundFlow021": {
+        "Series": 21,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mf_amt_open",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘净主动买入额",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "开盘：早盘10点前"
+    },
+    "FundFlow022": {
+        "Series": 22,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowrate_open_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘净主动买入率(金额)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "开盘：早盘10点前"
+    },
+    "FundFlow023": {
+        "Series": 23,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowproportion_open_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘净主动买入额占比",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "开盘：早盘10点前"
+    },
+    "FundFlow024": {
+        "Series": 24,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowvolume_open_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘净主动买入量",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "开盘：早盘10点前"
+    },
+    "FundFlow025": {
+        "Series": 25,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_volinflowrate_open_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘净主动买入率(量)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "开盘：早盘10点前"
+    },
+    "FundFlow026": {
+        "Series": 26,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_volinflowproportion_open_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘净主动买入量占比",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "开盘：早盘10点前"
+    },
+    "FundFlow027": {
+        "Series": 27,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mf_amt_close",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘净主动买入额",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "尾盘：午盘2点半后"
+    },
+    "FundFlow028": {
+        "Series": 28,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowrate_close_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘净主动买入率(金额)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "尾盘：午盘2点半后"
+    },
+    "FundFlow029": {
+        "Series": 29,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowproportion_close_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘净主动买入额占比",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "尾盘：午盘2点半后"
+    },
+    "FundFlow030": {
+        "Series": 30,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowvolume_close_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘资金净主动买入量",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "尾盘：午盘2点半后"
+    },
+    "FundFlow031": {
+        "Series": 31,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_volinflowrate_close_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘净主动买入率(量)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "尾盘：午盘2点半后"
+    },
+    "FundFlow032": {
+        "Series": 32,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_volinflowproportion_close_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘净主动买入量占比",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "尾盘：午盘2点半后"
+    },
+    "FundFlow033": {
+        "Series": 33,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflow_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力净流入额(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow034": {
+        "Series": 34,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowrate_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力净流入率(金额)(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow035": {
+        "Series": 35,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowproportion_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力净流入额占比(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow036": {
+        "Series": 36,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_buyvol_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力净流入量(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow037": {
+        "Series": 37,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_volinflowrate_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力净流入率(量)(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow038": {
+        "Series": 38,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_volinflowproportion_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "主力净流入量占比(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库"
+    },
+    "FundFlow039": {
+        "Series": 39,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflow_open_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘主力净流入额(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,开盘：早盘10点前"
+    },
+    "FundFlow040": {
+        "Series": 40,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowrate_open_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘主力净流入率(金额)(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,开盘：早盘10点前"
+    },
+    "FundFlow041": {
+        "Series": 41,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowproportion_open_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘主力净流入额占比(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,开盘：早盘10点前"
+    },
+    "FundFlow042": {
+        "Series": 42,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_buyvol_open_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘主力净流入量(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,开盘：早盘10点前"
+    },
+    "FundFlow043": {
+        "Series": 43,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_volinflowrate_open_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘主力净流入率(量)(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,开盘：早盘10点前"
+    },
+    "FundFlow044": {
+        "Series": 44,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_volinflowproportion_open_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "开盘主力净流入量占比(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,开盘：早盘10点前"
+    },
+    "FundFlow045": {
+        "Series": 45,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflow_close_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘主力净流入额(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,尾盘：午盘2点半后"
+    },
+    "FundFlow046": {
+        "Series": 46,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowrate_close_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘主力净流入率(金额)(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,尾盘：午盘2点半后"
+    },
+    "FundFlow047": {
+        "Series": 47,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_inflowproportion_close_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘主力净流入额占比(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,尾盘：午盘2点半后"
+    },
+    "FundFlow048": {
+        "Series": 48,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_buyvol_close_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘主力净流入量(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,尾盘：午盘2点半后"
+    },
+    "FundFlow049": {
+        "Series": 49,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_volinflowrate_close_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘主力净流入率(量)(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,尾盘：午盘2点半后"
+    },
+    "FundFlow050": {
+        "Series": 50,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_volinflowproportion_close_m",
+        "Factor_Name_CN": "",
+        "Factor_Description": "尾盘主力净流入量占比(机构单+大户单)",
+        "Factor_Source": "20180517-华泰证券-华泰多因子系列之七：华泰单因子测试之资金流向因子",
+        "Remarks": "机构单和大户单参考WIND数据库,尾盘：午盘2点半后"
+    },
+    "FundFlow051": {
+        "Series": 51,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "交易集中度类因子",
+        "Factor_Name_CN": "",
+        "Factor_Description": "详见报告",
+        "Factor_Source": "20191107-海通证券-选股因子系列研究（五十六）：买卖单数据中的Alpha",
+        "Remarks": ""
+    },
+    "FundFlow052": {
+        "Series": 52,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_buy_Nstd_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "大买成交金额占比(N倍标准差)=大买/总",
+        "Factor_Source": "20200621-海通证券-选股因子系列研究（六十六）：寻找逐笔交易中的有效信息",
+        "Remarks": "超过均值+N倍标准差定义为大单；N取值：0,1,2,3"
+    },
+    "FundFlow053": {
+        "Series": 53,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_sell_Nstd_a",
+        "Factor_Name_CN": "",
+        "Factor_Description": "大卖成交金额占比(N倍标准差)=大卖/总",
+        "Factor_Source": "20200621-海通证券-选股因子系列研究（六十六）：寻找逐笔交易中的有效信息",
+        "Remarks": "超过均值+N倍标准差定义为大单；N取值：0,1,2,3"
+    },
+    "FundFlow054": {
+        "Series": 54,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_buy_Nstd_d",
+        "Factor_Name_CN": "",
+        "Factor_Description": "大买成交金额占买单比重(N倍标准差)=大买/买单",
+        "Factor_Source": "20200621-海通证券-选股因子系列研究（六十六）：寻找逐笔交易中的有效信息",
+        "Remarks": "超过均值+N倍标准差定义为大单；N取值：0,1,2,3"
+    },
+    "FundFlow055": {
+        "Series": 55,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "资金流因子",
+        "Factor_Name_EN": "mfd_sell_Nstd_d",
+        "Factor_Name_CN": "",
+        "Factor_Description": "大卖成交金额占卖单比重(N倍标准差)=大卖/卖单",
+        "Factor_Source": "20200621-海通证券-选股因子系列研究（六十六）：寻找逐笔交易中的有效信息",
+        "Remarks": "超过均值+N倍标准差定义为大单；N取值：0,1,2,3"
+    },
+    "Profit032": {
+        "Series": 32,
+        "Factor_Category_1": "基本面因子",
+        "Factor_Category_2": "盈利能力因子",
+        "Factor_Name_EN": "ROA_TTM_T",
+        "Factor_Name_CN": "总资产净利率(TTM,同比)",
+        "Factor_Description": "",
+        "Factor_Source": "20170428-光大证券-多因子系列报告之二：因子测试全集",
+        "Remarks": ""
+    },
+    "Momentum007": {
+        "Series": 7,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "IMOM",
+        "Factor_Name_CN": "特质动量因子",
+        "Factor_Description": "FF三因子回归取残差对残差过去一段时间均值比上标准差",
+        "Factor_Source": "20190521-财通证券-“星火”多因子专题报告（五）：源于动量，超越动量，特质动量因子全解析",
+        "Remarks": ""
+    },
+    "Special001": {
+        "Series": 1,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "IVR",
+        "Factor_Name_CN": "特异度",
+        "Factor_Description": "FF三因子回归后残差平方和和总平方和之比",
+        "Factor_Source": "20151207-东方证券-因子选股系列研究之三：投机、交易行为与股票收益（上）",
+        "Remarks": ""
+    },
+    "Special002": {
+        "Series": 2,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "PriceDelay",
+        "Factor_Name_CN": "价格时滞",
+        "Factor_Description": "个股收益对市场收益进行滞后时间序列回归：1-无滞后回归R方比上有滞后回归R方",
+        "Factor_Source": "20151207-东方证券-因子选股系列研究之三：投机、交易行为与股票收益（上）",
+        "Remarks": "对峙后期参数不明感"
+    },
+    "Special003": {
+        "Series": 3,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "BehaviorIndex1",
+        "Factor_Name_CN": "交易热度1",
+        "Factor_Description": "（Q(IVR)+Q(adjTurnover)+Q(SpreadBias)）/3",
+        "Factor_Source": "20151214-东方证券-因子选股系列研究之四：基于交易热度的指数增强",
+        "Remarks": "Q为分位点"
+    },
+    "Special004": {
+        "Series": 4,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "BehaviorIndex2",
+        "Factor_Name_CN": "交易热度2",
+        "Factor_Description": "（Q(IVR)+Q(adjTurnover)）/2",
+        "Factor_Source": "20160512-东方证券-因子选股系列研究之七：投机、交易行为与股票收益（下）",
+        "Remarks": "Q为分位点"
+    },
+    "Liquidity010": {
+        "Series": 10,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "流动性因子",
+        "Factor_Name_EN": "Amihud",
+        "Factor_Name_CN": "Amihud测度",
+        "Factor_Description": "过去一段时间日收益率绝对值比上成交量均值",
+        "Factor_Source": "20161102-东方证券-《因子选股系列研究之十四》：非流动性的度量及其横截面溢价",
+        "Remarks": ""
+    },
+    "Liquidity011": {
+        "Series": 11,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "流动性因子",
+        "Factor_Name_EN": "Turnover",
+        "Factor_Name_CN": "换手率",
+        "Factor_Description": "过去一段时间成交量比上流通股均值",
+        "Factor_Source": "20161102-东方证券-《因子选股系列研究之十四》：非流动性的度量及其横截面溢价",
+        "Remarks": ""
+    },
+    "Special005": {
+        "Series": 5,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "gammbias",
+        "Factor_Name_CN": "价格冲击偏差",
+        "Factor_Description": "计算见报告",
+        "Factor_Source": "20161110-东方证券-《因子选股系列研究之十六》：非对称价格冲击带来的超额收益",
+        "Remarks": ""
+    },
+    "Special006": {
+        "Series": 6,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "EIVOL",
+        "Factor_Name_CN": "期望特质波动率",
+        "Factor_Description": "基于过去2年的月度数据用EGarch(1,1)模型估计的月度期望特质波动率",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special007": {
+        "Series": 7,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "COSKEW",
+        "Factor_Name_CN": "斜偏度",
+        "Factor_Description": "根据过去20个交易日计算的与市场指数的协偏度",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special008": {
+        "Series": 8,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "DOWNILLIQ",
+        "Factor_Name_CN": "卖单非流动性",
+        "Factor_Description": "通过每个月把每个月的5分钟的涨跌幅与主动买入额和主动卖出额做回归的系数，衡量了卖出单的非流动性",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special009": {
+        "Series": 9,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "UPILLIQ",
+        "Factor_Name_CN": "买单非流动性",
+        "Factor_Description": "通过把每个月的5分钟的涨跌幅与主动买入额和主动卖出额做回归的系数，衡量了买入单的非流动性",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special010": {
+        "Series": 10,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "NCSKEW",
+        "Factor_Name_CN": "spec1",
+        "Factor_Description": "过去20个交易日日收益的负三阶矩除以三阶化的标准差",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special011": {
+        "Series": 11,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "DUVOL",
+        "Factor_Name_CN": "spec2",
+        "Factor_Description": "低于历史60日复合收益率的日收益波动除以高于历史60日复合收益率的日收益波动的对数",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special012": {
+        "Series": 12,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "CVTURN",
+        "Factor_Name_CN": "换手率变异系数",
+        "Factor_Description": "过去20个交易日日换手率的变异系数",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special013": {
+        "Series": 13,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "CVILLIQ",
+        "Factor_Name_CN": "非流动性变异系数",
+        "Factor_Description": "过去20个交易日每日的ILLIQ的变异系数",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special014": {
+        "Series": 14,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "BSI",
+        "Factor_Name_CN": "小单占比",
+        "Factor_Description": "过去20个交易日小单净买入除以总的交易量",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special015": {
+        "Series": 15,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "Dbeta",
+        "Factor_Name_CN": "下行市场风险",
+        "Factor_Description": "市场下行条件下的beta,即取市场收益率为负时数据计算个股beta",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special016": {
+        "Series": 16,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "TSMON",
+        "Factor_Name_CN": "spec3",
+        "Factor_Description": "过去12个月超额收益（基准收益为12个月历史数据的指数平均）的符号乘以上个月超额收益除以标准差（类似地通过指数平均超额收益平方和得到）",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special017": {
+        "Series": 17,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "EDR",
+        "Factor_Name_CN": "spec4",
+        "Factor_Description": "基于极值分布和过去一个月日收益率最小值数据，通过MLE估计得到的极值分布中刻画尾部厚度的参数",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special018": {
+        "Series": 18,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "IVmonthly",
+        "Factor_Name_CN": "FF残差平方指数加权和",
+        "Factor_Description": "过去24个月FAMA三因子残差平方指数加权和",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special019": {
+        "Series": 19,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "IVshort",
+        "Factor_Name_CN": "短期特质波动",
+        "Factor_Description": "对过去12个月的IVmontly做趋势噪声分解得到的噪声项，度量短期特质波动",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special020": {
+        "Series": 20,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "IVlong",
+        "Factor_Name_CN": "长期特质波动",
+        "Factor_Description": "对过去12个月的IVmontly做趋势噪声分解得到的趋势项，度量长期特质波动",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "Special021": {
+        "Series": 21,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "特殊构建因子",
+        "Factor_Name_EN": "NEGILLIQ",
+        "Factor_Name_CN": "spec5",
+        "Factor_Description": "负的日收益率/负收益的当天的日成交量，按月取平均",
+        "Factor_Source": "20170217-东方证券-《因子选股系列研究之二十》：技术类新Alpha因子的批量测试",
+        "Remarks": ""
+    },
+    "TechIndex063": {
+        "Series": 63,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "技术指标",
+        "Factor_Name_EN": "ARPP",
+        "Factor_Name_CN": "时间加权相对价格位置",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20200421-东方证券-《因子选股系列之六十六》：基于时间尺度度量的日内买卖压力",
+        "Remarks": ""
+    },
+    "Behavior001": {
+        "Series": 1,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "投资者行为因子",
+        "Factor_Name_EN": "APM",
+        "Factor_Name_CN": "",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20161015-方正证券-聆听高频世界的声音系列研究（五）：凤鸣朝阳股价日内模式中蕴藏的选股因子",
+        "Remarks": ""
+    },
+    "HighFreq027": {
+        "Series": 27,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "HFD_MTM",
+        "Factor_Name_CN": "高频动量",
+        "Factor_Description": "各小时段收益最大化IR加权",
+        "Factor_Source": "20170914-方正证券-“聆听高频世界的声音”系列研究（七）：枯树生花，基于日内模式的动量因子革新",
+        "Remarks": ""
+    },
+    "HighFreq028": {
+        "Series": 28,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Rvol",
+        "Factor_Name_CN": "已实现波动",
+        "Factor_Description": "累积日收益平方和",
+        "Factor_Source": "20190506-广发证券-高频数据因子研究系列一：基于日内高频数据的短周期选股因子研究",
+        "Remarks": ""
+    },
+    "HighFreq029": {
+        "Series": 29,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Rskew",
+        "Factor_Name_CN": "已实现偏度",
+        "Factor_Description": "累积日收益偏度",
+        "Factor_Source": "20190506-广发证券-高频数据因子研究系列一：基于日内高频数据的短周期选股因子研究",
+        "Remarks": ""
+    },
+    "HighFreq030": {
+        "Series": 30,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Rkurt",
+        "Factor_Name_CN": "已实现峰度",
+        "Factor_Description": "累积日收益峰度",
+        "Factor_Source": "20190506-广发证券-高频数据因子研究系列一：基于日内高频数据的短周期选股因子研究",
+        "Remarks": ""
+    },
+    "Behavior002": {
+        "Series": 2,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "投资者行为因子",
+        "Factor_Name_EN": "sentimentBeta",
+        "Factor_Name_CN": "市场情绪指数",
+        "Factor_Description": "对因子成交量，换手率，PE，PB，上涨股票占比，市场活力指数进行第一主成分提取",
+        "Factor_Source": "20190510-广发证券-行为金融因子研究之五：情绪Beta因子在选股中的应用",
+        "Remarks": "因子计算见报告"
+    },
+    "HighFreq031": {
+        "Series": 31,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "HFD_Speial1",
+        "Factor_Name_CN": "",
+        "Factor_Description": "日收益平方和，日收益偏度和日收益峰度的差分对个股收益回归取残差",
+        "Factor_Source": "20190815-广发证券-高频数据因子研究系列二：基于日内高频数据的短周期选股因子研究",
+        "Remarks": ""
+    },
+    "Behavior003": {
+        "Series": 3,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "投资者行为因子",
+        "Factor_Name_EN": "HB",
+        "Factor_Name_CN": "买入羊群行为",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20200505-广发证券-高频数据因子研究系列三：基于个股羊群效应的选股因子研究",
+        "Remarks": ""
+    },
+    "Behavior004": {
+        "Series": 4,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "投资者行为因子",
+        "Factor_Name_EN": "HS",
+        "Factor_Name_CN": "卖出羊群行为",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20200505-广发证券-高频数据因子研究系列三：基于个股羊群效应的选股因子研究",
+        "Remarks": ""
+    },
+    "Behavior005": {
+        "Series": 5,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "投资者行为因子",
+        "Factor_Name_EN": "BetaConcentration",
+        "Factor_Name_CN": "Beta集中度",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20201102-广发证券-行为金融研究系列之六：A股羊群效应投资策略研究",
+        "Remarks": ""
+    },
+    "Behavior006": {
+        "Series": 6,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "投资者行为因子",
+        "Factor_Name_EN": "CSAD",
+        "Factor_Name_CN": "CSAD",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20201102-广发证券-行为金融研究系列之六：A股羊群效应投资策略研究",
+        "Remarks": ""
+    },
+    "Behavior007": {
+        "Series": 7,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "投资者行为因子",
+        "Factor_Name_EN": "CSSD",
+        "Factor_Name_CN": "CSSD",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20201102-广发证券-行为金融研究系列之六：A股羊群效应投资策略研究",
+        "Remarks": ""
+    },
+    "Behavior008": {
+        "Series": 8,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "投资者行为因子",
+        "Factor_Name_EN": "CGO",
+        "Factor_Name_CN": "未实现账面收益",
+        "Factor_Description": "股价相对于股票平均成本的标准化度量",
+        "Factor_Source": "20190531-国信证券-行为金融学系列之二：处置效应与新增信息参与定价的反应迟滞",
+        "Remarks": ""
+    },
+    "Behavior009": {
+        "Series": 9,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "投资者行为因子",
+        "Factor_Name_EN": "RCGO",
+        "Factor_Name_CN": "残差未实现盈利",
+        "Factor_Description": "CGO对显著指标进行截面回归",
+        "Factor_Source": "20190531-国信证券-行为金融学系列之二：处置效应与新增信息参与定价的反应迟滞",
+        "Remarks": ""
+    },
+    "HighFreq032": {
+        "Series": 32,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "BM",
+        "Factor_Name_CN": "买入情绪因子",
+        "Factor_Description": "当过去N日所有tick积极买入量比上保守买入量",
+        "Factor_Source": "20170310-长江证券-金工高频识途系列（一）：基于买入行为构建情绪因子",
+        "Remarks": ""
+    },
+    "HighFreq033": {
+        "Series": 33,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Rev",
+        "Factor_Name_CN": "高频反转因子",
+        "Factor_Description": "10分钟频率下半衰时间加权收益",
+        "Factor_Source": "20190601-长江证券-基础因子研究（七）：高频因子（二），结构化反转因子",
+        "Remarks": ""
+    },
+    "HighFreq034": {
+        "Series": 34,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Illiq_Track",
+        "Factor_Name_CN": "轨迹非流动因子",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20190810-长江证券-基础因子研究（十）：高频因子（五），高频因子和交易行为",
+        "Remarks": ""
+    },
+    "HighFreq035": {
+        "Series": 35,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Stren",
+        "Factor_Name_CN": "博弈因子",
+        "Factor_Description": "加权主买量比上加权主卖量",
+        "Factor_Source": "20190810-长江证券-基础因子研究（十）：高频因子（五），高频因子和交易行为",
+        "Remarks": ""
+    },
+    "HighFreq036": {
+        "Series": 36,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Open_5_volume",
+        "Factor_Name_CN": "开盘5分钟成交占比",
+        "Factor_Description": "",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq037": {
+        "Series": 37,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Open_15_volume",
+        "Factor_Name_CN": "开盘15分钟成交占比",
+        "Factor_Description": "",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq038": {
+        "Series": 38,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Open_30_volume",
+        "Factor_Name_CN": "开盘30分钟成交占比",
+        "Factor_Description": "",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq039": {
+        "Series": 39,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Open_60_volume",
+        "Factor_Name_CN": "开盘60分钟成交占比",
+        "Factor_Description": "",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq040": {
+        "Series": 40,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Close_5_volume",
+        "Factor_Name_CN": "收盘5分钟成交占比",
+        "Factor_Description": "",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq041": {
+        "Series": 41,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Open_15_volume",
+        "Factor_Name_CN": "收盘15分钟成交占比",
+        "Factor_Description": "",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq042": {
+        "Series": 42,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Open_30_volume",
+        "Factor_Name_CN": "收盘30分钟成交占比",
+        "Factor_Description": "",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq043": {
+        "Series": 43,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Open_60_volume",
+        "Factor_Name_CN": "收盘60分钟成交占比",
+        "Factor_Description": "",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq044": {
+        "Series": 44,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "CashFlow",
+        "Factor_Name_CN": "资金流向",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq045": {
+        "Series": 45,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Cor_Vol_Price",
+        "Factor_Name_CN": "量价相关性",
+        "Factor_Description": "当日成交量与价格的相关性",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq046": {
+        "Series": 46,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Cor_Vol_Ret",
+        "Factor_Name_CN": "量收益率相关性",
+        "Factor_Description": "当日成交量与收益率的相关性",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq047": {
+        "Series": 47,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Var_Ret",
+        "Factor_Name_CN": "收益率方差",
+        "Factor_Description": "当日收益率的方差",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq048": {
+        "Series": 48,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Var_Skew",
+        "Factor_Name_CN": "收益率偏度",
+        "Factor_Description": "当日收益率的偏度",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq049": {
+        "Series": 49,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Var_kurt",
+        "Factor_Name_CN": "收益率峰度",
+        "Factor_Description": "当日收益率的峰度",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq050": {
+        "Series": 50,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "StrucRev",
+        "Factor_Name_CN": "结构化反转",
+        "Factor_Description": "成交量加权收益率",
+        "Factor_Source": "20200701-长江证券-负面Alpha研究（三）：高频因子篇，如何利用负面因子做指数增强？",
+        "Remarks": ""
+    },
+    "HighFreq051": {
+        "Series": 51,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Close_Weight",
+        "Factor_Name_CN": "加权收盘价比",
+        "Factor_Description": "成交量加权收盘价比上收盘价平均",
+        "Factor_Source": "20200916-长江证券-基础因子研究（十三）：高频因子（八），高位成交因子，从量价匹配说起",
+        "Remarks": ""
+    },
+    "HighFreq052": {
+        "Series": 52,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Close_Weight_Skew",
+        "Factor_Name_CN": "加权收盘价偏度",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20200916-长江证券-基础因子研究（十三）：高频因子（八），高位成交因子，从量价匹配说起",
+        "Remarks": ""
+    },
+    "HighFreq053": {
+        "Series": 53,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Vol_Entropy",
+        "Factor_Name_CN": "成交额熵",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20200916-长江证券-基础因子研究（十三）：高频因子（八），高位成交因子，从量价匹配说起",
+        "Remarks": ""
+    },
+    "HighFreq054": {
+        "Series": 54,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "Vol_diff_mean",
+        "Factor_Name_CN": "成交量差分绝对值均值",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20201012-长江证券-基础因子研究（十四）：高频因子（九），高频波动中的时间序列信息",
+        "Remarks": ""
+    },
+    "HighFreq055": {
+        "Series": 55,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "高频因子",
+        "Factor_Name_EN": "VPIN",
+        "Factor_Name_CN": "指令流毒性",
+        "Factor_Description": "买卖双方驱动成交量占比差额累积和",
+        "Factor_Source": "20200620-招商证券-“高频寻踪”系列之一：交易指令流中的Alpha",
+        "Remarks": ""
+    },
+    "Momentum008": {
+        "Series": 8,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "HP",
+        "Factor_Name_CN": "最高价格因子",
+        "Factor_Description": "Max(P,N)/P",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum009": {
+        "Series": 9,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "HT",
+        "Factor_Name_CN": "最高价格时间因子",
+        "Factor_Description": "1-index(Max(P, N))/L",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": "index形成期内最高价出现的时点"
+    },
+    "Momentum010": {
+        "Series": 10,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "LP",
+        "Factor_Name_CN": "最低价格因子",
+        "Factor_Description": "Min(P,N)/P",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum011": {
+        "Series": 11,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "MktAlpha",
+        "Factor_Name_CN": "市场alpha因子",
+        "Factor_Description": "个股收益与市场指数回归alpha",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum012": {
+        "Series": 12,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "IndAlpha",
+        "Factor_Name_CN": "行业alpha因子",
+        "Factor_Description": "个股收益与行业指数回归alpha",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum013": {
+        "Series": 13,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "Slope",
+        "Factor_Name_CN": "动量斜率",
+        "Factor_Description": "个股收益时间序列回归",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum014": {
+        "Series": 14,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "PathLen",
+        "Factor_Name_CN": "路径动量",
+        "Factor_Description": "形成期内相邻股价差额的绝对值",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum015": {
+        "Series": 15,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "CTC_ret",
+        "Factor_Name_CN": "动量CTC收益率",
+        "Factor_Description": "收盘价收益率",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum016": {
+        "Series": 16,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "OTC_ret",
+        "Factor_Name_CN": "动量OTC收益率",
+        "Factor_Description": "收盘价比上开盘价-1",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum017": {
+        "Series": 17,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "LTC_ret",
+        "Factor_Name_CN": "动量LTC收益率",
+        "Factor_Description": "收盘价/最低价-1",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum018": {
+        "Series": 18,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "HTC_ret",
+        "Factor_Name_CN": "动量HTC收益率",
+        "Factor_Description": "收盘价/最高价-1",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum019": {
+        "Series": 19,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "CTO_ret",
+        "Factor_Name_CN": "动量CTO收益率",
+        "Factor_Description": "(1+CTC)/(1+OTC)-1",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum020": {
+        "Series": 20,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "CTHL_ret",
+        "Factor_Name_CN": "动量CTHL收益率",
+        "Factor_Description": "见报告",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum021": {
+        "Series": 21,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "CTO",
+        "Factor_Name_CN": "动量CTO收益率绝对值累积和",
+        "Factor_Description": "SUM(ABS(CTO_ret), N)",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    },
+    "Momentum022": {
+        "Series": 22,
+        "Factor_Category_1": "技术面因子",
+        "Factor_Category_2": "动量因子",
+        "Factor_Name_EN": "CTHL",
+        "Factor_Name_CN": "动量CTHL收益率绝对值累积和",
+        "Factor_Description": "SUM(ABS(CTHL_ret), N)",
+        "Factor_Source": "20190306-民生证券-因子研究专题三：动量（反转）因子解析",
+        "Remarks": ""
+    }
+}

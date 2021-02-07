@@ -23,8 +23,8 @@ class FactorProcess(object):
     """
     去极值，标准化，中性化，分组
     """
-    data_name = {'mv': 'MV.csv',
-                 'industry': 'IndustryLabel.csv'}
+    data_name = {'mv': 'AStockData.csv',
+                 'industry': 'AStockData.csv'}
 
     def __init__(self):
         self.fact_name = ''
@@ -61,10 +61,10 @@ class FactorProcess(object):
 
         self.fact_name = data.name
 
-        # regression
+        # regression TODO 判断空值即可
         def _reg(data_: pd.DataFrame) -> pd.Series:
             """！！！不排序回归结果会不一样！！！"""
-            data_sub_ = data_.dropna(how='any').sort_index()
+            data_sub_ = data_.sort_index()
 
             if data_sub_.shape[0] < data_sub_.shape[1]:
                 fact_neu = pd.Series(data=np.nan, index=data_.index)
@@ -80,28 +80,28 @@ class FactorProcess(object):
         # read mv and industry data
         if 'mv' in method:
             if self.raw_data.get('mv', None) is None:
-                mv_data = pd.read_csv(os.path.join(FPN.label_pool_path.value, self.data_name['mv']),
-                                      index_col=['date', 'stock_id'],
-                                      usecols=['date', 'stock_id', 'liq_mv'])
+                mv_data = pd.read_csv(os.path.join(FPN.Input_data_server.value, self.data_name['mv']),
+                                      index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value],
+                                      usecols=[KN.TRADE_DATE.value, KN.STOCK_ID.value, PVN.LIQ_MV.value])
                 self.raw_data['mv'] = mv_data
             else:
-                mv_data = self.raw_data['mv'].copy(deep=True)
+                mv_data = self.raw_data['mv']
 
         else:
             mv_data = pd.DataFrame()
 
         if 'industry' in method:
             if self.raw_data.get('industry', None) is None:
-                industry_data = pd.read_csv(os.path.join(FPN.label_pool_path.value, self.data_name['industry']),
-                                            index_col=['date', 'stock_id'])
+                industry_data = pd.read_csv(os.path.join(FPN.Input_data_server.value, self.data_name['industry']),
+                                            index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
                 self.raw_data['industry'] = industry_data
             else:
-                industry_data = self.raw_data['industry'].copy(deep=True)
+                industry_data = self.raw_data['industry']
         else:
             industry_data = pd.DataFrame()
 
         # merge data
-        neu_factor = pd.concat([data, mv_data, industry_data], axis=1, join='inner')
+        neu_factor = pd.concat([data, mv_data, industry_data], axis=1).dropna()
 
         # neutralization
 
@@ -123,7 +123,7 @@ class FactorProcess(object):
             return data
         elif method == 'mv':
             if self.raw_data.get('mv', None) is None:
-                mv_data = pd.read_csv(os.path.join(FPN.label_pool_path.value, self.data_name['mv']),
+                mv_data = pd.read_csv(os.path.join(FPN.Input_data_server.value, self.data_name['mv']),
                                       index_col=['date', 'stock_id'],
                                       usecols=['date', 'stock_id', 'liq_mv'])
                 self.raw_data['mv'] = mv_data
@@ -191,28 +191,6 @@ class FactorProcess(object):
     #
     #     return method_dict[method]
     #
-
-    # 因子预处理
-    def main(self,
-             factor: pd.Series,
-             outliers: str,
-             neutralization: str,
-             standardization: str) -> pd.Series:
-
-        df_factor = copy.deepcopy(factor)
-
-        if outliers != '':
-            print(f"{dt.datetime.now().strftime('%X')}: processing outlier")
-            df_factor = self.remove_outliers(df_factor, outliers)
-        if neutralization != '':
-            print(f"{dt.datetime.now().strftime('%X')}: neutralization")
-            df_factor = self.neutralization(df_factor, neutralization)
-        if standardization != '':
-            print(f"{dt.datetime.now().strftime('%X')}: standardization")
-            df_factor = self.standardization(df_factor, standardization)
-
-        # TODO 因子填充？？？
-        return df_factor
 
     """去极值"""
 
