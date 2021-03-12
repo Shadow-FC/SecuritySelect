@@ -54,7 +54,7 @@ class CalMidData(object):
     def cal(self, Name: str):
 
         # 计算中间过程1
-        # self.onProcess[Name].singleProcess()
+        self.onProcess[Name].singleProcess()
 
         # 计算中间过程2
         # self.onProcess[f'MID{Name}'].singleProcess(Name)

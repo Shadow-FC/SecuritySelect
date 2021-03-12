@@ -59,6 +59,11 @@ class HFDBase(object):
     def process(self, **kwargs):
         pass
 
+    # 记事本
+    def to_txt(self, Title: str, content: str):
+        with open(os.path.join(os.getcwd(), f"{Title}.txt"), mode='a', encoding='UTF-8') as f:
+            f.writelines(content + "\n")
+
 
 class HFDTrade(HFDBase):
     """
@@ -128,6 +133,7 @@ class HFDTrade(HFDBase):
                 print(f"逐笔数据-{date}：{flag:>4}/{len(files):>4}-{file_}, 耗时{round(time.time() - sta, 4)}")
             except Exception as e:
                 print(e)
+                self.to_txt("Trade", f"{dt.datetime.now()}: {date} {file_}")
 
         res1 = pd.concat(tradeCashFlow, axis=1).T
         res2 = pd.concat(trade1min)
@@ -296,6 +302,7 @@ class HFDDepth(HFDBase):
                 data = pd.read_csv(os.path.join(path, file_), encoding='GBK')
             except Exception as e:
                 print(e)
+                self.to_txt("Depth", f"{dt.datetime.now()}: {date} {file_}")
             else:
                 depthVwap.append(pd.Series(self.depthVwap(data, f"{file_[2:-4]}.{file_[:2].upper()}", date)))  # 十档Vwap
                 depth1min.append(self.depth1min(data, f"{file_[2:-4]}.{file_[:2].upper()}"))  # 十档1min
