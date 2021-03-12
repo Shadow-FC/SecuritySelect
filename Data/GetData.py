@@ -192,13 +192,20 @@ class SQL(object):
         return list_date
 
     # 个股上市日期
-    def list_date_SQL(self):
+    def list_date_SQL(self) -> str:
         sql_list_date = "SELECT S_INFO_WINDCODE \"{code}\", " \
                         "to_char(to_date(S_INFO_LISTDATE ,'yyyy-MM-dd'), 'yyyy-MM-dd') \"{list_date}\" " \
                         "FROM ASHAREDESCRIPTION " \
                         "WHERE regexp_like(S_INFO_WINDCODE, '^[0-9]')".format(code=KN.STOCK_ID.value,
                                                                               list_date=KN.LIST_DATE.value)
         return sql_list_date
+
+    # 股票ID
+    def stockID(self) -> str:
+        sql_stockID = "SELECT S_INFO_WINDCODE as CODE, S_INFO_CODE as code_simple FROM ASHAREDESCRIPTION " \
+                      "WHERE substr(S_INFO_CODE, 1, 1) not between 'A' and 'Z' " \
+                      "AND S_INFO_LISTDATE IS NOT NULL "
+        return sql_stockID
 
     def query(self, sql):
         """
@@ -208,3 +215,9 @@ class SQL(object):
         """
         sql_df = pd.read_sql(sql, self.con_wind)
         return sql_df
+
+
+if __name__ == '__main__':
+    A = SQL()
+    p = A.query(A.stockID())
+    print('s')

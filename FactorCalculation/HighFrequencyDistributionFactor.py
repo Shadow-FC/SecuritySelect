@@ -1723,7 +1723,7 @@ class HighFrequencyDistributionFactor(FactorBase):
     @classmethod
     def Distribution031_data_raw(cls,
                                  **kwargs):
-        """N日隔夜收益与下午收益差和(OVP)"""
+        """N日上午收益与下午收益差和(AVP)"""
         return cls.Distribution030_data_raw()
 
     @staticmethod

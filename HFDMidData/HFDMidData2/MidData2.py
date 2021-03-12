@@ -17,11 +17,13 @@ import multiprocessing as mp
 
 """
 高频数据计算注意事项：
-1.不做特殊说明计算不包含集合竞价数据：默认09:30:00作为当天第一根K线，15:00:00当根K线剔除
-2.在进行差分或者收益率计算时，先划分区间再进行计算，例如，先剔除集合竞价后再计算收益率
-3.缺失分钟数据不填充，默认当根K线无成交，成交量为0
-4.采用收益率后者差分后的数据对样本进行区间划分的时候，考虑首根K线因为差分或者计算收益率导致数据为空，使得该根数据不包含在所划分的区间内，
-  默认将该根K线数据划分到0区间
+1.如果不做特殊说明，所有因子的计算不包含集合竞价数据
+2.日内第一根K线为09:30:00，最后一根K线为15:00:00
+3.对于深度数据的统计，默认剔除14:57:00到15:00:00的数据，方便统计
+4.缺失分钟数据不填充，当根K线无成交，默认成交量为0
+5.在进行差分或者收益率计算时，先划分区间再进行计算，例如，先剔除集合竞价后再计算收益率
+6.数据进过差分或者收益率变换后，在按照收益率或者差分后的数据对样本进行划分时，考虑首根K线因为为空，将其划分为0的区间内
+7.不同时间段计算的因子是否需要包含时间段两端详见算法
 """
 
 
@@ -154,8 +156,6 @@ class MidData(object):
 
         files = os.listdir(self.Path_Mapping[self.file_name])
         files_filter = list(set(files) - set(ID))
-        # filter
-        # files_filter = [i for i in files_filter if i[:-4] >= '2020-05-06']
 
         path_files = [os.path.join(self.Path_Mapping[self.file_name], file_name) for file_name in files_filter]
 
@@ -167,9 +167,7 @@ class MidData(object):
                  func_name: str,
                  func: Callable):
         try:
-            # TODO
-            dataSub = data[((data['time'] < '14:57:00') | (data['time'] == '15:00:00')) & ((data['bidvolume1'] != 0) | (data['askvolume1'] != 0))]
-            res = dataSub.groupby('code').apply(func, date)
+            res = data.groupby('code').apply(func, date)
         except Exception as e:
             print(f"{func_name} {date}: {e}")
             with self.lock:
@@ -230,7 +228,7 @@ class MidData(object):
             "volPerDiffStd": volPerDiff.std(),  # 每笔成交量差分标准差
 
             "volPerDiffAbsMean": abs(volPerDiff).mean(),  # 每笔成交量差分绝对值均值
-            "volPerDiffAbsStd": abs(volPerDiff).std(),  # 每笔成交量差分绝绝对值标准差
+            "volPerDiffAbsStd": abs(volPerDiff).std(),  # 每笔成交量差分绝对值标准差
 
             "date": date
         })
@@ -346,7 +344,7 @@ class MidData(object):
 
         return pd.Series(closeData)
 
-    # 逐笔特殊因子
+    # 逐笔特殊因子1
     def _trade_special1(self, d: pd.DataFrame, date: str) -> pd.Series:
         d['amtPerTrade'] = d['amount'] / d['tradenum']
         d_sub = d[self.range_T]
@@ -380,6 +378,7 @@ class MidData(object):
 
         return pd.Series(specialData)
 
+    # 逐笔特殊因子2
     def _trade_special2(self, d: pd.DataFrame, date: str) -> pd.Series:
         d_sub = d[self.range_T]
         d_sub['ret'] = d_sub['close'].pct_change()
@@ -406,10 +405,10 @@ class MidData(object):
 
         return pd.Series(specialData)
 
-    # 不同时间点5档口委买委卖量和
+    # 5档盘口委买委卖量和
     def _depth5_vol_sum(self, data: pd.DataFrame, date: str) -> pd.Series:
-
-        dataSub = data
+        dataSub = data[((data['time'] < '14:57:00') | (data['time'] == '15:00:00')) & (
+                    (data['bidvolume1'] != 0) | (data['askvolume1'] != 0))]
 
         bid5VolSum = {f"bid5VolSum_{t_}": np.array(dataSub[dataSub['time'] <= T_r]['bidvolume5sum'].tail(1)).sum()
                       for t_, T_r in self.close_price.items()}  # 不同时间点5挡委买量和
@@ -420,9 +419,10 @@ class MidData(object):
 
         return pd.Series(depth5Sum)
 
-    # 不同时间点10档口委买委卖量和
+    # 10档盘口委买委卖量和
     def _depth10_vol_sum(self, data: pd.DataFrame, date: str) -> pd.Series:
-        dataSub = data
+        dataSub = data[((data['time'] < '14:57:00') | (data['time'] == '15:00:00')) & (
+                    (data['bidvolume1'] != 0) | (data['askvolume1'] != 0))]
 
         bid10VolSum = {f"bid10VolSum_{t_}": np.array(dataSub[dataSub['time'] <= T_r]['bidvolume10sum'].tail(1)).sum()
                        for t_, T_r in self.close_price.items()}  # 不同时间点10挡委买量和

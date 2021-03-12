@@ -66,7 +66,7 @@ def main():
 
             print(f"\033[1;31m{dt.datetime.now().strftime('%X')}: {factor_dict['factor_name']}\033[0m")
             db = 'Fin'
-            cal_factor(factor_dict, db)
+            cal_factor(factor_dict)
 
 
 def main1(fact_dict):
@@ -154,23 +154,41 @@ def main_M():
 
 
 def single():
-    for s in ['all', 'open', 'close', 'between']:  # ['all', 'open', 'close', 'between']
-        for factor in [f"FundFlow{i:03}" for i in [46, 47, 48]]:
-            fact_dict = {
-                "factor_name": factor,
-                "factor_params": {"minute": 1,
-                                  "x_min": s,
-                                  "method": 'mid',
-                                  "period": s,
-                                  "depth": 10,
-                                  "ratio": 0.1,
-                                  "q": 0.2,
-                                  "n": 1},
-                'cal': True
-            }
-            cal_factor(fact_dict)
+    for factor in [f"FundFlow{i:03}" for i in [46, 47, 48]] + [f"VolPrice{i:03}" for i in [18, 19, 20]]:
+        if factor.startswith('FundFlow'):
+            continue
+            for s in ['all', 'open', 'close', 'between']:  # ['all', 'open', 'close', 'between']
+                fact_dict = {
+                    "factor_name": factor,
+                    "factor_params": {"minute": 1,
+                                      "x_min": s,
+                                      "method": 'mid',
+                                      "period": s,
+                                      "depth": 5,
+                                      "ratio": 0.1,
+                                      "q": 0.2,
+                                      "n": 1},
+                    'cal': True
+                }
+                cal_factor(fact_dict)
+        if factor.startswith("VolPrice"):
+
+            for s in [5, 10]:
+                fact_dict = {
+                    "factor_name": factor,
+                    "factor_params": {"minute": 1,
+                                      "x_min": s,
+                                      "method": 'mid',
+                                      "period": s,
+                                      "depth": s,
+                                      "ratio": 0.1,
+                                      "q": 0.2,
+                                      "n": 1},
+                    'cal': True
+                }
+                cal_factor(fact_dict)
 
 
 if __name__ == '__main__':
-    single()
-    # main_M()
+    # single()
+    main()

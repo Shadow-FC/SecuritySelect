@@ -14,7 +14,7 @@ mem = psutil.virtual_memory()
 class FilePathName(Enum):
     # factor_info = 'Z:\\Database\\'  # 因子信息路径
 
-    Input_data_server = 'Y:\\DataBase'  # 服务端数据
+    Input_data_server = 'B:\\DataBase'  # 服务端数据
     Input_data_local = 'A:\\DataBase\\SecuritySelectData\\InputData'  # 本地数据
 
     factor_pool_path = 'A:\\DataBase\\SecuritySelectData\\FactorPool\\'  # 因子池
@@ -38,7 +38,7 @@ class FilePathName(Enum):
 
     HFD_Stock_M = 'B:\\合成数据\\逐笔1min\\逐笔1min'  # 高频分钟数据
     HFD_Stock_Depth = 'B:\\合成数据\\十档Vwap'  # 高频十档盘口数据
-    HFD_Stock_Depth_1min = 'B:\\合成数据\\十档1min\\十档一分钟样本内'  # 高频十档分钟数据
+    HFD_Stock_Depth_1min = 'B:\\合成数据\\十档1min\\十档一分钟样本外'  # 高频十档分钟数据
     HFD_Stock_CF = 'B:\\合成数据\\逐笔资金流向'  # 逐笔资金流向
     HFD_MidData = 'B:\\合成数据\\MidData'  # 高频因子中间数据
     # HFD_MidData = 'A:\\Test'

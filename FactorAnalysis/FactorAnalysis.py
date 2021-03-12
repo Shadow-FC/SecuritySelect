@@ -598,7 +598,7 @@ class FactorValidityCheck(object):
     def factor_to_csv(self):
 
         factor = self.dataSet['factDirty'][self.fact_name]
-        file_path = os.path.join(FPN.FactorDataSet.value, factor.factor_category)
+        file_path = os.path.join(r"C:\Users\Administrator\Desktop\Remain", factor.factor_category)
 
         if not os.path.exists(file_path):
             os.makedirs(file_path)
