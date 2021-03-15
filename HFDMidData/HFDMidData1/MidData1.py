@@ -35,7 +35,7 @@ class HFDBase(object):
             savePath (): 存储路径字典
         """
         self.savePath: Dict[str, str] = savePath
-        self.sql: type = SQL()
+        self.sql = SQL()
         self.stockIDMapping: Dict[str, str] = {}
 
         self.init()
@@ -44,14 +44,14 @@ class HFDBase(object):
         data = self.sql.query(self.sql.stockID())
         self.stockIDMapping = data.set_index('CODE_SIMPLE').to_dict()['CODE']
 
-    # 数据存储
-    def data_to_csv(self, Data: Dict[str, pd.DataFrame]):
-
-        for fileName, dataValue in Data.items():
-            if fileName.endswith('1min'):
-                res1.to_csv(os.path.join(self.savePath[fileName], f'{self.date}'), index=False)
-            else:
-                res1.to_csv(os.path.join(self.savePath[fileName], f'{fileName}.csv'), index=False)
+    # # 数据存储
+    # def data_to_csv(self, Data: Dict[str, pd.DataFrame]):
+    #
+    #     for fileName, dataValue in Data.items():
+    #         if fileName.endswith('1min'):
+    #             res1.to_csv(os.path.join(self.savePath[fileName], f'{self.date}'), index=False)
+    #         else:
+    #             res1.to_csv(os.path.join(self.savePath[fileName], f'{fileName}.csv'), index=False)
 
     def filePath(self, **kwargs):
         pass
