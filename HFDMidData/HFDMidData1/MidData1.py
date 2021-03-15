@@ -124,16 +124,28 @@ class HFDTrade(HFDBase):
             flag += 1
             if file_[:-4] not in self.stockIDMapping.keys():
                 continue
+            sta = time.time()
             try:
-                sta = time.time()
                 data = pd.read_csv(os.path.join(path, file_), encoding='GBK')
-                tradeCashFlow.append(
-                    pd.Series(self.tradeCashFlow(data, self.stockIDMapping[file_[:-4]], date)))  # 逐笔资金流向计算
-                trade1min.append(self.trade1min(data, self.stockIDMapping[file_[:-4]]))  # 逐笔1min计算
-                print(f"逐笔数据-{date}：{flag:>4}/{len(files):>4}-{file_}, 耗时{round(time.time() - sta, 4)}")
             except Exception as e:
-                print(e)
-                self.to_txt("Trade", f"{dt.datetime.now()}: {date} {file_}")
+                print(f"tradeReadFile-{date}-{file_}: {e}")
+                self.to_txt("Trade", f"{dt.datetime.now()}: readFile {date} {file_}")
+            else:
+                try:
+                    tradeCashFlow.append(
+                        pd.Series(self.tradeCashFlow(data, self.stockIDMapping[file_[:-4]], date)))  # 逐笔资金流向计算
+                except Exception as e:
+                    print(f"tradeCashFlow-{date}-{file_}: {e}")
+                    self.to_txt("Trade", f"{dt.datetime.now()}: tradeCashFlow {date} {file_}")
+
+                try:
+                    trade1min.append(self.trade1min(data, self.stockIDMapping[file_[:-4]]))  # 逐笔1min计算
+                except Exception as e:
+                    print(f"trade1min-{date}-{file_}: {e}")
+                    self.to_txt("Trade", f"{dt.datetime.now()}: trade1min {date} {file_}")
+
+            if flag % 200 == 0:
+                print(f"逐笔数据-{date}：{flag:>4}/{len(files):>4}-{file_}, 耗时{round(time.time() - sta, 4)}")
 
         res1 = pd.concat(tradeCashFlow, axis=1).T
         res2 = pd.concat(trade1min)
@@ -301,11 +313,22 @@ class HFDDepth(HFDBase):
             try:
                 data = pd.read_csv(os.path.join(path, file_), encoding='GBK')
             except Exception as e:
-                print(e)
-                self.to_txt("Depth", f"{dt.datetime.now()}: {date} {file_}")
+                print(f"depthReadFile-{date}-{file_}: {e}")
+                self.to_txt("Depth", f"{dt.datetime.now()}: readFile {date} {file_}")
             else:
-                depthVwap.append(pd.Series(self.depthVwap(data, f"{file_[2:-4]}.{file_[:2].upper()}", date)))  # 十档Vwap
-                depth1min.append(self.depth1min(data, f"{file_[2:-4]}.{file_[:2].upper()}"))  # 十档1min
+                try:
+                    depthVwap.append(pd.Series(self.depthVwap(data, f"{file_[2:-4]}.{file_[:2].upper()}", date)))  # 十档Vwap
+                except Exception as e:
+                    print(f"depthVwap-{date}-{file_}: {e}")
+                    self.to_txt("Depth", f"{dt.datetime.now()}: depthVwap {date} {file_}")
+
+                try:
+                    depth1min.append(self.depth1min(data, f"{file_[2:-4]}.{file_[:2].upper()}"))  # 十档1min
+                except Exception as e:
+                    print(f"depth1min-{date}-{file_}: {e}")
+                    self.to_txt("Depth", f"{dt.datetime.now()}: depth1min {date} {file_}")
+
+            if flag % 200 == 0:
                 print(f"十档数据-{date}：{flag:>5}/{len(files):>5}-{file_}, 耗时{round(time.time() - sta, 4)}")
 
         res1 = pd.concat(depthVwap, axis=1).T
@@ -361,7 +384,7 @@ class HFDDepth(HFDBase):
         return res
 
     # 十档1min中间过程(用来计算中间过程2)
-    def depth1min(self, df_data: pd.DataFrame, code: str) -> Dict[str, Any]:
+    def depth1min(self, df_data: pd.DataFrame, code: str) -> pd.DataFrame:
         df_data['time'] = df_data['时间'].apply(lambda x: x[-8:-2] + '00')
         l = df_data['time'] >= '09:25:00'
         df_data = df_data[l].copy()

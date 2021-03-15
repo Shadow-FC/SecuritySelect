@@ -173,174 +173,174 @@ class MidData(object):
             res = pd.DataFrame()
         return res
 
-    # # 收益率相关中间过程
-    # def _trade_ret(self, d: pd.DataFrame, date: str) -> pd.Series:
-    #     d_sub = d[self.range_T]
-    #     d_sub['ret'] = d_sub['close'].pct_change()
-    #
-    #     retDiff = d_sub['ret'].diff(1)
-    #     retData = {
-    #         "retDiffMean": retDiff.mean(),  # 收益率差分均值
-    #         "retDiffAbsMean": abs(retDiff).mean(),  # 收益率差分绝对值均值
-    #
-    #         "retMean": d_sub['ret'].mean(),  # 收益率均值
-    #         "retAbsMean": abs(d_sub['ret']).mean(),  # 收益率绝对值均值
-    #
-    #         "ret2Up_0": pow(d_sub['ret'][d_sub['ret'] > 0], 2).sum(),  # 收益率大于0的平方和
-    #         "ret2Down_0": pow(d_sub['ret'][d_sub['ret'] < 0], 2).sum(),  # 收益率小于0的平方和
-    #
-    #         "ret3Up_0": pow(d_sub['ret'][d_sub['ret'] > 0], 3).sum(),  # 收益率大于0的三次方和
-    #         "ret3Down_0": pow(d_sub['ret'][d_sub['ret'] < 0], 3).sum(),  # 收益率小于0的三次方和
-    #
-    #         "retVolWeight": (d_sub['ret'] * d_sub['volume']).sum() / d_sub['volume'].sum(),  # 成交量加权收益
-    #
-    #         "retVar": d_sub['ret'].var(),  # 收益率方差
-    #         "retSkew": d_sub['ret'].skew(),  # 收益率偏度
-    #         "retKurt": d_sub['ret'].kurt(),  # 收益率峰度
-    #
-    #         "date": date
-    #     }
-    #     return pd.Series(retData)
-    #
-    # # 成交量相关中间过程
-    # def _trade_vol(self, d: pd.DataFrame, date: str) -> pd.Series:
-    #
-    #     d['volPerTrade'] = d['volume'] / d['tradenum']
-    #     d_sub = d[self.range_T]
-    #
-    #     volDiff = d_sub['volume'].diff(1)
-    #     volPerDiff = d_sub['volPerTrade'].diff(1)
-    #
-    #     vol_data = pd.Series({
-    #
-    #         "volDiffMean": volDiff.mean(),  # 成交量差分均值
-    #         "volDiffStd": volDiff.std(),  # 成交量差分标准差
-    #
-    #         "volDiffAbsMean": abs(volDiff).mean(),  # 成交量差分绝对值均值
-    #         "volDiffAbsStd": abs(volDiff).std(),  # 成交量差分绝对值标准差
-    #
-    #         "volPerMean": d_sub['volPerTrade'].mean(),  # 每笔成交量均值
-    #         "volPerStd": d_sub['volPerTrade'].std(),  # 每笔成交量标准差
-    #
-    #         "volPerDiffMean": volPerDiff.mean(),  # 每笔成交量差分均值
-    #         "volPerDiffStd": volPerDiff.std(),  # 每笔成交量差分标准差
-    #
-    #         "volPerDiffAbsMean": abs(volPerDiff).mean(),  # 每笔成交量差分绝对值均值
-    #         "volPerDiffAbsStd": abs(volPerDiff).std(),  # 每笔成交量差分绝对值标准差
-    #
-    #         "date": date
-    #     })
-    #
-    #     return pd.Series(vol_data)
-    #
-    # # 成交笔数相关中间过程
-    # def _trade_trade_num(self, d: pd.DataFrame, date: str) -> pd.Series:
-    #     d_sub = d[self.range_T]
-    #     d_sub['ret'] = d_sub['close'].pct_change()
-    #
-    #     tradeNumDiff = d_sub['tradenum'].diff(1)
-    #
-    #     tradeNumData = {
-    #         "tradeNumRetUpSum_0": d_sub[d_sub['ret'] > 0]['tradenum'].sum(),  # 收益率大于0的笔数和
-    #         "tradeNumRetDownSum_0": d_sub[d_sub['ret'] < 0]['tradenum'].sum(),  # 收益率小于0的笔数和
-    #         "tradeNumRetEqualSum_0": d_sub[np.isnan(d_sub['ret']) | (d_sub['ret'] == 0)]['tradenum'].sum(),
-    #         # 收益率等于0的笔数和(包含收益率为空的数据)
-    #
-    #         "tradeNumDiffMean": tradeNumDiff.mean(),  # 成交笔数差分均值
-    #         "tradeNumDiffStd": tradeNumDiff.std(),  # 成交笔数差分标准差
-    #
-    #         "tradeNumDiffAbsMean": abs(tradeNumDiff).mean(),  # 成交笔数差分绝对值均值
-    #         "tradeNumDiffAbsStd": abs(tradeNumDiff).std(),  # 成交笔数差分绝对值标准差
-    #
-    #         "date": date  # 日期
-    #     }
-    #
-    #     return pd.Series(tradeNumData)
+    # 收益率相关中间过程
+    def _trade_ret(self, d: pd.DataFrame, date: str) -> pd.Series:
+        d_sub = d[self.range_T]
+        d_sub['ret'] = d_sub['close'].pct_change()
 
-    # # 不同时间段总成交额和
-    # def _trade_amt_sum(self, d: pd.DataFrame, date: str) -> pd.Series:
-    #     d_sub = d[self.range_T]
-    #     d_sub['ret'] = d_sub['close'].pct_change()
-    #
-    #     amtSumAM = {f"amtAM_{time_}": d[d['time'] < right_time]['amount'].sum()
-    #                 for time_, right_time in self.time_AM.items()}  # 开盘不同时间段成交量和
-    #
-    #     amtSumPM = {f"amtPM_{time_}": d[d['time'] >= left_time]['amount'].sum()
-    #                 for time_, left_time in self.time_PM.items()}  # 尾盘不同时间段成交量和
-    #
-    #     amtSumSp = {
-    #         "amtRetUpSum_0": d_sub[d_sub['ret'] > 0]['amount'].sum(),  # 收益率大于0的成交额和
-    #         "amtRetDownSum_0": d_sub[d_sub['ret'] < 0]['amount'].sum(),  # 收益率小于0的成交额和
-    #         "amtRetEqualSum_0": d_sub[np.isnan(d_sub['ret']) | (d_sub['ret'] == 0)]['amount'].sum(),  # # 收益率等于0的成交额和
-    #         "date": date  # 日期
-    #     }
-    #
-    #     amtSum = {**amtSumAM, **amtSumPM, **amtSumSp}
-    #
-    #     return pd.Series(amtSum)
+        retDiff = d_sub['ret'].diff(1)
+        retData = {
+            "retDiffMean": retDiff.mean(),  # 收益率差分均值
+            "retDiffAbsMean": abs(retDiff).mean(),  # 收益率差分绝对值均值
 
-    # # 不同时间段主买额和
-    # def _trade_buy_amt_sum(self, d: pd.DataFrame, date: str) -> pd.Series:
-    #     buyAmtSumAM = {f"buyAmtSumAM_{t_}": d[d['time'] < T_r]['buyamount'].sum()
-    #                    for t_, T_r in self.time_AM.items()}  # 开盘不同时间段主买额和
-    #
-    #     buyAmtSumPM = {f"buyAmtSumPM_{t_}": d[d['time'] >= T_l]['buyamount'].sum()
-    #                    for t_, T_l in self.time_PM.items()}  # 尾盘不同时间段主买额和
-    #
-    #     buyAmtSum = {**buyAmtSumAM, **buyAmtSumPM, **{"date": date}}
-    #
-    #     return pd.Series(buyAmtSum)
+            "retMean": d_sub['ret'].mean(),  # 收益率均值
+            "retAbsMean": abs(d_sub['ret']).mean(),  # 收益率绝对值均值
 
-    # # 不同时间段主卖额和
-    # def _trade_sell_amt_sum(self, d: pd.DataFrame, date: str) -> pd.Series:
-    #     d['sellAmount'] = d['amount'] - d['buyamount']
-    #
-    #     sellAmtSumAM = {f"sellAmtSumAM_{t_}": d[d['time'] < T_r]['sellAmount'].sum()
-    #                     for t_, T_r in self.time_AM.items()}  # 开盘不同时间段主卖额和
-    #
-    #     sellAmtSumPM = {f"sellAmtSumPM_{t_}": d[d['time'] >= T_l]['sellAmount'].sum()
-    #                     for t_, T_l in self.time_PM.items()}  # 尾盘不同时间段主卖额和
-    #
-    #     sellAmtSum = {**sellAmtSumAM, **sellAmtSumPM, **{"date": date}}
-    #
-    #     return pd.Series(sellAmtSum)
+            "ret2Up_0": pow(d_sub['ret'][d_sub['ret'] > 0], 2).sum(),  # 收益率大于0的平方和
+            "ret2Down_0": pow(d_sub['ret'][d_sub['ret'] < 0], 2).sum(),  # 收益率小于0的平方和
 
-    # # 不同时间段成交额标准差
-    # def _trade_amt_std(self, d: pd.DataFrame, date: str) -> pd.Series:
-    #     d['sellAmount'] = d['amount'] - d['buyamount']
-    #     d['netAmount'] = d['buyamount'] - d['sellAmount']
-    #
-    #     buyAmtStd = {f"buyAmtStd_{t_}": d[(d['time'] >= T_[0]) & (d['time'] < T_[1])]['buyamount'].std()
-    #                  for t_, T_ in self.time_std.items()}  # 不同时间段主买额标准差
-    #     sellAmtStd = {f"sellAmtStd_{t_}": d[(d['time'] >= T_[0]) & (d['time'] < T_[1])]['sellAmount'].std()
-    #                   for t_, T_ in self.time_std.items()}  # 不同时间段主卖额标准差
-    #     netAmtStd = {f"netAmtStd_{t_}": d[(d['time'] >= T_[0]) & (d['time'] < T_[1])]['netAmount'].std()
-    #                  for t_, T_ in self.time_std.items()}  # 不同时间段净主买额标准差
-    #
-    #     allAmtAtd = {f"amtStd_{t_}": d[(d['time'] >= T_[0]) & (d['time'] < T_[1])]['amount'].std()
-    #                  for t_, T_ in self.time_std.items()}  # 不同时间段成交额标准差
-    #
-    #     amtStd = {**buyAmtStd, **sellAmtStd, **allAmtAtd, **netAmtStd, **{"date": date}}
-    #
-    #     return pd.Series(amtStd)
-    #
-    # # 收盘价相关中间过程
-    # def _trade_close(self, d: pd.DataFrame, date: str) -> pd.Series:
-    #     d_sub = d[self.range_T]
-    #
-    #     # 收盘价相关中间过程
-    #     closeData = {"close" + t_: 0 if d[d['time'] <= T_r].tail(1)['close'].empty
-    #     else d[d['time'] <= T_r].tail(1)['close'].values[0]
-    #                  for t_, T_r in self.close_price.items()}  # 不同时间截面收盘价
-    #
-    #     closeData.update({
-    #         "closeMean": d_sub['close'].mean(),  # 收盘价均值
-    #         "closeStd": d_sub['close'].std(),  # 收盘价标准差
-    #         "closeAmtWeight": (d_sub['close'] * d_sub['amount']).sum() / d_sub['amount'].sum(),  # 成交量加权收盘价
-    #         "date": date  # 日期
-    #     })
-    #
-    #     return pd.Series(closeData)
+            "ret3Up_0": pow(d_sub['ret'][d_sub['ret'] > 0], 3).sum(),  # 收益率大于0的三次方和
+            "ret3Down_0": pow(d_sub['ret'][d_sub['ret'] < 0], 3).sum(),  # 收益率小于0的三次方和
+
+            "retVolWeight": (d_sub['ret'] * d_sub['volume']).sum() / d_sub['volume'].sum(),  # 成交量加权收益
+
+            "retVar": d_sub['ret'].var(),  # 收益率方差
+            "retSkew": d_sub['ret'].skew(),  # 收益率偏度
+            "retKurt": d_sub['ret'].kurt(),  # 收益率峰度
+
+            "date": date
+        }
+        return pd.Series(retData)
+
+    # 成交量相关中间过程
+    def _trade_vol(self, d: pd.DataFrame, date: str) -> pd.Series:
+
+        d['volPerTrade'] = d['volume'] / d['tradenum']
+        d_sub = d[self.range_T]
+
+        volDiff = d_sub['volume'].diff(1)
+        volPerDiff = d_sub['volPerTrade'].diff(1)
+
+        vol_data = pd.Series({
+
+            "volDiffMean": volDiff.mean(),  # 成交量差分均值
+            "volDiffStd": volDiff.std(),  # 成交量差分标准差
+
+            "volDiffAbsMean": abs(volDiff).mean(),  # 成交量差分绝对值均值
+            "volDiffAbsStd": abs(volDiff).std(),  # 成交量差分绝对值标准差
+
+            "volPerMean": d_sub['volPerTrade'].mean(),  # 每笔成交量均值
+            "volPerStd": d_sub['volPerTrade'].std(),  # 每笔成交量标准差
+
+            "volPerDiffMean": volPerDiff.mean(),  # 每笔成交量差分均值
+            "volPerDiffStd": volPerDiff.std(),  # 每笔成交量差分标准差
+
+            "volPerDiffAbsMean": abs(volPerDiff).mean(),  # 每笔成交量差分绝对值均值
+            "volPerDiffAbsStd": abs(volPerDiff).std(),  # 每笔成交量差分绝对值标准差
+
+            "date": date
+        })
+
+        return pd.Series(vol_data)
+
+    # 成交笔数相关中间过程
+    def _trade_trade_num(self, d: pd.DataFrame, date: str) -> pd.Series:
+        d_sub = d[self.range_T]
+        d_sub['ret'] = d_sub['close'].pct_change()
+
+        tradeNumDiff = d_sub['tradenum'].diff(1)
+
+        tradeNumData = {
+            "tradeNumRetUpSum_0": d_sub[d_sub['ret'] > 0]['tradenum'].sum(),  # 收益率大于0的笔数和
+            "tradeNumRetDownSum_0": d_sub[d_sub['ret'] < 0]['tradenum'].sum(),  # 收益率小于0的笔数和
+            "tradeNumRetEqualSum_0": d_sub[np.isnan(d_sub['ret']) | (d_sub['ret'] == 0)]['tradenum'].sum(),
+            # 收益率等于0的笔数和(包含收益率为空的数据)
+
+            "tradeNumDiffMean": tradeNumDiff.mean(),  # 成交笔数差分均值
+            "tradeNumDiffStd": tradeNumDiff.std(),  # 成交笔数差分标准差
+
+            "tradeNumDiffAbsMean": abs(tradeNumDiff).mean(),  # 成交笔数差分绝对值均值
+            "tradeNumDiffAbsStd": abs(tradeNumDiff).std(),  # 成交笔数差分绝对值标准差
+
+            "date": date  # 日期
+        }
+
+        return pd.Series(tradeNumData)
+
+    # 不同时间段总成交额和
+    def _trade_amt_sum(self, d: pd.DataFrame, date: str) -> pd.Series:
+        d_sub = d[self.range_T]
+        d_sub['ret'] = d_sub['close'].pct_change()
+
+        amtSumAM = {f"amtAM_{time_}": d[d['time'] < right_time]['amount'].sum()
+                    for time_, right_time in self.time_AM.items()}  # 开盘不同时间段成交量和
+
+        amtSumPM = {f"amtPM_{time_}": d[d['time'] >= left_time]['amount'].sum()
+                    for time_, left_time in self.time_PM.items()}  # 尾盘不同时间段成交量和
+
+        amtSumSp = {
+            "amtRetUpSum_0": d_sub[d_sub['ret'] > 0]['amount'].sum(),  # 收益率大于0的成交额和
+            "amtRetDownSum_0": d_sub[d_sub['ret'] < 0]['amount'].sum(),  # 收益率小于0的成交额和
+            "amtRetEqualSum_0": d_sub[np.isnan(d_sub['ret']) | (d_sub['ret'] == 0)]['amount'].sum(),  # # 收益率等于0的成交额和
+            "date": date  # 日期
+        }
+
+        amtSum = {**amtSumAM, **amtSumPM, **amtSumSp}
+
+        return pd.Series(amtSum)
+
+    # 不同时间段主买额和
+    def _trade_buy_amt_sum(self, d: pd.DataFrame, date: str) -> pd.Series:
+        buyAmtSumAM = {f"buyAmtSumAM_{t_}": d[d['time'] < T_r]['buyamount'].sum()
+                       for t_, T_r in self.time_AM.items()}  # 开盘不同时间段主买额和
+
+        buyAmtSumPM = {f"buyAmtSumPM_{t_}": d[d['time'] >= T_l]['buyamount'].sum()
+                       for t_, T_l in self.time_PM.items()}  # 尾盘不同时间段主买额和
+
+        buyAmtSum = {**buyAmtSumAM, **buyAmtSumPM, **{"date": date}}
+
+        return pd.Series(buyAmtSum)
+
+    # 不同时间段主卖额和
+    def _trade_sell_amt_sum(self, d: pd.DataFrame, date: str) -> pd.Series:
+        d['sellAmount'] = d['amount'] - d['buyamount']
+
+        sellAmtSumAM = {f"sellAmtSumAM_{t_}": d[d['time'] < T_r]['sellAmount'].sum()
+                        for t_, T_r in self.time_AM.items()}  # 开盘不同时间段主卖额和
+
+        sellAmtSumPM = {f"sellAmtSumPM_{t_}": d[d['time'] >= T_l]['sellAmount'].sum()
+                        for t_, T_l in self.time_PM.items()}  # 尾盘不同时间段主卖额和
+
+        sellAmtSum = {**sellAmtSumAM, **sellAmtSumPM, **{"date": date}}
+
+        return pd.Series(sellAmtSum)
+
+    # 不同时间段成交额标准差
+    def _trade_amt_std(self, d: pd.DataFrame, date: str) -> pd.Series:
+        d['sellAmount'] = d['amount'] - d['buyamount']
+        d['netAmount'] = d['buyamount'] - d['sellAmount']
+
+        buyAmtStd = {f"buyAmtStd_{t_}": d[(d['time'] >= T_[0]) & (d['time'] < T_[1])]['buyamount'].std()
+                     for t_, T_ in self.time_std.items()}  # 不同时间段主买额标准差
+        sellAmtStd = {f"sellAmtStd_{t_}": d[(d['time'] >= T_[0]) & (d['time'] < T_[1])]['sellAmount'].std()
+                      for t_, T_ in self.time_std.items()}  # 不同时间段主卖额标准差
+        netAmtStd = {f"netAmtStd_{t_}": d[(d['time'] >= T_[0]) & (d['time'] < T_[1])]['netAmount'].std()
+                     for t_, T_ in self.time_std.items()}  # 不同时间段净主买额标准差
+
+        allAmtAtd = {f"amtStd_{t_}": d[(d['time'] >= T_[0]) & (d['time'] < T_[1])]['amount'].std()
+                     for t_, T_ in self.time_std.items()}  # 不同时间段成交额标准差
+
+        amtStd = {**buyAmtStd, **sellAmtStd, **allAmtAtd, **netAmtStd, **{"date": date}}
+
+        return pd.Series(amtStd)
+
+    # 收盘价相关中间过程
+    def _trade_close(self, d: pd.DataFrame, date: str) -> pd.Series:
+        d_sub = d[self.range_T]
+
+        # 收盘价相关中间过程
+        closeData = {"close" + t_: 0 if d[d['time'] <= T_r].tail(1)['close'].empty
+        else d[d['time'] <= T_r].tail(1)['close'].values[0]
+                     for t_, T_r in self.close_price.items()}  # 不同时间截面收盘价
+
+        closeData.update({
+            "closeMean": d_sub['close'].mean(),  # 收盘价均值
+            "closeStd": d_sub['close'].std(),  # 收盘价标准差
+            "closeAmtWeight": (d_sub['close'] * d_sub['amount']).sum() / d_sub['amount'].sum(),  # 成交量加权收盘价
+            "date": date  # 日期
+        })
+
+        return pd.Series(closeData)
 
     # 逐笔特殊因子1
     def _trade_special1(self, d: pd.DataFrame, date: str) -> pd.Series:
@@ -508,7 +508,7 @@ class MidData(object):
                 print(f"{func_name:<15}{file_sub}:{process:>4}/{length}-{round(process / length * 100, 2)}%, "
                       f"Consuming:{round(T, 2):>6}sec")
 
-                if flag >= 10 or process == length:
+                if flag >= 100 or process == length:
                     self.to_csv(func_name, res_list)  # 存储结果
                     with self.lock:
                         self.save_json(self.json_name_ID, func_name, ID_checked)  # 存储ID
