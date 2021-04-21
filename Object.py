@@ -3,10 +3,12 @@
 # @Author: FC
 # @Email:  18817289038@163.com
 
-from dataclasses import dataclass
-from datetime import datetime
-import pandas as pd
 import yagmail
+import pandas as pd
+from datetime import datetime
+from dataclasses import dataclass
+
+from typing import Union, Any
 
 
 @dataclass
@@ -66,23 +68,24 @@ class FactorData(object):
 
 # 因子数据的存储
 @dataclass
-class FactorInfo(object):
+class DataInfo(object):
     """
-    对于交易日产生的数据计算出来的因子报告期等于公布期，
-    对于采用财务数据计算出来的因子有公布期和报告期之分
-    公布期属于财务会计年度日期，存在未来数据
-    报告期数据数据实际公布日期，正常数据
+    为方便数据的流转和统一定义数据集
+    数据集说明
+    1.原始数据必须要有存放在data_raw中；
+    2.对于加工后的数据或者后续计算所需数据则放入data属性中；
+    3.数据大类data_category用来识别该数据属于什么类型的数据：例如股票池，标签池，因子池等；
+    4.数据名称data_name用来给数据命名：例如PB，StockPoolZD；
+    5.数据子类data_type用来对数据进行子类标识：例如BF, HFD
+
     """
 
-    #:param data: 该数据用来进行后续的数据分析
-    #:param data_raw: 该数据用来进行数据存储
+    data_raw: Union[pd.DataFrame, pd.Series] = None  # 因子[双索引[股票ID， 交易日],...]
+    data: Union[pd.DataFrame, pd.Series] = None  # 因子[双索引[股票ID， 交易日]：因子值]
 
-    data_raw: pd.DataFrame = None  # 因子[股票ID，公布期,因子值, 报告期]
-    data: pd.Series = None  # 因子[双索引[股票ID， 交易日]：因子值]
-
-    factor_category: str = None
-    factor_name: str = None
-    factor_type: str = None  # 因子类型
+    data_category: str = None
+    data_name: str = None
+    data_type: str = None  # 因子类型
 
 
 # 发送邮件
@@ -113,21 +116,3 @@ def send_email(email, theme, contents):
             yag = yagmail.SMTP(user="18817289038@163.com", password="excejuxyyuthbiaa",
                                host="smtp.qq.com")
             yag.send([user], theme, contents)
-# @dataclass
-# class FactorData(object):
-#     """
-#     Candlestick bar data of a certain trading period.
-#     回归结果
-#     """
-#
-#     stock_id: str = ''
-#     industry: str = ''
-#     date: datetime = None
-#     datetime_update: datetime = None
-#     group: int = None
-#
-#     stock_return: float = None
-#     factor_name: str = None
-#     factor_category: str = None
-#     factor_name_chinese: str = None
-#     factor_value: float = None

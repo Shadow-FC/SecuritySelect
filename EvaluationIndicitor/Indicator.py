@@ -60,8 +60,3 @@ class Indicator(object):
     def shape_a(self, nav: pd.Series, freq: str = "D") -> float:
         shape_a = (self.return_a(nav, freq=freq) - 0.03) / self.std_a(nav, freq="D")
         return shape_a
-
-    #  因子方向
-    def direction(self, nav: pd.Series):
-
-        pass

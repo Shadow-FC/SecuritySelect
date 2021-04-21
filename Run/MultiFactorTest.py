@@ -3,12 +3,8 @@
 # @Author: FC
 # @Email:  18817289038@163.com
 
-import os
-import pandas as pd
 import time
-import yagmail
-from multiprocessing import Pool
-from FactorAnalysis.FactorAnalysis import *
+from Analysis.FactorAnalysis.FactorAnalysis import *
 
 DATABASE_NAME = {"Group": "分组数据保存",
                  "Fin": "基本面因子保存",
@@ -27,7 +23,7 @@ def Multiple_factor_test(fact_dicts: dict, process: dict, hp):
     for fact, fact_p in fact_dicts.items():
         try:
             fact_value = pd.read_csv(f"D:\\Data\\{fact_p['factor_category']}\\{fact}.csv")
-            # fact_value = pd.read_csv(f'D:\\Quant\\SecuritySelect\\Data\\{fact}.csv')
+            # fact_value = pd.read_csv(f'D:\\Quant\\SecuritySelect\\DataInput\\{fact}.csv')
             fact_p['factor_value'] = fact_value
             A = FactorValidityCheck()
 
@@ -39,7 +35,7 @@ def Multiple_factor_test(fact_dicts: dict, process: dict, hp):
             # load factor data
             A.load_factor(**fact_p)
 
-            # integration data and process factor
+            # integration data and worker factor
             print(f"因子处理和数据整合")
             A.integration(**process)
 

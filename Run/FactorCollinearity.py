@@ -1,8 +1,4 @@
-import os
-import pandas as pd
-import time
-from multiprocessing import Pool
-from FactorAnalysis.FactorAnalysis import *
+from Analysis.FactorAnalysis.FactorAnalysis import *
 
 DATABASE_NAME = {"Group": "分组数据保存",
                  "Fin": "基本面因子保存",

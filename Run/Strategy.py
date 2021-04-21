@@ -4,13 +4,12 @@
 # @Email:  18817289038@163.com
 
 import os
-import time
 import pandas as pd
 from functools import reduce
 from typing import Dict, List
 
-from StockPool.StockPool import StockPool
-from LabelPool.Labelpool import LabelPool
+from DataAPI.StockAPI.StockPool import StockPool
+from DataAPI.LabelAPI.Labelpool import LabelPool
 from Portfolio.MultiFactorPortfolio import PortfolioModel
 
 from constant import (

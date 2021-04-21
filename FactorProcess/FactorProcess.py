@@ -560,9 +560,9 @@ if __name__ == '__main__':
     IC = pd.DataFrame(data_array)
     A.PCA(IC)
     # A.neutralization('s', method='industry+mv')
-    # df_stock = pd.read_csv("D:\\Quant\\SecuritySelect\\Data\\AStockData.csv")
+    # df_stock = pd.read_csv("D:\\Quant\\SecuritySelect\\DataInput\\AStockData.csv")
     #
-    # # Data cleaning:Restoration stock price [open, high, low, close]
+    # # DataInput cleaning:Restoration stock price [open, high, low, close]
     # price_columns = ['open', 'close', 'high', 'low']
     # df_stock[price_columns] = df_stock[price_columns].multiply(df_stock['adjfactor'], axis=0)
     #
