@@ -840,10 +840,10 @@ class FundamentalSolvencyFactor(FactorBase):
 
     @classmethod  # TODO test
     def Solvency020(cls,
-                   data: pd.DataFrame,
-                   all_tax: str = FCFSN.All_Tax.value,
-                   quarter: int = 8,
-                   switch: bool = False):
+                    data: pd.DataFrame,
+                    all_tax: str = FCFSN.All_Tax.value,
+                    quarter: int = 8,
+                    switch: bool = False):
         """
         各项税费变化率标准化(PTCF_qoq_Z)
         """
@@ -882,10 +882,10 @@ class FundamentalSolvencyFactor(FactorBase):
 
     @classmethod
     def Solvency021(cls,
-                 data: pd.DataFrame,
-                 tax_surcharges: str = FISN.Tax_Surcharges.value,
-                 quarter: int = 8,
-                 switch: bool = False):
+                    data: pd.DataFrame,
+                    tax_surcharges: str = FISN.Tax_Surcharges.value,
+                    quarter: int = 8,
+                    switch: bool = False):
         """
         税金及附加变化率标准化(OT_qoq_Z)
         """
@@ -1015,9 +1015,9 @@ class FundamentalSolvencyFactor(FactorBase):
 
     @classmethod
     def Solvency010_data_raw(cls,
-                                     sta: int = 20130101,
-                                     end: int = 20200401,
-                                     f_type: str = '408001000'):
+                             sta: int = 20130101,
+                             end: int = 20200401,
+                             f_type: str = '408001000'):
         return cls.Solvency007_data_raw(sta, end, f_type)
 
     @classmethod
@@ -1160,10 +1160,10 @@ class FundamentalSolvencyFactor(FactorBase):
 
     @classmethod
     def Solvency020_data_raw(cls,
-                            sta: int = 20130101,
-                            end: int = 20200401,
-                            f_type: str = '408001000',
-                            ):
+                             sta: int = 20130101,
+                             end: int = 20200401,
+                             f_type: str = '408001000',
+                             ):
         sql_keys = {"CFT": {"PAY_ALL_TYP_TAX": f"\"{FCFSN.All_Tax.value}\"",
                             }
                     }
@@ -1186,9 +1186,9 @@ class FundamentalSolvencyFactor(FactorBase):
 
     @classmethod
     def Solvency021_data_raw(cls,
-                          sta: int = 20130101,
-                          end: int = 20200401,
-                          f_type: str = '408001000'):
+                             sta: int = 20130101,
+                             end: int = 20200401,
+                             f_type: str = '408001000'):
         sql_keys = {"IST": {"LESS_TAXES_SURCHARGES_OPS": f"\"{FISN.Tax_Surcharges.value}\"",
                             }
                     }

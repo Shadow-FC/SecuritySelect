@@ -34,7 +34,7 @@ class LabelAPI(object):
         :return:
         """
         stock_price = stock_price.sort_index()
-        result = stock_price[return_type].groupby(KN.STOCK_ID.value).pct_change()
+        result = stock_price[return_type].groupby(KN.STOCK_ID.value).pct_change(fill_method=None)
         if label:
             if return_type == PVN.OPEN.value:
                 result = result.groupby(KN.STOCK_ID.value).shift(-2)

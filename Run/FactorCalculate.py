@@ -195,8 +195,8 @@ def cal_factor(params_dict: dict):
 #                 cal_factor(fact_dict)
 
 
-def singleCal():
-    Factor = {"fact_name": "CGO_Ret",
+def singleCal(factName: str = None):
+    Factor = {"fact_name": factName,
               "fact_params": {"minute": 1,
                               "method": 'mid',
                               "R": 0.1,
@@ -279,5 +279,6 @@ def multipleCal():
 if __name__ == '__main__':
     # single()
     # main()
-    singleCal()
+    for i in ['TK_PB', 'TK_PB_abs', 'TK_BP', 'TK_BP_abs']:
+        singleCal(factName=i)
     # multipleCal()

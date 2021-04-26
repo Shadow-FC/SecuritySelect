@@ -19,7 +19,7 @@ from DataAPI.LabelAPI.Labelpool import LabelPool
 from Analysis.RiskForecast.RiskForecast import RiskModel
 from Analysis.ReturnForecast.ReturnForecast import ReturnModel
 from FactorProcess.FactorProcess import FactorProcess
-from Optimization import OptimizeSLSQP, OptimizeLinear
+from utility.Optimization import OptimizeSLSQP, OptimizeLinear
 
 from constant import (
     timer,

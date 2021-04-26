@@ -7,11 +7,11 @@
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize, linprog
+from typing import Dict, Any
 import numba as nb
-from abc import ABC, abstractmethod
 
 
-class MaxOptModel(ABC):
+class MaxOptModel(object):
     """
     最小二乘法求解优化模型
     当矩阵长度超过2000时迭代速度大幅下降，对于线性规划问题考虑采用单纯行法进行优化求解
@@ -26,26 +26,22 @@ class MaxOptModel(ABC):
     5.容忍度为1e-7
     """
 
-    def __init__(self, obj_type: str = 'MAX_RET'):
+    def __init__(self):
         self.data_mean = None  # 收益率矩阵
         self.data_cov = None  # 协方差矩阵
 
-        self.n = None  # 解个数
-        self.maxiter = 300  # 最大迭代次数
-        self.ftol = 1e-8  # 容忍度
-        self.eps = 1e-8  # 学习效率
-        self.obj_func = self.objectFunction(obj_type)
+        self.obj_func = None  # 目标方程
         self.bonds = None  # 最优解约束边界
         self.limit = []  # 约束条件
 
-    def objectFunction(self, obj_type: str = 'MAX_RET'):
-        if obj_type == 'MAX_RET':
-            return self.object_func1
-        elif obj_type == 'MIN_RISK':
-            return self.object_func2
-        elif obj_type == 'MAX_RET/RISK':
-            return self.object_func3
-        pass
+        self.maxiter = 300  # 最大迭代次数
+        self.ftol = 1e-8  # 容忍度
+        self.eps = 1e-8  # 学习效率
+
+    # 设置优化求解器参数
+    def set_params(self, **kwargs):
+        for paramName, paramValue in kwargs.items():
+            setattr(self, paramName, paramValue)
 
     # 目标函数
     def object_func1(self, w):
@@ -74,13 +70,13 @@ class MaxOptModel(ABC):
         return func
 
     # 约束条件
-    def _constraint(self):
-        self.limit.append({'type': 'eq', 'fun': lambda w: sum(w) - 1})
+    def constraint(self):
+        return {'type': 'eq', 'fun': lambda w: sum(w) - 1}
 
     # solve
     def solve(self):
         # 初始权重
-        w0 = np.array([1 / self.n] * self.n)
+        w0 = np.array([1 / len(self.bonds)] * len(self.bonds))
 
         result = minimize(fun=self.obj_func,
                           x0=w0,
@@ -97,7 +93,7 @@ class MaxOptModel(ABC):
         return result
 
 
-class OptimizeSLSQP(object):
+class OptimizeSLSQP(MaxOptModel):
     """
     最小二乘法求解优化模型
     当矩阵长度超过2000时迭代速度大幅下降，对于线性规划问题考虑采用单纯行法进行优化求解
@@ -112,75 +108,8 @@ class OptimizeSLSQP(object):
     5.容忍度为1e-7
     """
 
-    def __init__(self, obj_type: str = 'MAX_RET'):
-        self.data_mean = None  # 收益率矩阵
-        self.data_cov = None  # 协方差矩阵
-
-        self.n = None  # 解个数
-        self.maxiter = 300  # 最大迭代次数
-        self.ftol = 1e-8  # 容忍度
-        self.eps = 1e-8  # 学习效率
-        self.obj_func = self.objectFunction(obj_type)
-        self.bonds = None  # 最优解约束边界
-        self.limit = []  # 约束条件
-
-    def objectFunction(self, obj_type: str = 'MAX_RET'):
-        if obj_type == 'MAX_RET':
-            return self.object_func1
-        elif obj_type == 'MIN_RISK':
-            return self.object_func2
-        elif obj_type == 'MAX_RET/RISK':
-            return self.object_func3
-        pass
-
-    # 目标函数
-    def object_func1(self, w):
-        """
-        目标函数默认为夏普比最大化模型，通过前面加上负号转化为最小化模型
-        :param w:
-        :return:
-        """
-        func = - np.dot(w, np.array(self.data_mean))
-        return func
-
-    def object_func2(self, w):
-        """
-        :param w:
-        :return:
-        """
-        func = np.dot(w, np.dot(w, np.array(self.data_cov)))
-        return func
-
-    def object_func3(self, w):
-        """
-        :param w:
-        :return:
-        """
-        func = - np.dot(w, np.array(self.data_mean)) / np.sqrt(np.dot(w, np.dot(w, np.array(self.data_cov))))
-        return func
-
-    # 约束条件
-    def _constraint(self):
-        self.limit.append({'type': 'eq', 'fun': lambda w: sum(w) - 1})
-
-    # solve
-    def solve(self):
-        # 初始权重
-        w0 = np.array([1 / self.n] * self.n)
-
-        result = minimize(fun=self.obj_func,
-                          x0=w0,
-                          method='SLSQP',
-                          bounds=self.bonds,
-                          constraints=self.limit,
-                          options={'disp': False,
-                                   'ftol': self.ftol,
-                                   'maxiter': self.maxiter,
-                                   'eps': self.eps})
-
-        if not result.success:
-            print("Optimization of failure")
-        return result
+    def __init__(self):
+        super(OptimizeSLSQP, self).__init__()
 
 
 class OptimizeLinear(object):

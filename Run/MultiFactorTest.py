@@ -3,7 +3,6 @@
 # @Author: FC
 # @Email:  18817289038@163.com
 
-import time
 from Analysis.FactorAnalysis.FactorAnalysis import *
 
 DATABASE_NAME = {"Group": "分组数据保存",
@@ -16,113 +15,72 @@ email = {"FC": {"user": "18817289038@163.com",
                 "host": "smtp.163.com"},
          }
 
+API = LoadData()
+
 
 # 多因子测试
-def Multiple_factor_test(fact_dicts: dict, process: dict, hp):
+def multipleTest(factPathDict: Dict[str, str]):
+    # 1.初始化数据
+    dataParams = {
+        "StockPool": "StockPoolZD",
+        "LabelPool": "strategyLabel"
+    }
 
-    for fact, fact_p in fact_dicts.items():
-        try:
-            fact_value = pd.read_csv(f"D:\\Data\\{fact_p['factor_category']}\\{fact}.csv")
-            # fact_value = pd.read_csv(f'D:\\Quant\\SecuritySelect\\DataInput\\{fact}.csv')
-            fact_p['factor_value'] = fact_value
-            A = FactorValidityCheck()
+    dataInput = {
+        "stockPoolData": API.getStockPoolData(dataParams['StockPool']),
+        "labelPoolData": API.getLabelPoolData(dataParams['LabelPool']),
+    }
 
-            print(f"加载因子：{fact}")
-            # load pool data
-            A.load_pool_data(stock_pool_name="StockPool1",  # StockPool1
-                             label_pool_name="LabelPool1")
+    Analysis = FactorValidityCheck()
+    Analysis.set_data(**dataInput)
 
-            # load factor data
-            A.load_factor(**fact_p)
+    # 2.检验参数设置
+    Params = {
+        "hp": 5,
+        "groupNum": 10,
+        "retName": "retOpen",
+        "methodProcess": {
+            "RO": {"method": "mad", "p": {}},  #
+            "Neu": {"method": "", "p": {"mvName": "liqMv", "indName": "indexCode"}},  # industry+mv
+            "Sta": {"method": "z_score", "p": {"mvName": "liqMv"}}
+        },
+    }
+    Analysis.set_params(**Params)
 
-            # integration data and worker factor
-            print(f"因子处理和数据整合")
-            A.integration(**process)
+    # 多因子检验
+    for factName, path in factPathDict.items():
+        print(f"\033[1;31m{dt.datetime.now().strftime('%X')}: {factName}\033[0m")
+        with open(path, 'rb') as f:
+            factValue = pickle.load(f)
+            factValue = factValue.set_index(['date', 'code']).rolling(5, min_periods=1).mean().reset_index()
+            factParams = {"fact_name": factName,
+                          "fact_value": factValue,
+                          "fact_params": {"": ""}
+                          }
+            Analysis.set_data(factPoolData=API.getFactorData(**factParams))
+            Analysis.set_params(factName=factName)
 
-            # Factor validity test
-            print(f"开始测试因子：{fact}")
-            A.effectiveness(ret_period=hp, save=True)
+            # 3.整合数据
+            Analysis.integration()
 
-            # send_email(email, f'{fact}因子检验没有问题', f'{fact}因子检验没有问题')
-        except Exception as e:
-            send_email(email, f'{fact}因子检验存在问题', e.__str__())
-            print(">" * 40 + "time:{}".format(time.ctime()) + "<" * 40)
-        # time.sleep(60)
-    print('Over!')
+            testParams = {"plot": True,
+                          "save": True}
+            # 4.进行因子检验
+            Analysis.effectiveness(**testParams)
+
+
+def factPath(pathIn: str) -> Dict[str, str]:
+    factNames = os.listdir(pathIn)
+    res = {factName.split('.')[0]: os.path.join(pathIn, factName) for factName in factNames}
+    return res
 
 
 if __name__ == '__main__':
+    for i in ['HighFrequencyDistributionFactor', 'HighFrequencyFundFlowFactor', 'HighFrequencyVolPriceFactor']:
 
-    factors_name = {
-        FCN.Val.value: ['EP_ttm', 'EP_LR', 'EP_cut_ttm', 'E2P_ttm', 'PEG_ttm', 'BP_LR', 'BP_ttm', 'SP_ttm',
-                        'SP_LR', 'NCFP_ttm', 'OCFP_ttm', 'FCFP_LR', 'FCFP_ttm', 'DP_ttm'],
-
-        FCN.Gro.value: ['BPS_G_LR', 'EPS_G_ttm', 'ROA_G_ttm', 'TA_G_LR', 'TA_G_ttm', 'LA_G_LR', 'LA_G_ttm',
-                        'ILA_G_LR', 'ILA_G_ttm', 'TA_G_LR_std', 'TA_G_ttm_std', 'LA_G_LR_std', 'LA_G_ttm_std',
-                        'ILA_G_LR_std', 'ILA_G_ttm_std', 'NP_Acc', 'NP_Stable', 'NP_SD', 'OP_Acc', 'OP_Stable',
-                        'OP_SD', 'OR_Acc', 'OR_Stable', 'OR_SD'],
-
-        FCN.Pro.value: ['ROA_ttm', 'DPR_ttm', 'NP', 'NP_ttm', 'OPM', 'OPM_ttm'],
-
-        FCN.Sol.value: ['Int_to_Asset', 'ShortDebt1_CFPA', 'ShortDebt2_CFPA', 'ShortDebt3_CFPA',
-                        'ShortDebt1_CFPA_qoq', 'ShortDebt2_CFPA_qoq', 'ShortDebt3_CFPA_qoq',
-                        'ShortDebt1_CFPA_qoq_abs', 'ShortDebt2_CFPA_qoq_abs', 'ShortDebt3_CFPA_qoq_abs',
-                        'ShortDebt1_CFPA_std', 'ShortDebt2_CFPA_std', 'ShortDebt3_CFPA_std',
-                        'IT_qoq_Z', 'PTCF_qoq_Z', 'OT_qoq_Z', 'OT2NP_qoq_Z', 'PT2NA_Z'],
-
-        FCN.Ope.value: ['RROC_N', 'OCFA', 'TA_Turn_ttm'],
-
-        FCN.EQ.value: ['CSR', 'CSRD', 'APR', 'APRD']
-    }
-    # factors_ef = {
-    #     FCN.Val.value: ['EP_ttm', 'EP_LR', 'EP_cut_ttm', 'E2P_ttm', 'PEG_ttm', 'BP_LR', 'BP_ttm', 'SP_ttm',
-    #                     'SP_LR', 'NCFP_ttm', 'OCFP_ttm', 'FCFP_LR', 'FCFP_ttm', 'DP_ttm'],
-    #
-    #     FCN.Gro.value: ['BPS_G_LR', 'EPS_G_ttm', 'ROA_G_ttm', 'TA_G_LR_std', 'TA_G_ttm_std', 'ILA_G_ttm_std',
-    #                     'NP_Stable', 'OP_Stable', 'OR_Stable'],
-    #
-    #     FCN.Pro.value: ['ROA_ttm', 'DPR_ttm', 'NP', 'NP_ttm', 'OPM', 'OPM_ttm'],
-    #
-    #     FCN.Sol.value: ['Int_to_Asset', 'ShortDebt1_CFPA', 'ShortDebt2_CFPA', 'ShortDebt3_CFPA',
-    #                     'ShortDebt1_CFPA_qoq', 'ShortDebt2_CFPA_qoq', 'ShortDebt3_CFPA_qoq',
-    #                     'ShortDebt1_CFPA_qoq_abs', 'ShortDebt2_CFPA_qoq_abs', 'ShortDebt3_CFPA_qoq_abs',
-    #                     'ShortDebt1_CFPA_std', 'ShortDebt2_CFPA_std', 'ShortDebt3_CFPA_std',
-    #                     'IT_qoq_Z', 'PTCF_qoq_Z', 'OT_qoq_Z', 'OT2NP_qoq_Z', 'PT2NA_Z'],
-    #
-    #     FCN.Ope.value: ['RROC_N', 'OCFA', 'TA_Turn_ttm'],
-    #
-    #     FCN.EQ.value: ['CSR', 'CSRD', 'APR', 'APRD']
-    # }
-    s = 0
-    while True:
-        if True:
-            # send_email(email, "开始进行因子有效性检验", f'{dt.datetime.now()}')
-            for fact_c, fact_names in factors_name.items():
-                fact_dict = {}
-                for fact_name in fact_names:
-                    if fact_name in ['EP_ttm']:
-                        continue
-                    # if fact_c in ['估值', '成长'] or fact_name in ['BPS_G_LR', 'EPS_G_ttm']:
-                    #     continue
-                    factor_p = {"fact_name": fact_name,
-                                "factor_category": fact_c,
-                                "factor_params": {"switch": False},
-                                'db': 'Fin',
-                                'factor_value': None,
-                                'cal': False}
-
-                    factor_process = {"outliers": '',  # mad
-                                      "neu": '',  # mv+industry
-                                      "stand": '',  # mv
-                                      "switch_freq": False,
-                                      "limit": 120}
-                    fact_dict[fact_name] = factor_p
-
-                Multiple_factor_test(fact_dict, factor_process, hp=6)
-            s = 1
-        else:
-            print('Cycle')
-            time.sleep(60 * 10)
+        fact_path = r'A:\DataBase\SecuritySelectData\FactorPool\FactorDataSet\{}'.format(i)
+        factPaths = factPath(fact_path)
+        multipleTest(factPaths)
 
 
 

@@ -56,18 +56,24 @@ def SyntheticTradeMid1_worker(readFunc: Callable,
 
         subFolderPath = prepare(filePath)
         ileGroup = list(zip_longest(*[iter(subFolderPath)] * int(len(subFolderPath) / CPU)))
-
+        sta = time.time()
         pool = mp.Pool(CPU)
-        for group in ileGroup:  # [[r'Y:\逐笔全息\L2Transaction_202003\\2020-03-03']]
+        for group in ileGroup:  # ileGroup
+            # sta = time.time()
             pool.apply_async(func=onCallFunc, args=(group, readFunc), error_callback=onErrorInfo)
             # onCallFunc(group, readFunc)
+            # end = time.time() - sta
+            # print(f"ALL:{end}")
         pool.close()
         pool.join()
+        end = time.time() - sta
+        print(end)
     else:
         print(f"{funcClass} {dt.datetime.now()}: No function to cal!")
 
 
 def onCallFunc(filePathList: Iterable, readFunc: Callable):
+    Time = defaultdict(list)
     # 进程名
     pid = os.getpid()
     flag = 0
@@ -83,7 +89,7 @@ def onCallFunc(filePathList: Iterable, readFunc: Callable):
         sta = time.time()
         # 循环处理
         for fileSub in fileNames:
-
+            print(f"{pid}-{fileSub}")
             code = switchCode(fileSub[:-4])
 
             if code not in effectID:  # 剔除非股票数据
@@ -103,7 +109,10 @@ def onCallFunc(filePathList: Iterable, readFunc: Callable):
                 for funcName, func in calFuncs.items():
 
                     try:
+                        staC = time.time()
                         calRes = func(data=data.copy(), code=code, date=date)
+                        endC = time.time() - staC
+                        Time[funcName].append(endC)
                     except Exception as e:
                         print(f"{funcName} error: {date}, {fileSub}, {e}")
                         saveData(DBName=saveM['TxT']['DBName'],
@@ -132,6 +141,10 @@ def onCallFunc(filePathList: Iterable, readFunc: Callable):
                      fileName=funcClass)
 
         print(f"{funcClass} {pid:<5}:{date} {flag:>4}/{len(filePathList):>3}, 耗时{round(time.time() - sta, 4)}")
+        dataRes = pd.DataFrame(Time)
+        res = dataRes.describe()
+        dataRes.to_csv(f'C:\\Users\\Administrator\\Desktop\\Test\\{pid}.csv')
+        res.to_csv(f'C:\\Users\\Administrator\\Desktop\\Test\\{pid}_res.csv')
 
 
 def onErrorInfo(info: Any):

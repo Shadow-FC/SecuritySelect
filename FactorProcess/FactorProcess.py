@@ -1,15 +1,10 @@
 import pandas as pd
 import numpy as np
 import os
-import json
-import statsmodels.api as sm
-import copy
-import time
-import datetime as dt
+from typing import Dict, Any
 from sklearn.decomposition import PCA
-from sklearn import linear_model
 
-from Optimization import MaxOptModel
+from utility.Optimization import MaxOptModel
 from constant import (
     KeyName as KN,
     PriceVolumeName as PVN,
@@ -337,7 +332,7 @@ class Multicollinearity(object):
         self.fp = FactorProcess()
 
     # 相关性检验
-    def correlation(self, data: pd.DataFrame) -> dict:
+    def correlation(self, data: pd.DataFrame) -> Dict[str, Any]:
         """
         每期有效数据过少不计算相关性
         :param data:

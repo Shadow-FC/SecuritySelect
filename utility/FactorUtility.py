@@ -3,23 +3,21 @@
 # @Author: FC
 # @Email:  18817289038@163.com
 
-import pandas as pd
-import numpy as np
-import os
-import json
-import statsmodels.api as sm
-import copy
 import time
 import datetime as dt
-from typing import Dict, Any
-from sklearn.decomposition import PCA
-from sklearn import linear_model
+import pandas as pd
+import numpy as np
 
-from Optimization import MaxOptModel
+from scipy import stats
+from typing import Dict, Any, List
+from itertools import combinations_with_replacement
+from sklearn.decomposition import PCA
+from sklearn.metrics import normalized_mutual_info_score as nor_mi
+
+from utility.Optimization import MaxOptModel
 from constant import (
     KeyName as KN,
     PriceVolumeName as PVN,
-    FilePathName as FPN,
     SpecialName as SN
 )
 
@@ -29,9 +27,12 @@ class RemoveOutlier(object):
     dataName = ''
 
     def process(self,
-                data: pd.Series(float),
+                data: pd.DataFrame,
+                dataName: str,
                 method='before_after_3%',
                 **kwargs) -> pd.Series(float):
+
+        self.dataName = dataName
 
         method_dict = {
             "before_after_3%": self.before_after_n,
@@ -84,6 +85,7 @@ class Neutralization(object):
 
     def process(self,
                 data: pd.Series,
+                dataName: str,
                 mvName: str = PVN.LIQ_MV.value,
                 indName: str = SN.INDUSTRY_FLAG.value,
                 method: str = 'industry+mv',
@@ -91,6 +93,7 @@ class Neutralization(object):
         """
         若同时纳入行业因子和市值因子需要加上截距项，若仅纳入行业因子则回归方程不带截距项！
         :param data: 因子数据
+        :param dataName: 因子数据
         :param mvName: 市值名称
         :param indName: 行业指数名称
         :param method: 中心化方法
@@ -99,7 +102,12 @@ class Neutralization(object):
         Args:
             indName ():
             mvName ():
+
+        Parameters
+        ----------
+        factName :
         """
+        self.dataName = dataName
 
         colName = [self.dataName]
         # read mv and industry data
@@ -133,8 +141,10 @@ class Standardization(object):
 
     def process(self,
                 data: pd.DataFrame,
+                dataName: str,
                 method='z_score',
                 **kwargs) -> pd.Series(float):
+        self.dataName = dataName
 
         method_dict = {"range01": self.range01,
                        "z_score": self.z_score,
@@ -185,269 +195,324 @@ class Standardization(object):
 
         return res
 
-#  因子预处理
-# class FactorProcess(object):
-#     """
-#     去极值，标准化，中性化，分组
-#     """
-#     data_name = {'mv': 'AStockData.csv',
-#                  'industry': 'AStockData.csv'}
-#
-#     def __init__(self):
-#         self.fact_name = ''
-#         self.raw_data = {}
-#
-#     # *去极值*
-#     def remove_outliers(self,
-#                         data: pd.Series,
-#                         method='before_after_3%') -> pd.Series:
-#
-#         self.fact_name = data.name
-#
-#         method_dict = {
-#             "before_after_3%": self.before_after_n,
-#             "before_after_3sigma": self.before_after_3sigma,
-#             "mad": self.mad
-#         }
-#         if method is None:
-#             return data
-#         else:
-#             res = data.groupby(KN.TRADE_DATE.value).apply(method_dict[method])
-#             return res
-#
-#     # *中性化*
-#     def neutralization(self,
-#                        data: pd.Series,
-#                        method: str = 'industry+mv') -> pd.Series:
-#         """
-#         若同时纳入行业因子和市值因子需要加上截距项，若仅纳入行业因子则回归方程不带截距项！
-#         :param data: 因子数据
-#         :param method: 中心化方法
-#         :return: 剔除行业因素和市值因素后的因子
-#         """
-#
-#         self.fact_name = data.name
-#
-#         # regression TODO 判断空值即可
-#         def _reg(data_: pd.DataFrame) -> pd.Series:
-#             """！！！不排序回归结果会不一样！！！"""
-#             data_sub_ = data_.sort_index()
-#
-#             if data_sub_.shape[0] < data_sub_.shape[1]:
-#                 fact_neu = pd.Series(data=np.nan, index=data_.index)
-#             else:
-#                 X = pd.get_dummies(data_sub_.loc[:, data_sub_.columns != self.fact_name],
-#                                    columns=[SN.INDUSTRY_FLAG.value])
-#                 Y = data_sub_[self.fact_name]
-#                 reg = np.linalg.lstsq(X, Y)
-#                 fact_neu = Y - (reg[0] * X).sum(axis=1)
-#             fact_neu.name = self.fact_name
-#             return fact_neu
-#
-#         # read mv and industry data
-#         if 'mv' in method:
-#             if self.raw_data.get('mv', None) is None:
-#                 mv_data = pd.read_csv(os.path.join(FPN.Input_data_server.value, self.data_name['mv']),
-#                                       index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value],
-#                                       usecols=[KN.TRADE_DATE.value, KN.STOCK_ID.value, PVN.LIQ_MV.value])
-#                 self.raw_data['mv'] = mv_data
-#             else:
-#                 mv_data = self.raw_data['mv']
-#
-#         else:
-#             mv_data = pd.DataFrame()
-#
-#         if 'industry' in method:
-#             if self.raw_data.get('industry', None) is None:
-#                 industry_data = pd.read_csv(os.path.join(FPN.Input_data_server.value, self.data_name['industry']),
-#                                             index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
-#                 self.raw_data['industry'] = industry_data
-#             else:
-#                 industry_data = self.raw_data['industry']
-#         else:
-#             industry_data = pd.DataFrame()
-#
-#         # merge data
-#         neu_factor = pd.concat([data, mv_data, industry_data], axis=1).dropna()
-#
-#         # neutralization
-#
-#         res = neu_factor.groupby(KN.TRADE_DATE.value, group_keys=False).apply(_reg)
-#         return res
-#
-#     # *标准化*
-#     def standardization(self,
-#                         data: pd.Series,
-#                         method='z_score') -> pd.Series:
-#
-#         method_dict = {"range01": self.range01,
-#                        "z_score": self.z_score,
-#                        "mv": self.market_value_weighting
-#                        }
-#         self.fact_name = data.name
-#
-#         if method is None:
-#             return data
-#         elif method == 'mv':
-#             if self.raw_data.get('mv', None) is None:
-#                 mv_data = pd.read_csv(os.path.join(FPN.Input_data_server.value, self.data_name['mv']),
-#                                       index_col=['date', 'stock_id'],
-#                                       usecols=['date', 'stock_id', 'liq_mv'])
-#                 self.raw_data['mv'] = mv_data
-#             else:
-#                 mv_data = self.raw_data['mv']
-#
-#             stand_data = pd.concat([data, mv_data], axis=1, join='inner')
-#         else:
-#             stand_data = data
-#
-#         res = stand_data.groupby(KN.TRADE_DATE.value, group_keys=False).apply(method_dict[method])
-#         return res
-#
-#     # # *正交化*
-#     # @staticmethod
-#     # def orthogonal(factor_df, method='schimidt'):
-#     #     # 固定顺序的施密特正交化
-#     #     def schimidt():
-#     #
-#     #         col_name = factor_df.columns
-#     #         factors1 = factor_df.values
-#     #
-#     #         R = np.zeros((factors1.shape[1], factors1.shape[1]))
-#     #         Q = np.zeros(factors1.shape)
-#     #         for k in range(0, factors1.shape[1]):
-#     #             R[k, k] = np.sqrt(np.dot(factors1[:, k], factors1[:, k]))
-#     #             Q[:, k] = factors1[:, k] / R[k, k]
-#     #             for j in range(k + 1, factors1.shape[1]):
-#     #                 R[k, j] = np.dot(Q[:, k], factors1[:, j])
-#     #                 factors1[:, j] = factors1[:, j] - R[k, j] * Q[:, k]
-#     #
-#     #         Q = pd.DataFrame(Q, columns=col_name, index=factor_df.index)
-#     #         return Q
-#     #
-#     #     # 规范正交
-#     #     def canonial():
-#     #         factors1 = factor_df.values
-#     #         col_name = factor_df.columns
-#     #         D, U = np.linalg.eig(np.dot(factors1.T, factors1))
-#     #         S = np.dot(U, np.diag(D ** (-0.5)))
-#     #
-#     #         Fhat = np.dot(factors1, S)
-#     #         Fhat = pd.DataFrame(Fhat, columns=col_name, index=factor_df.index)
-#     #
-#     #         return Fhat
-#     #
-#     #     # 对称正交
-#     #     def symmetry():
-#     #         col_name = factor_df.columns
-#     #         factors1 = factor_df.values
-#     #         D, U = np.linalg.eig(np.dot(factors1.T, factors1))
-#     #         S = np.dot(U, np.diag(D ** (-0.5)))
-#     #
-#     #         Fhat = np.dot(factors1, S)
-#     #         Fhat = np.dot(Fhat, U.T)
-#     #         Fhat = pd.DataFrame(Fhat, columns=col_name, index=factor_df.index)
-#     #
-#     #         return Fhat
-#     #
-#     #     method_dict = {
-#     #         "schimidt": schimidt(),
-#     #         "canonial": canonial(),
-#     #         "symmetry": symmetry()
-#     #     }
-#     #
-#     #     return method_dict[method]
-#     #
-#
-#     """去极值"""
-#
-#     # 前后3%
-#     @staticmethod
-#     def before_after_n(data: pd.Series, n: int = 3):
-#         length = len(data)
-#         sort_values = data.sort_values()
-#         threshold_top = sort_values.iloc[int(length * n / 100)]
-#         threshold_down = sort_values.iloc[-(int(length * n / 100) + 1)]
-#         data[data <= threshold_top] = threshold_top
-#         data[data >= threshold_down] = threshold_down
-#         return data
-#
-#     # 3倍标准差外
-#     @staticmethod
-#     def before_after_3sigma(data: pd.Series) -> pd.Series:
-#         miu = data.mean()
-#         sigma = data.std()
-#         threshold_down = miu - 3 * sigma
-#         threshold_up = miu + 3 * sigma
-#         data[data.ge(threshold_up)] = threshold_up
-#         data[data.le(threshold_down)] = threshold_down
-#         return data
-#
-#     # 绝对中位偏差法
-#     @staticmethod
-#     def mad(data):
-#         median = data.median()
-#         MAD = (data - median).abs().median()
-#         threshold_up = median + 3 * 1.483 * MAD
-#         threshold_down = median - 3 * 1.483 * MAD
-#         data[data >= threshold_up] = threshold_up
-#         data[data <= threshold_down] = threshold_down
-#         return data
-#
-#     """标准化"""
-#
-#     # 标准分数法
-#     @staticmethod
-#     def z_score(data: pd.Series):
-#         """
-#         :param data:
-#         :return:
-#         """
-#         miu = data.mean()
-#         sigma = data.std()
-#         stand = (data - miu) / sigma
-#         return stand
-#
-#     @staticmethod
-#     def range01(data: pd.Series):
-#         result = (data - data.min()) / (data.max() - data.min())
-#         return result
-#
-#     # 市值加权标准化
-#     def market_value_weighting(self, data) -> pd.Series:
-#         data_sub = data.dropna(how='any')
-#
-#         if data_sub.empty:
-#             stand = pd.Series(data=np.nan, index=data.index)
-#         else:
-#
-#             factor = data_sub[self.fact_name]
-#             mv = data_sub[PVN.LIQ_MV.value]
-#
-#             sum_mv = sum(mv)
-#             miu = sum(data_sub.prod(axis=1, skipna=False)) / sum_mv
-#
-#             sigma = factor.std()
-#             stand = (factor - miu) / sigma
-#         stand.name = self.fact_name
-#         return stand
-#
-#     # 分组
-#     @staticmethod
-#     def grouping(data: pd.DataFrame, n):
-#         """
-#         1.假设样本量为M,将因子分成N组，前N-1组有效样本量为int(M/N),最后一组有效样本量为M-(N-1)*int(M/*N);
-#         2.无效样本不参与计算;
-#         3.相同排序定义为同一组;
-#         4.相同排序后下一元素连续不跳级
-#         5.升序排列
-#         :param data:
-#         :param n:分组个数
-#         :return:
-#         """
-#         rank_data = data.rank(axis=1, ascending=True, method='dense')
-#         effect_data = rank_data.max(axis=1)
-#         amount_each_group = effect_data // n
-#         data_group = rank_data.floordiv(amount_each_group, axis=0) + np.sign(rank_data.mod(amount_each_group, axis=0))
-#         data_group[data_group > n] = n
-#         return data_group
+
+# *相关性检验*
+class Correlation(object):
+
+    def process(self,
+                data: pd.DataFrame,
+                method='LinCor',
+                **kwargs) -> pd.Series(float):
+
+        method_dict = {"LinCor": self.correlation,
+                       "MI": self.MI,
+                       }
+
+        if method is None:
+            return data
+
+        res = method_dict[method](data, **kwargs)
+
+        return res
+
+    # 线性相关性检验
+    def correlation(self,
+                    data: pd.DataFrame,
+                    corName: str,
+                    **kwargs) -> Dict[str, Any]:
+        """
+        每期有效数据过少不计算相关性
+        Parameters
+        ----------
+        data :
+        corName :
+        kwargs :
+
+        Returns
+        -------
+
+        """
+        dataSub = data.dropna()
+
+        df_cor = dataSub.groupby(KN.TRADE_DATE.value).corr(method=corName)
+
+        cor_GroupBy = df_cor.groupby(pd.Grouper(level=-1))
+        cor_dict = {
+            "corMean": cor_GroupBy.apply(lambda x: x.abs().mean().round(4)),
+            "corMedian": cor_GroupBy.apply(lambda x: x.abs().median().round(4)),
+            "corStd": cor_GroupBy.apply(lambda x: x.abs().std().round(4)),
+            "corTtest_0_6": cor_GroupBy.apply(lambda x: pd.Series(stats.ttest_1samp(abs(x), 0.6)[0],
+                                                                  index=x.columns).round(4)),
+        }
+
+        for corValue in cor_dict.values():
+            corValue.replace(np.inf, np.nan, inplace=True)
+
+        return cor_dict
+
+    # 非线性相关性检验
+    def MI(self, data: pd.DataFrame, **kwargs):
+        dataSub = data.dropna()
+        dataNames = dataSub.columns
+        df_mi = pd.DataFrame(columns=dataNames, index=dataNames)
+
+        iters = combinations_with_replacement(dataNames, 2)
+        for ite_ in iters:
+            df_mi.loc[ite_[0], ite_[1]] = nor_mi(dataSub[ite_[0]], dataSub[ite_[1]])
+
+
+# 因子合成方法
+class DataSynthesis(object):
+
+    hp = 0
+    rp = 0
+
+    # class OPT(MaxOptModel):
+    #
+    #     """
+    #     默认:
+    #     1.目标函数为最大化收益比上波动
+    #     2.权重介于0到1之间
+    #     3.权重和为1
+    #     4.最大迭代次数为300
+    #     5.容忍度为1e-7
+    #     """
+    #
+    #     def __init__(self):
+    #         super(OPT, self).__init__()
+    #
+    #     # 目标函数
+    #     def object_func(self, w):
+    #         """
+    #         目标函数默认为夏普比最大化模型，通过前面加上负号转化为最小化模型
+    #         :param w:
+    #         :return:
+    #         """
+    #         mean = np.array(self.data.mean())
+    #         cov = np.array(self.data.cov())  # 协方差
+    #         func = - np.dot(w, mean) / np.sqrt(np.dot(w, np.dot(w, cov)))
+    #         return func
+    #
+    #     # 约束条件
+    #     def _constraint1(self, w, **kwargs):
+    #         return sum(w) - 1
+    #
+    #     # 约束条件函数集
+    #     def _constraints(self, **kwargs):
+    #         limit = {'type': 'eq', 'fun': self._constraint1}
+    #         return limit
+
+    def __init__(self):
+        self.opt = MaxOptModel()
+
+    # 因子复合
+    def process(self,
+                factData: pd.DataFrame,
+                factWeight: pd.DataFrame,
+                method: str = 'Equal',
+                rp: int = 60,
+                hp: int = 5,
+                **kwargs) -> pd.DataFrame:
+        """
+        部分权重会用到未来数据，所以需要对权重进行平移与相应的因子值进行匹配
+        Parameters
+        ----------
+        hp :
+        rp :
+        factData :
+        factWeight :
+        method :
+        kwargs :
+
+        Returns
+        -------
+
+        """
+        self.rp, self.hp = rp, hp
+
+        factDir = np.sign(factWeight.rolling(rp, min_periods=1).mean())
+        factDir = factDir.shift(hp + 1)  # 收益率为标签(预测值), 历史收益数据加权需要+ 1
+
+        # 因子转为正向因子，同时因子收益等指标调整为单调状态
+        factNew = factData * factDir
+        factWeightNew = factWeight.abs()
+
+        method_dict = {"RetWeight": self.retWeighted,
+                       "OPT": self.MAX_IC_IR
+                       }
+
+        if method is None:
+            return data
+
+        res = method_dict[method](fact=factNew, factWeight=factWeightNew, **kwargs)
+        return res
+
+    """因子合成"""
+
+    # 等权法
+    def retWeighted(self,
+                    fact: pd.DataFrame,
+                    factWeight: pd.DataFrame,
+                    algorithm: str = 'RetMean',
+                    **kwargs) -> pd.Series(float):
+        """
+
+        Parameters
+        ----------
+        factWeight :
+        fact :
+        algorithm : RetMean: 历史收益率均值， HalfTime: 历史收益率半衰加权
+        kwargs :
+
+        Returns
+        -------
+
+        """
+
+        if algorithm != 'equal':
+            # 生成权重
+            factWeightNew = abs(self._weight(factWeight, self.rp, algorithm))
+            # 权重归一化
+            factWeightStand = factWeightNew.div(factWeightNew.sum(axis=1), axis=0)
+            # 权重与因子值匹配
+            factWeightStand = factWeightStand.shift(self.hp + 1)
+            # 复合因子
+            fact_comp = fact.mul(factWeightStand).sum(axis=1)
+        else:
+            fact_comp = fact.groupby(KN.TRADE_DATE.value, group_keys=False).apply(lambda x: x.mean(axis=1))
+        return fact_comp
+
+    def MAX_IC_IR(self,
+                  fact: pd.DataFrame,
+                  factWeight: pd.DataFrame,
+                  retType='IC_IR') -> pd.Series(float):
+
+        # 设置优化方程组
+        self.opt.obj_func = self.opt.object_func3
+        self.opt.limit.append(self.opt.constraint())
+        self.opt.bonds = ((0, 1),) * fact.shape[1]
+
+        # 对收益率进行调整
+        factWeightNew = factWeight.shift(self.hp + 1).dropna(how='all')
+
+        weightDict = {}
+        for sub in range(self.rp, factWeightNew.shape[0] + 1):
+            print(dt.datetime.now(), sub)
+            df_ = factWeightNew.iloc[sub - self.rp: sub, :]
+            data_mean = np.array(df_.mean())
+
+            if retType == 'IC':
+                data_cov = np.array(fact.loc[df_.index].cov())
+            else:
+                data_cov = np.array(df_.cov())
+
+            optParams = {
+                "data_mean": data_mean,
+                "data_cov": data_cov,
+            }
+            self.opt.set_params(**optParams)
+
+            res_ = self.opt.solve()
+            weightDict[df_.index[-1]] = res_.x
+
+        w_df = pd.DataFrame(weightDict, index=fact.columns).T
+        fact_comp = fact.mul(w_df, level=0).dropna(how='all').sum(axis=1).reindex(fact.index)
+        return fact_comp
+
+    def PCA(self,
+            fact: pd.DataFrame,
+            **kwargs):
+
+        w_list = []
+        for i in range(rp, fact.shape[0] + 1):
+            df_ = fact.iloc[i - self.rp: i, :]
+
+            pca = PCA(n_components=1)
+            pca.fit(np.array(df_))
+            weight = pca.components_[0]
+            w_s = pd.Series(data=weight, index=df_.columns, name=df_.index[-1])
+            w_list.append(w_s)
+        w_df = pd.DataFrame(w_list)
+
+        fact_comp = fact.mul(w_df).sum(axis=1)
+        fact_comp.name = fact_comp
+
+        return fact_comp
+
+    # *正交化*
+    @staticmethod
+    def orthogonal(factor_df, method='schimidt'):
+        # 固定顺序的施密特正交化
+        def schimidt():
+
+            col_name = factor_df.columns
+            factors1 = factor_df.values
+
+            R = np.zeros((factors1.shape[1], factors1.shape[1]))
+            Q = np.zeros(factors1.shape)
+            for k in range(0, factors1.shape[1]):
+                R[k, k] = np.sqrt(np.dot(factors1[:, k], factors1[:, k]))
+                Q[:, k] = factors1[:, k] / R[k, k]
+                for j in range(k + 1, factors1.shape[1]):
+                    R[k, j] = np.dot(Q[:, k], factors1[:, j])
+                    factors1[:, j] = factors1[:, j] - R[k, j] * Q[:, k]
+
+            Q = pd.DataFrame(Q, columns=col_name, index=factor_df.index)
+            return Q
+
+        # 规范正交
+        def canonial():
+            factors1 = factor_df.values
+            col_name = factor_df.columns
+            D, U = np.linalg.eig(np.dot(factors1.T, factors1))
+            S = np.dot(U, np.diag(D ** (-0.5)))
+
+            Fhat = np.dot(factors1, S)
+            Fhat = pd.DataFrame(Fhat, columns=col_name, index=factor_df.index)
+
+            return Fhat
+
+        # 对称正交
+        def symmetry():
+            col_name = factor_df.columns
+            factors1 = factor_df.values
+            D, U = np.linalg.eig(np.dot(factors1.T, factors1))
+            S = np.dot(U, np.diag(D ** (-0.5)))
+
+            Fhat = np.dot(factors1, S)
+            Fhat = np.dot(Fhat, U.T)
+            Fhat = pd.DataFrame(Fhat, columns=col_name, index=factor_df.index)
+
+            return Fhat
+
+        method_dict = {
+            "schimidt": schimidt(),
+            "canonial": canonial(),
+            "symmetry": symmetry()
+        }
+
+        return method_dict[method]
+
+    def _weight(self,
+                data: pd.DataFrame = None,
+                rp: int = 60,
+                algorithm: str = 'RetMean') -> [pd.DataFrame, None]:
+
+        if algorithm == 'RetMean':
+            data_weight = data.rolling(rp, min_periods=1).mean()
+        elif algorithm == 'HalfTime':
+            data_weight = data.rolling(rp, min_periods=1).apply(lambda x: np.dot(x, self._Half_time(len(x))))
+        else:
+            return
+
+        return data_weight
+
+    # 半衰权重
+    @staticmethod
+    def _Half_time(period: int, decay: int = 2) -> List[str]:
+
+        weight_list = [pow(2, (i - period - 1) / decay) for i in range(1, period + 1)]
+
+        weight_1 = [i / sum(weight_list) for i in weight_list]
+
+        return weight_1

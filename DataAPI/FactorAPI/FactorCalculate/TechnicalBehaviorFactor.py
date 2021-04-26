@@ -45,44 +45,21 @@ class TechnicalBehaviorFactor(FactorBase):
 
     @classmethod
     @Process("BF")
-    def TK_BP_abs(cls,
-                  data: pd.DataFrame,
-                  n: int = 20,
-                  **kwargs) -> Dict[str, Any]:
+    def TK_BP(cls,
+              data: pd.DataFrame,
+              n: int = 20,
+              **kwargs) -> Dict[str, Any]:
         """
         TK价值因子:采用BP替代股价
         :return:
         """
         fact_name = kwargs['name'] + f'_{n}days'
 
-        data['BP'] = abs(data[FBSN.Net_Asset_Ex.value]) / data[PVN.TOTAL_MV.value]
+        data['BP'] = data[FBSN.Net_Asset_Ex.value] / data[PVN.TOTAL_MV.value]
 
         data = cls().reindex(data)
 
         data[KN.RETURN.value] = data.groupby(KN.STOCK_ID.value, group_keys=False)["BP"].pct_change(fill_method=None)
-        data['v'] = cls.valueFunc(data[KN.RETURN.value])
-
-        data[fact_name] = data['v'].groupby(KN.STOCK_ID.value, group_keys=False).apply(lambda x: cls().TKAlgo(x, n))
-
-        return {"data": data[fact_name], "name": fact_name}
-
-    @classmethod
-    @Process("BF")
-    def TK_PB_abs(cls,
-                  data: pd.DataFrame,
-                  n: int = 20,
-                  **kwargs) -> Dict[str, Any]:
-        """
-        TK价值因子:采用BP替代股价
-        :return:
-        """
-        fact_name = kwargs['name'] + f'_{n}days'
-
-        data['PB'] = data[PVN.TOTAL_MV.value] / abs(data[FBSN.Net_Asset_Ex.value])
-
-        data = cls().reindex(data)
-
-        data[KN.RETURN.value] = data.groupby(KN.STOCK_ID.value, group_keys=False)["PB"].pct_change(fill_method=None)
         data['v'] = cls.valueFunc(data[KN.RETURN.value])
 
         data[fact_name] = data['v'].groupby(KN.STOCK_ID.value, group_keys=False).apply(lambda x: cls().TKAlgo(x, n))
@@ -146,42 +123,11 @@ class TechnicalBehaviorFactor(FactorBase):
         return price_data
 
     @classmethod
-    def TK_PB_abs_data_raw(cls,
-                           sta: int = 20130101,
-                           end: int = 20201231,
-                           f_type: str = '408001000',
-                           **kwargs) -> pd.DataFrame:
-        sql_keys = {"BST": {"TOT_SHRHLDR_EQY_EXCL_MIN_INT": f"\"{FBSN.Net_Asset_Ex.value}\""}
-                    }
-
-        sql_ = cls().Q.finance_SQL(sql_keys, sta, end, f_type)
-        financial_data = cls().Q.query(sql_)
-
-        # TTM
-        financial_ttm = cls()._switch_ttm(financial_data, FBSN.Net_Asset_Ex.value)
-        financial_data = financial_data.set_index([SN.REPORT_DATE.value, KN.STOCK_ID.value])
-        financial_data[FBSN.Net_Asset_Ex.value] = financial_ttm
-
-        # switch freq
-        financial_data = cls()._switch_freq(data_=financial_data, name=FBSN.Net_Asset_Ex.value, limit=120)
-
-        price_data = cls()._csv_data(data_name=[PVN.TOTAL_MV.value],
-                                     file_name='AStockData')
-        price_data[PVN.TOTAL_MV.value] = price_data[PVN.TOTAL_MV.value] * 10000
-        price_data = price_data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-        # merge data
-        res = pd.concat([financial_data[FBSN.Net_Asset_Ex.value], price_data], axis=1)
-        res = res.dropna(subset=[FBSN.Net_Asset_Ex.value, PVN.TOTAL_MV.value])
-        res = res.reset_index()
-        return res
-
-    @classmethod
-    def TK_BP_abs_data_raw(cls,
-                           sta: int = 20130101,
-                           end: int = 20201231,
-                           f_type: str = '408001000',
-                           **kwargs) -> pd.DataFrame:
+    def TK_BP_data_raw(cls,
+                       sta: int = 20130101,
+                       end: int = 20201231,
+                       f_type: str = '408001000',
+                       **kwargs) -> pd.DataFrame:
         sql_keys = {"BST": {"TOT_SHRHLDR_EQY_EXCL_MIN_INT": f"\"{FBSN.Net_Asset_Ex.value}\""}
                     }
 
@@ -221,7 +167,6 @@ class TechnicalBehaviorFactor(FactorBase):
         return cls.CGO_Price_data_raw(**kwargs)
 
     def TKAlgo(self, data: pd.Series, n: int) -> pd.Series:
-        sta = time.time()
         if data.shape[0] >= n:
             df_new = self.switchForm(data, n)
 
@@ -247,7 +192,6 @@ class TechnicalBehaviorFactor(FactorBase):
             tk = (weight * df_new).sum(axis=1)
             # 样本量不足80%剔除
             tk[df_max < round(n * 0.8)] = np.nan
-            print(f"{data.index[0][1]}: {time.time() - sta}")
             return tk
 
     def RPAlgo(self, data: pd.Series, colName: str, n: int) -> pd.Series:

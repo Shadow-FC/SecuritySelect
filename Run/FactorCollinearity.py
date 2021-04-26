@@ -1,3 +1,4 @@
+from utility.utility import factor_to_pkl
 from Analysis.FactorAnalysis.FactorAnalysis import *
 
 DATABASE_NAME = {"Group": "分组数据保存",
@@ -5,94 +6,132 @@ DATABASE_NAME = {"Group": "分组数据保存",
                  "PV": "价量易因子保存",
                  "GenPro": "遗传规划算法挖掘因子保存"}
 
-factor_effect = {FCN.Val.value: {"BP_LR", "BP_ttm", "DP_ttm", "E2P_ttm", "EP_cut_ttm",
-                                 "EP_LR", "EP_ttm", "SP_LR", "SP_ttm"},
-
-                 FCN.Gro.value: {"BPS_G_LR", "EPS_G_ttm", "ROA_G_ttm", "MAR_G",
-                                 "NP_Stable", "OP_Stable", "OR_Stable",
-                                 "ILA_G_ttm_std", "TA_G_LR_std"},
-
-                 FCN.Pro.value: {"NPM_T", "ROA_ttm"},
-
-                 FCN.Ope.value: {"RROC_N", "TA_Turn_ttm_T"},
-
-                 FCN.Sol.value: {"IT_qoq_Z", "OT2NP_qoq_Z",
-                                 "ShortDebt2_CFPA_qoq_abs", "ShortDebt3_CFPA_qoq_abs",
-                                 "ShortDebt3_CFPA_std"},
-                 FCN.EQ.value: {}}
-
-factor_comp = {FCN.Val.value: [{"name": 'VF1',
-                                "factor_name": {'BP_LR', 'DP_ttm', 'EP_ttm'}}],
-               FCN.Gro.value: [{"name": 'GF1',
-                                "factor_name": {'NP_Stable', 'OP_Stable', 'OR_Stable'}},
-                               {"name": 'GF2',
-                                "factor_name": {'ILA_G_ttm_std', 'TA_G_LR_std'}}],
-               FCN.Sol.value: [{"name": 'SF1',
-                                "factor_name": {'IT_qoq_Z', 'OT2NP_qoq_Z'}},
-                               {"name": 'SF2',
-                                "factor_name": {'ShortDebt2_CFPA_qoq_abs', 'ShortDebt3_CFPA_qoq_abs'}}]}
+# factorSynthetic = {FCN.Val.value: {"BP_LR", "BP_ttm", "DP_ttm", "E2P_ttm", "EP_cut_ttm",
+#                                  "EP_LR", "EP_ttm", "SP_LR", "SP_ttm"},
+#
+#                  FCN.Gro.value: {"BPS_G_LR", "EPS_G_ttm", "ROA_G_ttm", "MAR_G",
+#                                  "NP_Stable", "OP_Stable", "OR_Stable",
+#                                  "ILA_G_ttm_std", "TA_G_LR_std"},
+#
+#                  FCN.Pro.value: {"NPM_T", "ROA_ttm"},
+#
+#                  FCN.Ope.value: {"RROC_N", "TA_Turn_ttm_T"},
+#
+#                  FCN.Sol.value: {"IT_qoq_Z", "OT2NP_qoq_Z",
+#                                  "ShortDebt2_CFPA_qoq_abs", "ShortDebt3_CFPA_qoq_abs",
+#                                  "ShortDebt3_CFPA_std"},
+#                  FCN.EQ.value: {}}
+#
+factorComp = {'Syn1': ['Distribution004_1min_1days', 'Distribution005_1min_1days', 'Distribution006_1min_1days',
+                       'Distribution007_1min_1days']}
 
 
-# 相关性检验
-def main():
-    # FPN.FactorSwitchFreqData.value
-    A = FactorCollinearity()
+# 因子路径
+def factParma(pathExp: str, pathRet: str) -> Dict[str, str]:
+    # 因子暴露路径
+    expFolders = os.listdir(pathExp)
+    res = defaultdict(dict)
+    for folder in expFolders:
+        subPath = os.path.join(pathExp, folder)
+        factFiles = os.listdir(subPath)
+        for factName in factFiles:
+            res[factName.split('.')[0]]['expPath'] = os.path.join(subPath, factName)
 
-    for factor_name_, factor_info in factor_effect.items():
-        if factor_name_ != FCN.Ope.value:
-            continue
-        # A.get_data(factor_name_, factor_info)  #
-        try:
-            L = []
-            for i in ['MAR_G', "NPM_T", "SP_LR", "TA_Turn_ttm_T", "VF1_comp", "currentdebttodebt"]:
-                m = pd.read_csv(f"A:\\SecuritySelectData\\FactorPool\\FactorEffective\\{i}.csv")
-                m.set_index(['date', 'stock_id'], inplace=True)
-                L.append(m[f"{i}"])
-            op = pd.concat(L, axis=1, join='inner')
-            op.reset_index(inplace=True)
-            A.get_data('', {}, op)
-            A.correctionTest()
-        except Exception as e:
-            print(e)
+    # 因子收益路径
+    retFiles = os.listdir(pathRet)
+    for file in retFiles:
+        res[file.split('.')[0]]['retPath'] = os.path.join(pathRet, file)
+
+    return res
 
 
-# 因子合成
-def main1():
-    Equal_dict = {}
+def CorTest():
+    pathIn = r'A:\DataBase\SecuritySelectData\FactorPool\FactorDataSet\HighFrequencyDistributionFactor'
+    m = []
+    for fact_ in ['Distribution004_1min_1days', 'Distribution005_1min_1days', 'Distribution006_1min_1days',
+                  'Distribution007_1min_1days']:
+        with open(os.path.join(pathIn, fact_ + '.pkl'), 'rb') as f:
+            dataD = pickle.load(f).set_index(['date', 'code'])
+            m.append(dataD)
+    factData = pd.concat(m, axis=1)
 
-    Ret_dict = {"fact_ret": None,
-                "rp": 60,
-                "hp": 6,
-                "algorithm": "Half_time"}
-    MAX_IC_dict = {"fact_ret": None,
-                   "rp": 60,
-                   "hp": 6,
-                   "way": "IC_IR"}
-    factor_D = {"OCFA": '+',
-                "RROC_N": '+',
-                "TA_Turn_ttm": '+'}
+    Corr = FactorCollinearity()
+    Corr.set_data(factPoolData=factData)
 
-    # FPN.FactorSwitchFreqData.value
-    A = FactorCollinearity()
+    Params = {
+        "methodProcess": {
+            "RO": {"method": "mad", "p": {}},  #
+            "Sta": {"method": "z_score", "p": {}},
+            "Cor": {"method": "LinCor", "p": {"corName": "pearson"}}
+        },
+    }
 
-    for factor_name_, factor_info in factor_comp.items():
-        for factor_info_ in factor_info:
+    Corr.set_params(**Params)
 
-            comp_name = factor_info_['name'] + '_comp'
-            A.get_data(factor_name_, factor_info_["factor_name"])  #
-            try:
-                comp_factor = A.factor_synthetic(method='Equal',
-                                                 factor_D=factor_D,
-                                                 stand_method='mv',
-                                                 ret_type='Pearson',
-                                                 **Equal_dict)
-            except Exception as e:
-                print(e)
-            else:
-                comp_factor.name = comp_name
-                comp_factor.to_csv(os.path.join(FPN.factor_comp.value, comp_name + '.csv'), header=True)
+    Corr.Cleaning()
+    Corr.correctionTest(plot=True)
+
+
+def FactSynthetic(factPathDict: Dict[str, str]):
+    Corr = FactorCollinearity()
+
+    # 1.参数设置
+    Params = {
+        "methodProcess": {
+            "RO": {"method": "mad", "p": {}},  #
+            "Sta": {"method": "z_score", "p": {}},
+            "Cor": {"method": "LinCor", "p": {"corName": "pearson"}}
+        },
+        # "methodSynthetic": {
+        #     "method": "RetWeight",
+        #     "p": {"rp": 60,
+        #           "hp": 5,
+        #           "algorithm": "HalfTime"}, },
+        "methodSynthetic": {
+            "method": "OPT",
+            "p": {"rp": 60,
+                  "hp": 5,
+                  "retType": "IC_IR"}, }
+    }
+
+    Corr.set_params(**Params)
+
+    # 2.加载因子暴露和因子收益
+    for compName, compFacts in factorComp.items():
+        exps, rets = [], []
+        for factSub in compFacts:
+            with open(factPathDict[factSub]['expPath'], 'rb') as f:
+                dataD = pickle.load(f).set_index(['date', 'code'])
+                exps.append(dataD)
+            with open(factPathDict[factSub]['retPath'], 'rb') as f:
+                dataD = pickle.load(f).set_index('date')['IC']
+                dataD.name = factSub
+                rets.append(dataD)
+        factExps = pd.concat(exps, axis=1)
+        factRets = pd.concat(rets, axis=1)
+
+        Corr.set_data(factPoolData=factExps,
+                      factWeightData=factRets)
+
+        # 3.清洗数据
+        Corr.Cleaning()
+
+        # 4.因子合成
+        factValue = Corr.factorSynthetic()
+
+        # 5.因子存储
+        F = DataInfo(data=factValue,
+                     data_name=compName,
+                     data_type='Syn',
+                     data_category='SyntheticFactor')
+        factor_to_pkl(F)
 
 
 if __name__ == '__main__':
+    factExp = r'A:\DataBase\SecuritySelectData\FactorPool\FactorDataSet'
+    factRet = r'A:\DataBase\SecuritySelectData\FactorPool\FactorsTestResult\FactRet'
+    # CorTest()
 
-    main()
+    factDict = factParma(factExp, factRet)
+    FactSynthetic(factDict)
+    # main()
