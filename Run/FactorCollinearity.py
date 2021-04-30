@@ -1,27 +1,11 @@
 from utility.utility import factor_to_pkl
-from Analysis.FactorAnalysis.FactorAnalysis import *
+from Analysis.FactorAnalysis import *
 
 DATABASE_NAME = {"Group": "分组数据保存",
                  "Fin": "基本面因子保存",
                  "PV": "价量易因子保存",
                  "GenPro": "遗传规划算法挖掘因子保存"}
 
-# factorSynthetic = {FCN.Val.value: {"BP_LR", "BP_ttm", "DP_ttm", "E2P_ttm", "EP_cut_ttm",
-#                                  "EP_LR", "EP_ttm", "SP_LR", "SP_ttm"},
-#
-#                  FCN.Gro.value: {"BPS_G_LR", "EPS_G_ttm", "ROA_G_ttm", "MAR_G",
-#                                  "NP_Stable", "OP_Stable", "OR_Stable",
-#                                  "ILA_G_ttm_std", "TA_G_LR_std"},
-#
-#                  FCN.Pro.value: {"NPM_T", "ROA_ttm"},
-#
-#                  FCN.Ope.value: {"RROC_N", "TA_Turn_ttm_T"},
-#
-#                  FCN.Sol.value: {"IT_qoq_Z", "OT2NP_qoq_Z",
-#                                  "ShortDebt2_CFPA_qoq_abs", "ShortDebt3_CFPA_qoq_abs",
-#                                  "ShortDebt3_CFPA_std"},
-#                  FCN.EQ.value: {}}
-#
 factorComp = {'Syn1': ['Distribution004_1min_1days', 'Distribution005_1min_1days', 'Distribution006_1min_1days',
                        'Distribution007_1min_1days']}
 
@@ -62,6 +46,7 @@ def CorTest():
         "methodProcess": {
             "RO": {"method": "mad", "p": {}},  #
             "Sta": {"method": "z_score", "p": {}},
+
             "Cor": {"method": "LinCor", "p": {"corName": "pearson"}}
         },
     }
@@ -80,18 +65,11 @@ def FactSynthetic(factPathDict: Dict[str, str]):
         "methodProcess": {
             "RO": {"method": "mad", "p": {}},  #
             "Sta": {"method": "z_score", "p": {}},
-            "Cor": {"method": "LinCor", "p": {"corName": "pearson"}}
+
+            "Syn": {"method": "OPT", "p": {"rp": 60, "hp": 5, "retType": "IC_IR"}},
         },
-        # "methodSynthetic": {
-        #     "method": "RetWeight",
-        #     "p": {"rp": 60,
-        #           "hp": 5,
-        #           "algorithm": "HalfTime"}, },
-        "methodSynthetic": {
-            "method": "OPT",
-            "p": {"rp": 60,
-                  "hp": 5,
-                  "retType": "IC_IR"}, }
+
+        # "Syn": {"method": "RetWeight", "p": {"rp": 60, "hp": 5, "algorithm": "HalfTime"}},
     }
 
     Corr.set_params(**Params)
@@ -102,6 +80,8 @@ def FactSynthetic(factPathDict: Dict[str, str]):
         for factSub in compFacts:
             with open(factPathDict[factSub]['expPath'], 'rb') as f:
                 dataD = pickle.load(f).set_index(['date', 'code'])
+                # 原始因子需要滚动N日取平均
+                dataD = dataD.groupby('code').apply(lambda x: x.rolling(5, min_periods=1).mean())
                 exps.append(dataD)
             with open(factPathDict[factSub]['retPath'], 'rb') as f:
                 dataD = pickle.load(f).set_index('date')['IC']

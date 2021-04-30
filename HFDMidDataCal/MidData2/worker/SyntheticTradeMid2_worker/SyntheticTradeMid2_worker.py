@@ -1,5 +1,6 @@
 import os
 import time
+import numpy as np
 import pandas as pd
 import datetime as dt
 import multiprocessing as mp
@@ -39,7 +40,7 @@ def SyntheticTradeMid2_worker(readFunc: Callable,
                               **kwargs):
     if calFuncs != {}:
         files = prepare(filePath)
-        ileGroup = list(zip_longest(*[iter(files)] * int(len(files) / CPU)))
+        ileGroup = list(zip_longest(*[iter(files)] * int(np.ceil(len(files) / CPU))))
 
         pool = mp.Pool(CPU)
         for group in ileGroup:  # ileGroup

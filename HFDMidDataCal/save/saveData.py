@@ -42,7 +42,7 @@ def saveData(DBName: str,
         jsonPath = os.path.join(position, fileName + '.json')
 
         dataOld = readJson(position, fileName)
-        dataOld.append(data)
+        dataOld = dataOld + data if isinstance(data, list) else dataOld + [data]
         dataNew = list(set(dataOld))
 
         with open(jsonPath, mode="w+") as f:

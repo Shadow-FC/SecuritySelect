@@ -54,11 +54,11 @@ class LabelAPI(object):
         生成行业权重
         如果某个行业权重为零则舍弃掉
         """
-        data_ = pd.concat([index_weight, industry_exposure], axis=1).dropna()
-        data_[SN.INDUSTRY_WEIGHT.value] = data_.groupby(KN.TRADE_DATE.value, group_keys=False).apply(
-            lambda x: x[SN.STOCK_WEIGHT.value] / x[SN.STOCK_WEIGHT.value].sum())
+        indW = index_weight.unstack()
+        indW = indW.div(indW.sum(axis=1), axis=0).stack()
+        data_ = pd.concat([indW, industry_exposure], axis=1).dropna()
         # industry weight
-        ind_weight = data_.groupby([KN.TRADE_DATE.value, SN.INDUSTRY_FLAG.value])[SN.INDUSTRY_WEIGHT.value].sum()
+        ind_weight = data_.groupby([KN.TRADE_DATE.value, SN.INDUSTRY_FLAG.value]).sum()
         index_ = industry_exposure.index.get_level_values(KN.TRADE_DATE.value).drop_duplicates()
         ind_weight_new = ind_weight.unstack().reindex(index_).fillna(method='ffill').stack(dropna=False)
         ind_weight_new.name = SN.INDUSTRY_WEIGHT.value
@@ -67,7 +67,8 @@ class LabelAPI(object):
                         on=[KN.TRADE_DATE.value, SN.INDUSTRY_FLAG.value], how='right')
         res_ = res_.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value]).sort_index()
 
-        return res_[SN.INDUSTRY_WEIGHT.value]
+        # 改名字 TODO
+        return res_[index_weight.columns]
 
     def industry_mv(self,
                     index_weight: pd.Series,
@@ -94,21 +95,21 @@ class LabelAPI(object):
 
 
 class LabelPool(object):
-    Mapping = {"price": {"file": 'AStockData.csv',
+    Mapping = {"price": {"file": 'AStockData.pkl',
                          "columns": [PVN.CLOSE_ADJ.value, PVN.OPEN_ADJ.value, PVN.HIGH_ADJ.value, PVN.LOW_ADJ.value]},
-               "industry": {"file": 'AStockData.csv',
+               "industry": {"file": 'AStockData.pkl',
                             "columns": [SN.INDUSTRY_FLAG.value]},
-               "mv": {"file": 'AStockData.csv',
+               "mv": {"file": 'AStockData.pkl',
                       "columns": [PVN.LIQ_MV.value]},
                # "composition": {"file": 'IndexMember.csv',
                #                 "columns": [SN.CSI_300.value, SN.CSI_500.value, SN.CSI_800.value]},
-               "stock_w1": {"file": "StockPool.csv",
+               "stock_w1": {"file": "StockPool.pkl",
                             "columns": [SN.STOCK_WEIGHT.value]},
-               "stock_w2": {"file": "StockPool.csv",
+               "stock_w2": {"file": "StockPool.pkl",
                             "columns": ["stockPool", SN.STOCK_WEIGHT.value]},
-               "priceLimit": {"file": "AStockData.csv",
+               "priceLimit": {"file": "AStockData.pkl",
                               "columns": [PVN.Up_Down.value]},
-               "index_w": {"file": "StockPool.csv",
+               "index_w": {"file": "StockPool.pkl",
                            "columns": ["stockPool", "stockWeight"]},
                }
 
@@ -118,15 +119,14 @@ class LabelPool(object):
         self.local_path = FPN.Input_data_local.value
 
     def read_data(self) -> Dict[str, pd.DataFrame]:
-        file = defaultdict(list)
+        file = defaultdict(set)
         for label_name, label_info in self.Mapping.items():
-            file[label_info['file']] += label_info['columns']
+            file[label_info['file']].update(label_info['columns'])
 
         data = {}
-        for file_name, columns_list in file.items():
-            data[file_name] = pd.read_csv(os.path.join(self.path, file_name),
-                                          usecols=[KN.TRADE_DATE.value, KN.STOCK_ID.value] + columns_list,
-                                          index_col=[KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        for file_name, columnsSet in file.items():
+            with open(os.path.join(self.path, file_name), 'rb') as f:
+                data[file_name] = pickle.load(f).set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])[list(columnsSet)]
         return data
 
     def merge_labels(self, **kwargs) -> pd.DataFrame:
@@ -178,6 +178,52 @@ class LabelPool(object):
                 mv=stock_mv_data[PVN.LIQ_MV.value],
                 stock_w=stock_w_data,
                 price_limit=up_down_limit
+            )
+
+            # sort
+            category_label = category_label.sort_index()
+
+            category_label.to_pickle(result_path)
+
+        dataClass = DataInfo(data=category_label,
+                             data_category=self.__class__.__name__,
+                             data_name=func_name)
+        return dataClass
+
+    def portfolioLabel(self) -> DataInfo:
+        func_name = sys._getframe().f_code.co_name
+        result_path = os.path.join(self.local_path, func_name + '.pkl')
+
+        if os.path.exists(result_path):
+            with open(result_path, 'rb') as f:
+                category_label = pickle.load(f)
+        else:
+            # read data
+            print(f"{dt.datetime.now().strftime('%X')}: Construction the label pool")
+
+            data_dict = self.read_data()
+            price_data = data_dict['AStockData.pkl'][self.Mapping["price"]['columns']]
+            ind_exp = data_dict['AStockData.pkl'][self.Mapping["industry"]['columns']]
+            stock_mv_data = data_dict['AStockData.pkl'][self.Mapping["mv"]['columns']] * 10000  # wan yuan->yuan
+            stock_w_data = data_dict['StockPool.pkl'][self.Mapping['stock_w1']['columns']]
+
+            price_data = price_data.rename(columns={PVN.CLOSE_ADJ.value: PVN.CLOSE.value,
+                                                    PVN.OPEN_ADJ.value: PVN.OPEN.value,
+                                                    PVN.HIGH_ADJ.value: PVN.HIGH.value,
+                                                    PVN.LOW_ADJ.value: PVN.LOW.value})
+
+            print(f"{dt.datetime.now().strftime('%X')}: Calculate stock daily return label")
+            stock_ret_o = self.api.stock_ret(price_data, return_type=PVN.OPEN.value)
+            print(f"{dt.datetime.now().strftime('%X')}: Calculate industry daily weight label")
+            ind_w = self.api.industry_w(stock_w_data, industry_exposure=ind_exp)
+            ############################################################################################################
+            # merge labels
+            print(f"{dt.datetime.now().strftime('%X')}: Merge labels")
+            category_label = self.merge_labels(
+                data_ret_open=stock_ret_o,
+                ind_exp=ind_exp,
+                mv=stock_mv_data[PVN.LIQ_MV.value],
+                ind_w=ind_w,
             )
 
             # sort

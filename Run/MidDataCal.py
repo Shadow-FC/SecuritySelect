@@ -30,7 +30,7 @@ def RunMidData1():
     for funcName, func in calFuncsMid1.items():
         try:
             print(f"\033[1;31m{dt.datetime.now()}:Start calculate {funcName}\033[0m")
-            if funcName.startswith('SyntheticTrade'):  # 母函数计算
+            if funcName.startswith('Synthetic'):  # 母函数计算
                 calFuncsMid1[funcName](readFuncsMid1[funcName], readM[funcName])
         except Exception as e:
             print(f"RunMidData1 Error: {e}")

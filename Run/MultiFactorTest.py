@@ -3,7 +3,7 @@
 # @Author: FC
 # @Email:  18817289038@163.com
 
-from Analysis.FactorAnalysis.FactorAnalysis import *
+from Analysis.FactorAnalysis import *
 
 DATABASE_NAME = {"Group": "分组数据保存",
                  "Fin": "基本面因子保存",
@@ -52,21 +52,28 @@ def multipleTest(factPathDict: Dict[str, str]):
         print(f"\033[1;31m{dt.datetime.now().strftime('%X')}: {factName}\033[0m")
         with open(path, 'rb') as f:
             factValue = pickle.load(f)
+        if '_1days' in factName:
+
             factValue = factValue.set_index(['date', 'code']).rolling(5, min_periods=1).mean().reset_index()
-            factParams = {"fact_name": factName,
-                          "fact_value": factValue,
-                          "fact_params": {"": ""}
-                          }
-            Analysis.set_data(factPoolData=API.getFactorData(**factParams))
-            Analysis.set_params(factName=factName)
+            nameNew = factName.replace('_1days', '_5days')
+            factValue = factValue.rename(columns={factName: nameNew})
+        else:
+            nameNew = factName
 
-            # 3.整合数据
-            Analysis.integration()
+        factParams = {"fact_name": nameNew,
+                      "fact_value": factValue,
+                      "fact_params": {"": ""}
+                      }
+        Analysis.set_data(factPoolData=API.getFactorData(**factParams))
+        Analysis.set_params(factName=nameNew)
 
-            testParams = {"plot": True,
-                          "save": True}
-            # 4.进行因子检验
-            Analysis.effectiveness(**testParams)
+        # 3.整合数据
+        Analysis.integration()
+
+        testParams = {"plot": True,
+                      "save": True}
+        # 4.进行因子检验
+        Analysis.effectiveness(**testParams)
 
 
 def factPath(pathIn: str) -> Dict[str, str]:

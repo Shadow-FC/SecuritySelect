@@ -23,6 +23,9 @@ saveMapping = {
     "depth1min": {"Path": DBP.depth1min.value, "DBName": DBN.PKL.value},
     "depthVwap": {"Path": DBP.depthVwap.value, "DBName": DBN.PKL.value},
 
+    "depthUpLimitInfo": {"Path": DBP.depthUpLimitInfo.value, "DBName": DBN.PKL.value},
+    "depthUpLimitTick": {"Path": DBP.depthUpLimitTick.value, "DBName": DBN.PKL.value},
+
     "trade1min": {"Path": DBP.trade1min.value, "DBName": DBN.PKL.value},
     "tradeCashFlow": {"Path": DBP.tradeCashFlow.value, "DBName": DBN.PKL.value},
     "tradeBigOrderNum": {"Path": DBP.tradeBigOrderNum.value, "DBName": DBN.PKL.value},
@@ -30,6 +33,7 @@ saveMapping = {
     "tradeInvF_004_ZBQX": {"Path": DBP.tradeInvF_004_ZBQX.value, "DBName": DBN.PKL.value},
     "tradeInvF_005_ZBQX": {"Path": DBP.tradeInvF_005_ZBQX.value, "DBName": DBN.PKL.value},
 
+    "tradeUpLimitInfo": {"Path": DBP.tradeUpLimitInfo.value, "DBName": DBN.PKL.value},
     # 中间过程2
     "depth5VolSum": {"Path": DBP.depth5VolSum.value, "DBName": DBN.PKL.value},
     "depth10VolSum": {"Path": DBP.depth10VolSum.value, "DBName": DBN.PKL.value},
@@ -59,6 +63,9 @@ readMapping = {
 
     "SyntheticDepthMid1": r'Y:\十档',
     "SyntheticTradeMid1": r"Y:\逐笔全息",
+
+    "SyntheticDepthMid1Sub": r'D:\Test\UpDownLimit.pkl',
+    "SyntheticTradeMid1Sub": r'D:\Test\UpDownLimit.pkl',
 
     "SyntheticDepthMid2": r'Y:\合成数据\十档1min\因子数据',
     "SyntheticTradeMid2": r'Y:\合成数据\逐笔1min',
@@ -101,5 +108,6 @@ time_std = {"all": ["09:30:00", "15:00:00"],
             "open": ["09:30:00", "10:00:00"],
             "between": ["10:00:00", "14:30:00"],
             "close": ["14:30:00", "15:00:00"]}
+
 
 range_T = lambda x: (x['time'] >= '09:30:00') & (x['time'] < '15:00:00')

@@ -72,47 +72,28 @@ def t1():
         dataCsv.to_pickle(os.path.join(pathIn, fileName + '.pkl'))
     print('s')
 
-class A(object):
-    def __init__(self):
-        print("enter A")
-        super(A, self).__init__()# new
-        print("leave A")
 
-class B(object):
-    def __init__(self):
-        print("enter B")
-        super(B, self).__init__()# new
-        print("leave B")
-
-class C(A):
-    def __init__(self):
-        print("enter C")
-        super(C, self).__init__()
-        print("leave C")
-
-class D(A):
-    def __init__(self):
-        print("enter D")
-        super(D, self).__init__()
-        print("leave D")
-class E(B, C):
-    def __init__(self):
-        print("enter E")
-        super(E, self).__init__()# change
-        print("leave E")
-
-class F(E, D):
-    def __init__(self):
-        print("enter F")
-        super(F, self).__init__()# change
-        print("leave F")
+def t2():
+    pathIn = r'A:\DataBase\SecuritySelectData\FactorPool\FactorDataSet'
+    m = []
+    folders = os.listdir(pathIn)
+    for folder in folders:
+        if folder.startswith('High'):
+            pathFile = os.path.join(pathIn, folder)
+            files = os.listdir(pathFile)
+            for fileSub in files:
+                with open(os.path.join(pathFile, fileSub), 'rb') as f:
+                    data = pickle.load(f)
+                    dataSub = data[(data['code'] == '600000.SZ') & (data['date'] == '2020-04-28')]
+                    dataSub = dataSub.set_index(['date', 'code'])
+                m.append(dataSub)
+    res = pd.concat(m).stack()
+    print(res)
 
 
 if __name__ == '__main__':
-    P = F()
-    op = B()
-    op.set('tg')
-    t1()
+
+    t2()
     pathTest = r'B:'
     # files = os.listdir(pathTest)
     m = []

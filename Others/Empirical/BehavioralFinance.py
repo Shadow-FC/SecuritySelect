@@ -3,7 +3,7 @@
 # @Author: FC
 # @Email:  18817289038@163.com
 
-from Analysis.FactorAnalysis.FactorAnalysis import *
+from Analysis.FactorAnalysis import *
 import os
 
 

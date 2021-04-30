@@ -3,7 +3,7 @@
 # @Author: FC
 # @Email:  18817289038@163.com
 
-from Analysis.FactorAnalysis.FactorAnalysis import *
+from Analysis.FactorAnalysis import *
 
 DATABASE_NAME = {"Group": "分组数据保存",
                  "Fin": "基本面因子保存",
@@ -15,12 +15,15 @@ API = LoadData()
 
 def singleTest(factName: str = None, PathIn: str = ''):
     # 1.数据部署
-    pathRead = os.path.join(PathIn, factName + '.pkl')
+    pathRead = os.path.join(PathIn, factName)
     with open(pathRead, mode='rb') as f:
-        fact_value = pickle.load(f)
+        factValue = pickle.load(f)
+    factValue = factValue.set_index(['date', 'code']).rolling(5, min_periods=1).mean().reset_index()
+    nameNew = factName.split('.')[0].replace('_1days', '_5days')
+    factValue = factValue.rename(columns={factName.split('.')[0]: nameNew})
     dataParams = {
-        "Factor": {"fact_name": factName,
-                   "fact_value": fact_value,
+        "Factor": {"fact_name": nameNew,
+                   "fact_value": factValue,
                    "fact_params": {"": ""}
                    },
         "StockPool": "StockPoolZD",
@@ -54,7 +57,7 @@ def singleTest(factName: str = None, PathIn: str = ''):
     # 3.整合数据
     Analysis.integration()
 
-    testParams = {"plot": False,
+    testParams = {"plot": True,
                   "save": True}
     # 4.进行因子检验
     Analysis.effectiveness(**testParams)
@@ -62,8 +65,8 @@ def singleTest(factName: str = None, PathIn: str = ''):
 
 if __name__ == '__main__':
 
-    fact_path = r'A:\DataBase\SecuritySelectData\FactorPool\FactorDataSet\TechnicalBehaviorFactor'
-    factNameList = ['TK_PB_20days', 'TK_PB_abs_20days', 'TK_BP_20days', 'TK_BP_abs_20days']
+    fact_path = r'D:\DataBase\HighFrequencyStrengthFactor'
+    factNameList = os.listdir(fact_path)
     for fact_ in factNameList:
         singleTest(factName=fact_, PathIn=fact_path)
     print('Finish!')

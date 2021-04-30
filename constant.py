@@ -19,18 +19,15 @@ projectPath = os.path.abspath(os.path.dirname(os.getcwd()) + os.path.sep + ".")
 class FilePathName(Enum):
     # factor_info = 'Z:\\Database\\'  # 因子信息路径
 
-    Input_data_server = 'Y:\\DataBase'  # 服务端数据
+    Input_data_server = 'B:\\DataBase'  # 服务端数据
     Input_data_local = 'A:\\DataBase\\SecuritySelectData\\InputData'  # 本地数据
 
     factor_pool_path = 'A:\\DataBase\\SecuritySelectData\\FactorPool\\'  # 因子池
     factor_inputData = 'A:\\DataBase\\SecuritySelectData\\FactorPool\\Factor_InputData\\'  # 因子计算所需数据
-    FactorRawData = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorDataSet\\RawDataFundamental\\"  # 未经过处理的因子集
-    FactorDataSet = "D:\\DataBase\\"  # 标准因子集(日频)
-    # FactorDataSet = "D:\\DataBase\\NEW2"  # 标准因子集(日频)
-    factor_test_res = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorsTestResult\\"  # 因子检验结果保存
 
+    FactorDataSet = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorDataSet"  # 标准因子集(日频)
+    factor_test_res = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorsTestResult\\"  # 因子检验结果保存
     factor_ef = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorEffective\\"  # 筛选有效因子集
-    factor_comp = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorEffective\\FactorComp\\"  # 复合因子数据集
 
     Trade_Date = 'Y:\\DataBase'  # 交易日
     List_Date = 'A:\\DataBase\\ListDate'  # 成立日
@@ -39,7 +36,7 @@ class FilePathName(Enum):
     HFD_Stock_M = 'Y:\\合成数据\\逐笔1min'  # 高频分钟数据
     HFD_Stock_Depth = 'Y:\\合成数据\\十档Vwap'  # 高频十档盘口数据
     HFD_Stock_CF = 'Y:\\合成数据\\逐笔资金流'  # 逐笔资金流向
-    HFD_MidData = 'Y:\\合成数据\\中间过程2'  # 高频因子中间数据
+    HFD_MidData = 'B:\\中间过程2'  # 高频因子中间数据
     HFD = 'A:\\DataBase\\HFD'  # 高频数据存储地址
 
 
@@ -86,12 +83,17 @@ class DBPath(Enum):
     depth1min = os.path.join(pathMidData1, "depth1min")
     depthVwap = os.path.join(pathMidData1, "depthVwap")
 
+    depthUpLimitTick = os.path.join(pathMidData1, "depthUpLimitTick")
+    depthUpLimitInfo = os.path.join(pathMidData1, "depthUpLimitInfo")
+
     trade1min = os.path.join(pathMidData1, "trade1min")
     tradeCashFlow = os.path.join(pathMidData1, "tradeCashFlow")
     tradeBigOrderNum = os.path.join(pathMidData1, "tradeBigOrderNum")
     tradeBigOrderTime = os.path.join(pathMidData1, "tradeBigOrderTime")
     tradeInvF_004_ZBQX = os.path.join(pathMidData1, "tradeInvF_004_ZBQX")
     tradeInvF_005_ZBQX = os.path.join(pathMidData1, "tradeInvF_005_ZBQX")
+
+    tradeUpLimitInfo = os.path.join(pathMidData1, "tradeUpLimitInfo")
 
     depth5VolSum = os.path.join(pathMidData2, "depth5VolSum")
     depth10VolSum = os.path.join(pathMidData2, "depth10VolSum")

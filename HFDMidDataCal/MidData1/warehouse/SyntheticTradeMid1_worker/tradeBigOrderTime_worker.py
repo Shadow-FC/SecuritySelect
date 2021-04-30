@@ -35,19 +35,20 @@ def tradeBigOrderTime_worker(data: pd.DataFrame,
            'BigSellTimeRetCumAmtWet': 0,
            }
 
-    data['Amt'] = data['Volume'] * data['Price']
-    data['Time'] = data['Time'].map(lambda x: np.dot(np.array((x.split(':')), dtype=float), [3600, 60, 1]))
+    dataSub = data[data['Price'] != 0]
+    dataSub['Amt'] = dataSub['Volume'] * dataSub['Price']
+    dataSub['Time'] = dataSub['Time'].map(lambda x: np.dot(np.array((x.split(':')), dtype=float), [3600, 60, 1]))
 
     # 买单和卖单挂单时长及造成的价格波动(累积和非累积)
-    BuySta = data.groupby(['Type', 'BuyOrderID']).agg({"Time": ["first", "last", "count"],
-                                                       "Price": ["first", "last"],
-                                                       "Amt": "sum"})
-    SellSta = data.groupby(['Type', 'SaleOrderID']).agg({"Time": ["first", "last", "count"],
-                                                         "Price": ["first", "last"],
-                                                         "Amt": "sum"})
+    BuySta = dataSub.groupby(['Type', 'BuyOrderID']).agg({"Time": ["first", "last", "count"],
+                                                          "Price": ["first", "last"],
+                                                          "Amt": "sum"})
+    SellSta = dataSub.groupby(['Type', 'SaleOrderID']).agg({"Time": ["first", "last", "count"],
+                                                            "Price": ["first", "last"],
+                                                            "Amt": "sum"})
 
-    BuyRetCum = data.groupby('BuyOrderID')['Price'].last() / data.groupby('BuyOrderID')['Price'].first() - 1
-    SellRetCum = data.groupby('SaleOrderID')['Price'].last() / data.groupby('SaleOrderID')['Price'].first() - 1
+    BuyRetCum = dataSub.groupby('BuyOrderID')['Price'].last() / dataSub.groupby('BuyOrderID')['Price'].first() - 1
+    SellRetCum = dataSub.groupby('SaleOrderID')['Price'].last() / dataSub.groupby('SaleOrderID')['Price'].first() - 1
     BuyTime = (BuySta['Time']['last'] - BuySta['Time']['first']).unstack().T
     SellTime = (SellSta['Time']['last'] - SellSta['Time']['first']).unstack().T
     BuyRet = (BuySta['Price']['last'] / BuySta['Price']['first'] - 1).unstack().sum()

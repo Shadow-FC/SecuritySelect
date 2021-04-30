@@ -1,6 +1,7 @@
 import os
 import time
 import warnings
+import numpy as np
 import pandas as pd
 import datetime as dt
 import multiprocessing as mp
@@ -8,7 +9,7 @@ from itertools import zip_longest
 from collections import defaultdict
 from typing import Callable, List, Dict, Any, Tuple, Iterable
 
-from utility.utility import searchFunc, stockCode
+from utility.utility import searchFunc, switchCode, stockCode
 from mapping import (
     saveMapping as saveM,
     CPU
@@ -17,7 +18,7 @@ from HFDMidDataCal.save.saveData import saveData, readJson
 
 warnings.filterwarnings('ignore')
 
-parentPath = os.path.abspath(os.path.dirname(os.getcwd()) + os.path.sep + ".")
+parentPath = os.path.abspath(os.path.dirname(os.getcwd()) + os.path.sep+".")
 folderName = os.path.splitext(os.path.basename(__file__))[0]
 
 calFuncs = searchFunc(parentPath + f'{os.sep}HFDMidDataCal{os.sep}MidData1{os.sep}worker{os.sep}{folderName}', 'worker')
@@ -28,7 +29,7 @@ switchFuncs = searchFunc(parentPath + f'{os.sep}HFDMidDataCal{os.sep}MidData1{os
 effectID = stockCode()
 
 # 函数类别
-funcClass = 'DepthMid1'
+funcClass = 'TradeMid1'
 
 
 # 准备数据
@@ -50,24 +51,31 @@ def prepare(filePath: str) -> List[str]:
     return subFolderPath
 
 
-def SyntheticDepthMid1_worker(readFunc: Callable,
+def SyntheticTradeMid1_worker(readFunc: Callable,
                               filePath: str,
                               **kwargs):
     if calFuncs != {}:
-        subFolderPath = prepare(filePath)
-        ileGroup = list(zip_longest(*[iter(subFolderPath)] * int(len(subFolderPath) / CPU)))
 
+        subFolderPath = prepare(filePath)
+        ileGroup = list(zip_longest(*[iter(subFolderPath)] * int(np.ceil(len(subFolderPath) / CPU))))
+        sta = time.time()
         pool = mp.Pool(CPU)
-        for group in ileGroup:  # [[r'Y:\十档\Stk_Tick10_201309\20130910']]
+        for group in ileGroup:  # ileGroup
+            # sta = time.time()
             pool.apply_async(func=onCallFunc, args=(group, readFunc), error_callback=onErrorInfo)
             # onCallFunc(group, readFunc)
+            # end = time.time() - sta
+            # print(f"ALL:{end}")
         pool.close()
         pool.join()
+        end = time.time() - sta
+        print(end)
     else:
         print(f"{funcClass} {dt.datetime.now()}: No function to cal!")
 
 
 def onCallFunc(filePathList: Iterable, readFunc: Callable):
+    Time = defaultdict(list)
     # 进程名
     pid = os.getpid()
     flag = 0
@@ -77,22 +85,19 @@ def onCallFunc(filePathList: Iterable, readFunc: Callable):
             continue
 
         resDict = defaultdict(list)  # 每日数据容器
-        folder_date = os.path.split(folderPathSub)[-1]
-        date = folder_date[:4] + '-' + folder_date[4:6] + '-' + folder_date[-2:]  # 日期
-
+        date = os.path.split(folderPathSub)[-1]
         fileNames = os.listdir(folderPathSub)
+
         sta = time.time()
         # 循环处理
         for fileSub in fileNames:
-
-            code = f"{fileSub[2:-4]}.{fileSub[:2].upper()}"
+            print(f"{pid}-{fileSub}")
+            code = switchCode(fileSub[:-4])
 
             if code not in effectID:  # 剔除非股票数据
                 continue
-
-            # if fileSub not in ["sz000010.csv", "sz000010.csv", "sh600000.csv"]:
+            # if code != '688321.SH':
             #     continue
-            # 1.Read
             try:
                 data = readFunc(folderPathSub, fileSub)
             except Exception as e:
@@ -101,13 +106,15 @@ def onCallFunc(filePathList: Iterable, readFunc: Callable):
                          position=saveM['TxT']['Path'],
                          data=f"Read file error {dt.datetime.now()}: {date}, {fileSub}, {e}",
                          fileName=f"{funcClass}Error")
-                continue  # 读取出错后跳出该次循环
+                continue     # 读取出错后跳出该次循环
             else:
-                # 2.Cal
                 for funcName, func in calFuncs.items():
 
                     try:
+                        staC = time.time()
                         calRes = func(data=data.copy(), code=code, date=date)
+                        endC = time.time() - staC
+                        Time[funcName].append(endC)
                     except Exception as e:
                         print(f"{funcName} error: {date}, {fileSub}, {e}")
                         saveData(DBName=saveM['TxT']['DBName'],
@@ -119,7 +126,6 @@ def onCallFunc(filePathList: Iterable, readFunc: Callable):
                     if calRes is not None:
                         resDict[funcName].append(calRes)
 
-        # 3.Save
         for resName, resValue in resDict.items():  # 对子函数返回值进行格式转化
             resSwitch = switchFuncs[resName](resValue)
 
@@ -133,10 +139,14 @@ def onCallFunc(filePathList: Iterable, readFunc: Callable):
         with mp.Lock():
             saveData(DBName=saveM['Record']['DBName'],
                      position=saveM['Record']['Path'],
-                     data=folder_date,
+                     data=date,
                      fileName=funcClass)
 
         print(f"{funcClass} {pid:<5}:{date} {flag:>4}/{len(filePathList):>3}, 耗时{round(time.time() - sta, 4)}")
+        dataRes = pd.DataFrame(Time)
+        res = dataRes.describe()
+        dataRes.to_csv(f'C:\\Users\\Administrator\\Desktop\\Test\\{pid}.csv')
+        res.to_csv(f'C:\\Users\\Administrator\\Desktop\\Test\\{pid}_res.csv')
 
 
 def onErrorInfo(info: Any):

@@ -16,9 +16,9 @@ import statsmodels.api as sm
 import matplotlib.pyplot as plt
 
 from DataAPI.LabelAPI.Labelpool import LabelPool
-from Analysis.RiskForecast.RiskForecast import RiskModel
-from Analysis.ReturnForecast.ReturnForecast import ReturnModel
-from FactorProcess.FactorProcess import FactorProcess
+from Analysis.RiskForecast import RiskModel
+from Analysis.ReturnForecast import ReturnModel
+from utility.FactorUtility import MethodSets
 from utility.Optimization import OptimizeSLSQP, OptimizeLinear
 
 from constant import (
@@ -44,7 +44,11 @@ email = {"FC": {"user": "18817289038@163.com",
          }
 
 
-class PortfolioModel(object):
+class RiskForecast(MethodSets):
+    pass
+
+
+class PortfolioModel(MethodSets):
     """
     优化模型输入数据存放格式为字典形式：{"time": values}
     除因子名称外，其他输入参数的名称同一为系统定义的名称，该名称定在constant脚本下
@@ -60,8 +64,9 @@ class PortfolioModel(object):
                  ind_weight: pd.Series = None,
                  fact_weight: pd.Series = None,
                  hp: int = 1):
+        super(PortfolioModel, self).__init__()
 
-        self.RET = ReturnModel()
+        self.RET = ReturnForecast()
         self.RISK = RiskModel()
         self.FP = FactorProcess()
         self.LP = LabelPool()
@@ -210,7 +215,7 @@ class PortfolioModel(object):
                          bounds: str = '01'):
 
         # Set the objective function
-        opt = OptimizeSLSQP(method)
+        opt = OptimizeSLSQP()
         # opt
         for index_ in self.OPT_params['ASSET_RET_FORECAST'].keys():
             X = self.OPT_params['FACT_EXP'][index_]
@@ -393,7 +398,7 @@ class PortfolioModel(object):
             try:
                 sta = time.time()
                 res = opt.solve()
-                print(f'{index_}: 迭代耗时 {time.time()- sta}')
+                print(f'{index_}: 迭代耗时 {time.time() - sta}')
             except Exception as e:
                 print(f"Optimization failed:{e}")
                 self.OPT_params['WEIGHT'][index_] = pd.Series(index=R.index)
@@ -432,7 +437,8 @@ class PortfolioModel(object):
 
         return NAV
 
-    def WLS(self, data_: pd.DataFrame, sample_length: int = 100) -> object:
+    def WLS(self, data_: pd.DataFrame,
+            sample_length: int = 100) -> object:
         """返回回归类"""
         data_copy = data_.copy(deep=True)
         # check data

@@ -19,13 +19,7 @@ from DataAPI.DataInput.GetData import SQL, CSV
 
 from EvaluationIndicitor.Indicator import Indicator
 
-from utility.FactorUtility import (
-    RemoveOutlier as RO,
-    Neutralization as Neu,
-    Standardization as Sta,
-    Correlation as Cor,
-    DataSynthesis as Syn,
-)
+from utility.FactorUtility import MethodSets
 from utility.utility import (
     timer
 )
@@ -50,109 +44,8 @@ sns.set_style("darkgrid", {"font.sans-serif": ['simhei', 'Droid Sans Fallback']}
 """
 
 
-# 因子处理方法合集
-class FactorProcess(object):
-    # 方法参数必须被继承复写
-    methodProcess = {
-        "RO": {"method": "", "p": {}},
-        "Neu": {"method": "", "p": {}},
-        "Sta": {"method": "", "p": {}},
-        "Cor": {"method": "pearson", "p": {}}
-    }
-
-    methodSynthetic = {
-        "method": "EqualWeight",
-        "p": {"rp": 60,
-              "hp": 5,
-              "algorithm": "mean"},
-
-    }
-
-    def __init__(self):
-        self.Cor = Cor()
-        self.Syn = Syn()
-        self.RO = RO()
-        self.Neu = Neu()
-        self.Sta = Sta()
-
-    # 更新因子处理参数
-    def set_params(self, **kwargs):
-        """
-
-        Parameters
-        ----------
-        Returns
-        -------
-        对于因子处理方法设置因子参数
-        """
-        for paramName, paramValue in kwargs.items():
-            setattr(self, paramName, paramValue)
-
-    def processSingle(self,
-                      data: Union[pd.DataFrame, pd.Series],
-                      methodN: str,
-                      **kwargs) -> Any:
-        """
-        单一处理方法
-        Parameters
-        ----------
-        data :
-        methodN :
-        kwargs :
-
-        Returns
-        -------
-
-        """
-        value = getattr(self, methodN).process(data=data,
-                                               method=self.methodProcess[methodN]['method'],
-                                               **self.methodProcess[methodN]['p'],
-                                               **kwargs)
-        return value
-
-    def processSeq(self,
-                   data: pd.DataFrame,
-                   methodN: List[str],
-                   dataName: str,
-                   **kwargs):
-        """
-        连续处理
-        Parameters
-        ----------
-        data :
-        methodN :
-        dataName :
-        kwargs :
-
-        Returns
-        -------
-
-        """
-        for M in methodN:
-            if self.methodProcess[M]['method'] != "":
-                value = getattr(self, M).process(data=data,
-                                                 method=self.methodProcess[M]['method'],
-                                                 dataName=dataName,
-                                                 **self.methodProcess[M]['p'],
-                                                 **kwargs)
-                data[dataName] = value
-
-    def processSyn(self,
-                   factData: pd.DataFrame,
-                   factWeight: pd.DataFrame,
-                   **kwargs
-                   ) -> pd.Series(float):
-        methodN = self.methodSynthetic['method']
-        value = getattr(self, "Syn").process(factData=factData,
-                                             factWeight=factWeight,
-                                             method=methodN,
-                                             **self.methodSynthetic['p'],
-                                             **kwargs)
-        return value
-
-
 # 单因子有效性测试
-class FactorValidityCheck(FactorProcess):
+class FactorValidityCheck(MethodSets):
     """
     对于单因子的有效性检验，我们从以下几个维度进行考量：
     1.因子暴露稳定性
@@ -243,7 +136,6 @@ class FactorValidityCheck(FactorProcess):
 
         self.api = LoadData()  # 数据接口
 
-        self.factProc = FactorProcess()  # 因子预处理
         self.ind = Indicator()  # 评价指标的计算
 
         self.dataSet = {}  # 原始数据集
@@ -519,7 +411,7 @@ class FactorValidityCheck(FactorProcess):
             Var[f"ind{v_}"].loc['Cap'] = CapUp / CapDown
 
             # 衰减
-            Var[f"ind{v_}"].loc['decay'] = Var[f"ex_nav{v_}"].resample("M").agg(self.ind.accumulative_return).mean()
+            Var[f"ind{v_}"].loc['decay'] = Var[f"ex_nav{v_}"].resample("M").agg(self.ind.accumulative_return).diff(1).mean()
             # 单调性
             Var[f"Monotony"] = Var[f"ex_nav{v_}"].resample(f"{self.hp}D").last().corrwith(
                 pd.Series([i for i in range(1, self.groupNum + 1)], index=Var[f"ex_nav{v_}"].columns),
@@ -819,7 +711,7 @@ class FactorValidityCheck(FactorProcess):
 
 
 # 多因子相关性分析
-class FactorCollinearity(FactorProcess):
+class FactorCollinearity(MethodSets):
     """
     目前只考虑线性相关性
 
@@ -924,9 +816,10 @@ class FactorCollinearity(FactorProcess):
         :return:
         """
 
-        comp_factor = self.processSyn(factData=self.dataSet['factClean'],
-                                      factWeight=self.dataSet['factWeight'],
-                                      **kwargs)
+        comp_factor = self.processSingle(data=self.dataSet['factClean'],
+                                         factWeight=self.dataSet['factWeight'],
+                                         methodN='Syn',
+                                         **kwargs)
         return comp_factor
 
 

@@ -12,6 +12,10 @@ from constant import (
 )
 
 
+# class RiskForecast(MethodSets):
+#     pass
+
+
 class RiskModel(object):
 
     def __init__(self):
@@ -303,7 +307,8 @@ class RiskModel(object):
         df_N2 = pd.merge(df_N1, delta_n, left_on=['Group'], right_index=True, how='left')
 
         # 压缩系数
-        df_N2['V_n'] = q * abs(df_N2['sigma_n'] - df_N2['sigma_n_weight']) / (df_N2['delta'] + q * abs(df_N2['sigma_n'] - df_N2['sigma_n_weight']))
+        df_N2['V_n'] = q * abs(df_N2['sigma_n'] - df_N2['sigma_n_weight']) / (
+                    df_N2['delta'] + q * abs(df_N2['sigma_n'] - df_N2['sigma_n_weight']))
 
         # 调整后的特异波动
         sigma_SH = df_N2['V_n'] * df_N2['sigma_n_weight'] + (1 - df_N2['V_n']) * df_N2['sigma_n']
