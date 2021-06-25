@@ -48,7 +48,7 @@ class BenchmarkMethod(object):
 class Benchmark(object):
     def __init__(self):
         self.meth = BenchmarkMethod()
-        self.local_path = FPN.Input_data_local.value
+        self.local_path = FPN.Local_inputData.value
 
     def benchmarkZD(self,
                     data: pd.DataFrame,

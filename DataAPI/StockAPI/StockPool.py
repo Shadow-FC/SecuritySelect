@@ -121,8 +121,8 @@ class StockPool(object):
 
     def __init__(self):
         self.api = StockAPI()  # 股票池API接口
-        self.path = FPN.Input_data_server.value  # 原始数据路径
-        self.local_path = FPN.Input_data_local.value  # 历史股票池数据路径
+        self.path = FPN.Server_inputData.value  # 原始数据路径
+        self.local_path = FPN.Local_inputData.value  # 历史股票池数据路径
 
     def read_data(self, pool_name: str) -> pd.DataFrame:
         data = pd.read_csv(os.path.join(self.path, self.Mapping[pool_name]['file']),

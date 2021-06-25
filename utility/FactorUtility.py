@@ -29,15 +29,15 @@ class MethodSets(object):
     # 方法参数必须被继承复写
 
     methodProcess = {
-        "RO": {"method": "", "p": {}},
-        "Neu": {"method": "", "p": {}},
-        "Sta": {"method": "", "p": {}},
+        "RO": {"method": "", "p": {}},  # 异常值处理
+        "Neu": {"method": "", "p": {}},  # 中性化处理
+        "Sta": {"method": "", "p": {}},  # 标准化处理
 
-        "Cor": {"method": "", "p": {}},
-        "Syn": {"method": "", "p": {}},
+        "Cor": {"method": "", "p": {}},  # 相关性计算
+        "Syn": {"method": "", "p": {}},  # 因子合成
 
-        "Ret": {"method": "", "p": {}},
-        "Risk": {"method": "", "p": {}},
+        "Ret": {"method": "", "p": {}},  # 收益预测方法
+        "Risk": {"method": "", "p": {}},  # 风险分析方法
     }
 
     def __init__(self):
@@ -265,7 +265,7 @@ class Standardization(object):
                 data: pd.DataFrame,
                 **kwargs):
         data_df = data[self.dataName]
-        denominator, numerator = data_df.max(axis=1) - data_df.min(axis=1), data_df.div(data_df.min(axis=1), axis=0)
+        denominator, numerator = data_df.max(axis=1) - data_df.min(axis=1), data_df.sub(data_df.min(axis=1), axis=0)
         result = numerator.div(denominator, axis=0).stack()
         return result
 
@@ -351,8 +351,6 @@ class Correlation(object):
 
 # 因子合成方法
 class DataSynthesis(object):
-    hp: int = 0
-    rp: int = 0
 
     def __init__(self):
         self.opt = MaxOptModel()
@@ -360,19 +358,15 @@ class DataSynthesis(object):
     # 因子复合
     def process(self,
                 data: pd.DataFrame,
-                factWeight: pd.DataFrame,
-                method: str = 'Equal',
-                rp: int = 60,
-                hp: int = 5,
+                weight: pd.DataFrame,
+                method: str = 'RetWeight',
                 **kwargs) -> pd.DataFrame:
         """
         部分权重会用到未来数据，所以需要对权重进行平移与相应的因子值进行匹配
         Parameters
         ----------
-        hp : 持有期
-        rp : 滚动周期
         data : 因子集
-        factWeight :因子权重
+        weight :因子权重
         method : 因子合成方法
         kwargs :
 
@@ -380,40 +374,44 @@ class DataSynthesis(object):
         -------
 
         """
-        self.rp, self.hp = rp, hp
 
-        factDir = np.sign(factWeight.rolling(rp, min_periods=1).mean())
-        factDir = factDir.shift(hp + 1)  # 收益率为标签(预测值), 历史收益数据加权需要+ 1
+        # factor direction
+        factDir = np.sign(weight.mean())
 
-        # 因子转为正向因子，同时因子收益等指标调整为单调状态
-        factNew = data.mul(factDir, level=0).dropna()
-        factWeightNew = factWeight.abs()
+        # switch the factor direction，and turn the weight to positive
+        factNew = data.mul(factDir, level=0).dropna(how='all')
+        weightNew = weight.abs()
 
-        method_dict = {"RetWeight": self.retWeighted,
-                       "OPT": self.MAX_IC_IR
+        method_dict = {"RetWeight": self.ret_weighted,
+                       "OPT": self.MAX_IC_IR,
+                       "PCA": self.PCA,
+                       "Cluster": self.cluster
                        }
 
         if method is None:
             return data
 
-        res = method_dict[method](fact=factNew, factWeight=factWeightNew, **kwargs)
+        res = method_dict[method](fact=factNew, weight=weightNew, **kwargs)
         return res
 
     """因子合成"""
 
-    # 等权法
-    def retWeighted(self,
-                    fact: pd.DataFrame,
-                    factWeight: pd.DataFrame,
-                    algorithm: str = 'RetMean',
-                    **kwargs) -> pd.Series(float):
+    # 加权法
+    def ret_weighted(self,
+                     fact: pd.DataFrame,
+                     weight: pd.DataFrame,
+                     weightAlgo: str = 'IC',
+                     meanType: str = 'Equal',
+                     **kwargs) -> pd.Series(float):
         """
-
+        某股票因子值为Nan，则将剩余因子值进行加权
+        默认采用等权加权
         Parameters
         ----------
-        factWeight :
+        weight :
         fact :
-        algorithm : RetMean: 历史收益率均值， HalfTime: 历史收益率半衰加权
+        weightAlgo : RetMean: 历史收益率均值， HalfTime: 历史收益率半衰加权
+        meanType :
         kwargs :
 
         Returns
@@ -421,54 +419,48 @@ class DataSynthesis(object):
 
         """
 
-        if algorithm != 'equal':
+        # TODO 测试
+        if weightAlgo in ['IC', 'Ret']:
             # 生成权重
-            factWeightNew = abs(self._weight(factWeight, self.rp, algorithm))
-            # 权重归一化
-            factWeightStand = factWeightNew.div(factWeightNew.sum(axis=1), axis=0)
-            # 权重与因子值匹配
-            factWeightStand = factWeightStand.shift(self.hp + 1)
-            # 复合因子
-            fact_comp = fact.mul(factWeightStand).sum(axis=1)
+            factW = self.mean_weight(weight, meanType)
+            # 对非空部分进行加权
+            fact_comp = self.weighted(fact, factW.values)
+        elif weightAlgo == 'IC_IR':
+            IC_Mean = self.mean_weight(weight, meanType)
+            IC_Std = self.std_weight(weight, meanType)
+            factW = IC_Mean / IC_Std
+
+            fact_comp = self.weighted(fact, factW.values)
         else:
-            fact_comp = fact.groupby(KN.TRADE_DATE.value, group_keys=False).apply(lambda x: x.mean(axis=1))
+            fact_comp = fact.mean(axis=1)
         return fact_comp
 
     def MAX_IC_IR(self,
                   fact: pd.DataFrame,
-                  factWeight: pd.DataFrame,
-                  retType='IC_IR') -> pd.Series(float):
+                  weight: pd.DataFrame,
+                  weightAlgo='IC_IR') -> pd.Series(float):
 
+        # TODO  压缩矩阵估计协方差
+        self.opt.clear()
         # 设置优化方程组
         self.opt.obj_func = self.opt.object_func3
-        self.opt.limit.append(self.opt.constraint())
-        self.opt.bonds = ((0, 1),) * fact.shape[1]
+        self.opt.limit.append(self.opt.constraint())  # 权重和为1
+        self.opt.bonds = ((0, 1),) * fact.shape[1]  # 权重大于0
 
-        # 对收益率进行调整
-        factWeightNew = factWeight.shift(self.hp + 1).dropna(how='all')
+        weight_mean = np.array(weight.mean())
+        if weightAlgo == 'IC':
+            weight_cov = np.array(fact.cov())
+        else:
+            weight_cov = np.array(weight.cov())
+        optParams = {
+            "data_mean": weight_mean,
+            "data_cov": weight_cov,
+        }
+        self.opt.set_params(**optParams)
 
-        weightDict = {}
-        for sub in range(self.rp, factWeightNew.shape[0] + 1):
-            print(dt.datetime.now(), sub)
-            df_ = factWeightNew.iloc[sub - self.rp: sub, :]
-            data_mean = np.array(df_.mean())
+        weightOpt = self.opt.solve()
 
-            if retType == 'IC':
-                data_cov = np.array(fact.loc[df_.index].cov())
-            else:
-                data_cov = np.array(df_.cov())
-
-            optParams = {
-                "data_mean": data_mean,
-                "data_cov": data_cov,
-            }
-            self.opt.set_params(**optParams)
-
-            res_ = self.opt.solve()
-            weightDict[df_.index[-1]] = res_.x
-
-        w_df = pd.DataFrame(weightDict, index=fact.columns).T
-        fact_comp = fact.mul(w_df, level=0).dropna(how='all').sum(axis=1).reindex(fact.index)
+        fact_comp = self.weighted(fact, weightOpt.x)
         return fact_comp
 
     def PCA(self,
@@ -491,7 +483,11 @@ class DataSynthesis(object):
 
         return fact_comp
 
-    # *正交化*
+    def cluster(self,
+                fact: pd.DataFrame):
+        pass
+
+    # 正交化
     @staticmethod
     def orthogonal(factor_df, method='schimidt'):
         # 固定顺序的施密特正交化
@@ -545,29 +541,54 @@ class DataSynthesis(object):
 
         return method_dict[method]
 
-    def _weight(self,
-                data: pd.DataFrame = None,
-                rp: int = 60,
-                algorithm: str = 'RetMean') -> [pd.DataFrame, None]:
+    # 加权均值
+    def mean_weight(self,
+                    data: pd.DataFrame = None,
+                    meanType: str = 'Equal') -> [pd.Series, None]:
 
-        if algorithm == 'RetMean':
-            data_weight = data.rolling(rp, min_periods=1).mean()
-        elif algorithm == 'HalfTime':
-            data_weight = data.rolling(rp, min_periods=1).apply(lambda x: np.dot(x, self._Half_time(len(x))))
+        if meanType == 'HalfTime':
+            meanW = data.apply(lambda x: np.dot(x, self.half_time(len(x))))
         else:
-            return
+            meanW = data.mean()
+        return meanW
 
-        return data_weight
+    # 加权标准差
+    def std_weight(self,
+                   data: pd.DataFrame = None,
+                   meanType: str = 'Equal') -> [pd.Series, None]:
+        dataSub = data.dropna()
+
+        if meanType == 'HalfTime':
+            stdW = np.diag(pow(np.cov(dataSub.T, aweights=self.half_time(len(dataSub))), 0.5))
+            stdW = pd.Series(stdW, name='std')
+        else:
+            stdW = dataSub.std()
+        return stdW
 
     # 半衰权重
     @staticmethod
-    def _Half_time(period: int, decay: int = 2) -> List[str]:
+    def half_time(period: int, decay: int = 2) -> List[str]:
 
         weight_list = [pow(2, (i - period - 1) / decay) for i in range(1, period + 1)]
 
         weight_1 = [i / sum(weight_list) for i in weight_list]
 
         return weight_1
+
+    # 考虑缺失值加权法
+    def weighted(self, fact: pd.DataFrame, weight: np.array) -> pd.Series:
+        """
+        对非空部分进行加权
+        """
+        weight_df = pd.DataFrame(np.repeat(weight.reshape(1, len(weight)), len(fact.index), axis=0),
+                                 index=fact.index,
+                                 columns=fact.columns)
+        weight_df = pd.DataFrame(np.where(fact.isna(), np.nan, weight_df),
+                                 index=fact.index,
+                                 columns=fact.columns)
+        # 复合因子
+        factWeighted = (fact * weight_df).div(weight_df.sum(axis=1), axis=0).sum(axis=1)
+        return factWeighted
 
 
 # 收益预测模型

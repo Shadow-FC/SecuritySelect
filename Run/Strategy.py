@@ -31,7 +31,7 @@ def get_factors(factorDict: Dict[str, List[str]]) -> pd.DataFrame:
     """
     factor_data = []
     for fold, factor_list in factorDict.items():
-        pathSub = os.path.join(FPN.FactorDataSet.value, fold)
+        pathSub = os.path.join(FPN.Fact_dataSet.value, fold)
         for factor_name in factor_list:
             factor_path = os.path.join(pathSub, factor_name + '.csv')
             factor = pd.read_csv(factor_path)

@@ -115,8 +115,8 @@ class LabelPool(object):
 
     def __init__(self):
         self.api = LabelAPI()
-        self.path = FPN.Input_data_server.value
-        self.local_path = FPN.Input_data_local.value
+        self.path = FPN.Server_inputData.value
+        self.local_path = FPN.Local_inputData.value
 
     def read_data(self) -> Dict[str, pd.DataFrame]:
         file = defaultdict(set)

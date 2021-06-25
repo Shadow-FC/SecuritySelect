@@ -43,6 +43,14 @@ class MaxOptModel(object):
         for paramName, paramValue in kwargs.items():
             setattr(self, paramName, paramValue)
 
+    # 清空优化器
+    def clear(self):
+        self.data_mean = None
+        self.data_cov = None
+        self.obj_func = None
+        self.bonds = None
+        self.limit = []
+
     # 目标函数
     def object_func1(self, w):
         """

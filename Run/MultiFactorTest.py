@@ -31,7 +31,7 @@ def multipleTest(factPathDict: Dict[str, str]):
         "labelPoolData": API.getLabelPoolData(dataParams['LabelPool']),
     }
 
-    Analysis = FactorValidityCheck()
+    Analysis = FactorValidityCheckRelative()
     Analysis.set_data(**dataInput)
 
     # 2.检验参数设置

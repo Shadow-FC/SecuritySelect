@@ -552,38 +552,15 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution001_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 21,
-                                 method: str = 'raw',
                                  **kwargs) -> pd.Series(float):
         """高频波动(HFD_std_ret)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
-
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: pow(pow(x[KN.RETURN.value], 2).sum(), 0.5))
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['ret2Up_0', 'ret2Down_0'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeRet',
-                                   stock_id=KN.STOCK_ID.value)
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-            res = pow(data['ret2Up_0'] + data['ret2Down_0'], 0.5)
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['ret2Up_0', 'ret2Down_0'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeRet',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = pow(data['ret2Up_0'] + data['ret2Down_0'], 0.5)
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -594,39 +571,17 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution004_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 21,
-                                 method: str = 'raw',
                                  **kwargs) -> pd.Series(float):
         """高频上行波动(HFD_std_up)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
+        data = cls()._csv_data(data_name=['ret2Up_0'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeRet',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
 
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: pow(pow(x[KN.RETURN.value][x[KN.RETURN.value] > 0], 2).sum(), 0.5))
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['ret2Up_0'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeRet',
-                                   stock_id=KN.STOCK_ID.value)
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-            res = pow(data['ret2Up_0'], 0.5)
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        res = pow(data['ret2Up_0'], 0.5)
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -641,34 +596,12 @@ class HighFrequencyDistributionFactor(FactorBase):
                                  **kwargs) -> pd.Series(float):
         """高频下行波动(HFD_std_down)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
-
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: pow(pow(x[KN.RETURN.value][x[KN.RETURN.value] < 0], 2).sum(), 0.5))
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['ret2Down_0'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeRet',
-                                   stock_id=KN.STOCK_ID.value)
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-            res = pow(data['ret2Down_0'], 0.5)
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['ret2Down_0'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeRet',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = pow(data['ret2Down_0'], 0.5)
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -683,35 +616,12 @@ class HighFrequencyDistributionFactor(FactorBase):
                                  **kwargs) -> pd.Series(float):
         """高频上行波动占比(HFD_std_up_occupy)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
-
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: np.nan if pow(x[KN.RETURN.value], 2).sum() == 0
-                    else pow(x[KN.RETURN.value][x[KN.RETURN.value] > 0], 2).sum() / pow(x[KN.RETURN.value], 2).sum())
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['ret2Up_0', 'ret2Down_0'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeRet',
-                                   stock_id=KN.STOCK_ID.value)
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-            res = data['ret2Up_0'] / (data['ret2Up_0'] + data['ret2Down_0'])
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['ret2Up_0', 'ret2Down_0'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeRet',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['ret2Up_0'] / (data['ret2Up_0'] + data['ret2Down_0'])
 
         res[np.isinf(res)] = np.nan
         res = cls().reindex(res)
@@ -727,35 +637,13 @@ class HighFrequencyDistributionFactor(FactorBase):
                                  **kwargs) -> pd.Series(float):
         """高频下行波动占比(HFD_std_down_occupy)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
+        data = cls()._csv_data(data_name=['ret2Up_0', 'ret2Down_0'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeRet',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: np.nan if pow(x[KN.RETURN.value], 2).sum() == 0
-                    else pow(x[KN.RETURN.value][x[KN.RETURN.value] < 0], 2).sum() / pow(x[KN.RETURN.value], 2).sum())
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['ret2Up_0', 'ret2Down_0'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeRet',
-                                   stock_id=KN.STOCK_ID.value)
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-            res = data['ret2Down_0'] / (data['ret2Up_0'] + data['ret2Down_0'])
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        res = data['ret2Down_0'] / (data['ret2Up_0'] + data['ret2Down_0'])
 
         res[np.isinf(res)] = np.nan
         res = cls().reindex(res)
@@ -767,36 +655,16 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution008_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """高频量价相关性(HFD_Corr_Vol_P)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                r = d_sub.groupby(KN.STOCK_ID.value,
-                                  group_keys=False).apply(lambda x: x[PVN.CLOSE.value].corr(x[PVN.VOLUME.value]))
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.VOLUME.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['corCloseVol'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial1',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['corCloseVol']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['corCloseVol'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial1',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['corCloseVol']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -807,43 +675,19 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution009_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """高频收益偏度(HFD_ret_skew)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
+        data = cls()._csv_data(data_name=['ret2Up_0', 'ret2Down_0', 'ret3Up_0', 'ret3Down_0'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeRet',
+                               stock_id=KN.STOCK_ID.value)
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                d_sub['ret_2'], d_sub['ret_3'] = pow(d_sub[KN.RETURN.value], 2), pow(d_sub[KN.RETURN.value], 3)
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: np.nan if x['ret_2'].sum() == 0
-                    else x['ret_3'].sum() * pow(len(x), 0.5) / pow(x['ret_2'].sum(), 1.5))
-                return r
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        data['ret2Sum'] = data['ret2Up_0'] + data['ret2Down_0']
+        data['ret3Sum'] = data['ret3Up_0'] + data['ret3Down_0']
 
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['ret2Up_0', 'ret2Down_0', 'ret3Up_0', 'ret3Down_0'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeRet',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            data['ret2Sum'] = data['ret2Up_0'] + data['ret2Down_0']
-            data['ret3Sum'] = data['ret3Up_0'] + data['ret3Down_0']
-
-            res = data['ret3Sum'] * pow(239, 0.5) / pow(data['ret2Sum'], 1.5)
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        res = data['ret3Sum'] * pow(239, 0.5) / pow(data['ret2Sum'], 1.5)
 
         res[np.isinf(res)] = np.nan
         res = cls().reindex(res)
@@ -851,83 +695,20 @@ class HighFrequencyDistributionFactor(FactorBase):
         res.name = factor_name
         return res
 
-    # @classmethod
-    # def Distribution010_data_raw(cls,
-    #                              minute: int = 5,
-    #                              n: int = 20,
-    #                              method: str = 'mid',
-    #                              **kwargs):
-    #     """量价相关性(Cor_Vol_Price)"""
-    #     factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
-    #
-    #     if method == 'raw':
-    #         def func(d: pd.DataFrame):
-    #             d_sub = d[cls().range]
-    #             r = d_sub.groupby(KN.STOCK_ID.value,
-    #                               group_keys=False).apply(lambda x: x[PVN.CLOSE.value].corr(x[PVN.VOLUME.value]))
-    #             return r
-    #
-    #         Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.VOLUME.value],
-    #                                func=func,
-    #                                file_path=FPN.HFD.value,
-    #                                sub_file=f"{minute}minute")
-    #         res = pd.concat(Q)
-    #
-    #     elif method == 'mid':
-    #         data = cls()._csv_data(data_name=['corCloseVol'],
-    #                                file_path=FPN.HFD_MidData.value,
-    #                                file_name='TradeSpecial1',
-    #                                stock_id=KN.STOCK_ID.value)
-    #
-    #         data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-    #         res = data['corCloseVol']
-    #
-    #     else:
-    #         print('Parameter is wrong!')
-    #         res = pd.Series()
-    #
-    #     res = cls().reindex(res)
-    #     res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
-    #     res.name = factor_name
-    #
-    #     return res
-
     @classmethod
     def Distribution011_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """量收益率相关性(Cor_Vol_Ret)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                r = d_sub.groupby(KN.STOCK_ID.value,
-                                  group_keys=False).apply(lambda x: x[KN.RETURN.value].corr(x[PVN.VOLUME.value]))
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.VOLUME.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['corRetVol'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial1',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['corRetVol']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['corRetVol'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial1',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['corRetVol']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -939,37 +720,16 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution012_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """收益率方差(Var_Ret)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False)[KN.RETURN.value].var()
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['retVar'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeRet',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['retVar']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['retVar'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeRet',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['retVar']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -981,37 +741,16 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution013_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """收益率偏度(Var_Skew)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False)[KN.RETURN.value].skew()
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['retSkew'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeRet',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['retSkew']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['retSkew'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeRet',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['retSkew']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -1023,37 +762,15 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution014_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """收益率峰度(Var_kurt)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
-
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False)[KN.RETURN.value].apply(lambda x: x.kurt())
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['retKurt'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeRet',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['retKurt']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['retKurt'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeRet',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['retKurt']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -1065,39 +782,17 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution015_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """
         加权收盘价偏度(Close_Weight_Skew)
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
-
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: (pow((x[PVN.CLOSE.value] - x[PVN.CLOSE.value].mean()) / x[PVN.CLOSE.value].std(), 3) * (
-                            x[PVN.VOLUME.value] / x[PVN.VOLUME.value].sum())).sum())
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.VOLUME.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['closeVolWeightSkew'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial1',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['closeVolWeightSkew']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['closeVolWeightSkew'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial1',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['closeVolWeightSkew']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -1109,38 +804,18 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution016_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """
         单位一成交量占比熵(Vol_Entropy)
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: cls.entropy(x[PVN.CLOSE.value] * x[PVN.VOLUME.value]))
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.VOLUME.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['volEntropy'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial2',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['volEntropy']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['volEntropy'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial2',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['volEntropy']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -1152,37 +827,19 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution017_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """
         成交额占比熵(Amt_Entropy)
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(lambda x: cls.entropy(x[PVN.AMOUNT.value]))
-                return r
+        data = cls()._csv_data(data_name=['amtEntropy'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial2',
+                               stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=[PVN.AMOUNT.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['amtEntropy'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial2',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['amtEntropy']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['amtEntropy']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -1194,43 +851,22 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution018_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """每笔成交量差分均值(Vol_diff_mean)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub['volb'] = d_sub[PVN.VOLUME.value] / d_sub['tradenum']
-                d_sub['diff'] = d_sub.groupby(KN.STOCK_ID.value)['volb'].diff(1)
-                d_sub = d_sub.groupby(KN.STOCK_ID.value).agg({"diff": 'std', PVN.VOLUME.value: 'mean'})
-                r = d_sub['diff'] / d_sub[PVN.VOLUME.value]
-                return r
+        data1 = cls()._csv_data(data_name=['volPerDiffStd'],
+                                file_path=FPN.HFD_midData.value,
+                                file_name='TradeVol',
+                                stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=['tradenum', PVN.VOLUME.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data1 = cls()._csv_data(data_name=['volPerDiffStd'],
-                                    file_path=FPN.HFD_MidData.value,
-                                    file_name='TradeVol',
-                                    stock_id=KN.STOCK_ID.value)
-
-            data2 = cls()._csv_data(data_name=['volume'],
-                                    file_path=FPN.HFD_Stock_Depth.value,
-                                    file_name='MarketData',
-                                    stock_id=KN.STOCK_ID.value)
-            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['volPerDiffStd'] / data['volume'] * 240
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data2 = cls()._csv_data(data_name=['volume'],
+                                file_path=FPN.HFD_depthVwap.value,
+                                file_name='MarketData',
+                                stock_id=KN.STOCK_ID.value)
+        data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['volPerDiffStd'] / data['volume'] * 240
 
         res[np.isinf(res)] = np.nan
         res = cls().reindex(res)
@@ -1243,36 +879,17 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution019_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """每笔成交量差分绝对值均值(Vol_diff_abs_mean)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub['volb'] = d_sub[PVN.VOLUME.value] / d_sub['tradenum']
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(lambda x: abs(x['volb'].diff(1)).mean() / x['volb'].mean())
-                return r
+        data = cls()._csv_data(data_name=['volPerDiffAbsMean', 'volPerMean'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeVol',
+                               stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=['tradenum', PVN.VOLUME.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['volPerDiffAbsMean', 'volPerMean'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeVol',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['volPerDiffAbsMean'] / data['volPerMean']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['volPerDiffAbsMean'] / data['volPerMean']
 
         res[np.isinf(res)] = np.nan
         res = cls().reindex(res)
@@ -1285,7 +902,6 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution020_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """
         朴素主动占比因子(Naïve_Amt_R)
@@ -1293,36 +909,12 @@ class HighFrequencyDistributionFactor(FactorBase):
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub["closeStand"] = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: x[PVN.CLOSE.value].diff(1) / x[PVN.CLOSE.value].diff(1).std())
-
-                d_sub['buy_T'] = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: st.t.cdf(x["closeStand"], len(x) - 1) * x[PVN.AMOUNT.value])
-
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(lambda x: x['buy_T'].sum() / x[PVN.AMOUNT.value].sum())
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['naiveAmtR'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial2',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['naiveAmtR']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['naiveAmtR'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial2',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['naiveAmtR']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -1334,46 +926,19 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution021_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """
         T分布主动占比因子(T_Amt_R)
         自由度采用样本长度减一
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
+        data = cls()._csv_data(data_name=['TAmtR'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial2',
+                               stock_id=KN.STOCK_ID.value)
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                d_sub['retStand'] = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: x[KN.RETURN.value] / x[KN.RETURN.value].std())
-
-                d_sub['buy_T'] = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: st.t.cdf(x["retStand"], len(x) - 1) * x[PVN.AMOUNT.value])
-
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(lambda x: x['buy_T'].sum() / x[PVN.AMOUNT.value].sum())
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['TAmtR'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial2',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['TAmtR']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['TAmtR']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -1385,41 +950,18 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution022_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """
         正态分布主动占比因子(N_Amt_R)
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
+        data = cls()._csv_data(data_name=['NAmtR'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial2',
+                               stock_id=KN.STOCK_ID.value)
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                d_sub['retStand'] = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: x[KN.RETURN.value] / x[KN.RETURN.value].std())
-                d_sub['buy_T'] = st.norm.cdf(d_sub["retStand"]) * d_sub[PVN.AMOUNT.value]
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(lambda x: x['buy_T'].sum() / x[PVN.AMOUNT.value].sum())
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['NAmtR'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial2',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['NAmtR']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['NAmtR']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -1431,40 +973,19 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution023_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """
         置信正态分布主动占比因子(C_N_Amt_R)
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                d_sub['buy_T'] = st.norm.cdf(d_sub[KN.RETURN.value] / 0.1 * 1.96) * d_sub[PVN.AMOUNT.value]
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(lambda x: x['buy_T'].sum() / x[PVN.AMOUNT.value].sum())
-                return r
+        data = cls()._csv_data(data_name=['CNAmtR'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial2',
+                               stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['CNAmtR'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial2',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['CNAmtR']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['CNAmtR']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -1476,40 +997,18 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution024_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """
         均匀分布主动占比因子(Event_Amt_R)
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                d_sub['buy_T'] = (d_sub[KN.RETURN.value] - 0.1) / 0.2 * d_sub[PVN.AMOUNT.value]
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(lambda x: x['buy_T'].sum() / x[PVN.AMOUNT.value].sum())
-                return r
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['EventAmtR'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial2',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['EventAmtR']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = cls()._csv_data(data_name=['EventAmtR'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial2',
+                               stock_id=KN.STOCK_ID.value)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['EventAmtR']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -1521,7 +1020,6 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution025_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """
         N日分钟成交量差分绝对值波动稳定性(HFD_vol_diff_abs_std)
@@ -1529,37 +1027,19 @@ class HighFrequencyDistributionFactor(FactorBase):
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(
-                    lambda x: abs(x[PVN.VOLUME.value].diff(1)).mean() / x[PVN.VOLUME.value].mean())
-                return r
+        data1 = cls()._csv_data(data_name=['volDiffAbsMean'],
+                                file_path=FPN.HFD_midData.value,
+                                file_name='TradeVol',
+                                stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=[PVN.VOLUME.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
+        data2 = cls()._csv_data(data_name=['volume'],
+                                file_path=FPN.HFD_depthVwap.value,
+                                file_name='MarketData',
+                                stock_id=KN.STOCK_ID.value)
 
-        elif method == 'mid':
-            data1 = cls()._csv_data(data_name=['volDiffAbsMean'],
-                                    file_path=FPN.HFD_MidData.value,
-                                    file_name='TradeVol',
-                                    stock_id=KN.STOCK_ID.value)
-
-            data2 = cls()._csv_data(data_name=['volume'],
-                                    file_path=FPN.HFD_Stock_Depth.value,
-                                    file_name='MarketData',
-                                    stock_id=KN.STOCK_ID.value)
-
-            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['volDiffAbsMean'] / data['volume'] * 240
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['volDiffAbsMean'] / data['volume'] * 240
 
         res[np.isinf(res)] = np.nan
         res = cls().reindex(res)
@@ -1571,7 +1051,6 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution026_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """
         N日分钟成交笔数差分绝对值波动稳定性(HFD_num_diff_abs_std)
@@ -1579,36 +1058,18 @@ class HighFrequencyDistributionFactor(FactorBase):
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(
-                    lambda x: abs(x['tradenum'].diff(1)).mean() / x['tradenum'].mean())
-                return r
+        data = cls()._csv_data(data_name=['tradeNumRetUpSum_0', 'tradeNumRetDownSum_0', 'tradeNumRetEqualSum_0',
+                                          'tradeNumDiffAbsMean'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeTradeNum',
+                               stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=['tradenum'],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
 
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['tradeNumRetUpSum_0', 'tradeNumRetDownSum_0', 'tradeNumRetEqualSum_0',
-                                              'tradeNumDiffAbsMean'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeTradeNum',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-            data['tradeNumMean'] = (data['tradeNumRetUpSum_0'] +
-                                    data['tradeNumRetDownSum_0'] +
-                                    data['tradeNumRetEqualSum_0']) / 240
-            res = data['tradeNumDiffAbsMean'] / data['tradeNumMean']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data['tradeNumMean'] = (data['tradeNumRetUpSum_0'] +
+                                data['tradeNumRetDownSum_0'] +
+                                data['tradeNumRetEqualSum_0']) / 240
+        res = data['tradeNumDiffAbsMean'] / data['tradeNumMean']
 
         res[np.isinf(res)] = np.nan
         res = cls().reindex(res)
@@ -1620,42 +1081,20 @@ class HighFrequencyDistributionFactor(FactorBase):
     def Distribution027_data_raw(cls,
                                  minute: int = 5,
                                  n: int = 20,
-                                 method: str = 'mid',
                                  **kwargs) -> pd.Series(float):
         """
         N日分钟振幅差分绝对值波动稳定性(HFD_ret_diff_abs_std)
         集合竞价只存在唯一价格，振幅为零, 剔除
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
+        data = cls()._csv_data(data_name=['retDiffAbsMean', 'retMean'],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeRet',
+                               stock_id=KN.STOCK_ID.value)
 
-        if method == 'raw':
-            def func(d: pd.DataFrame) -> pd.Series(float):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(
-                    lambda x: abs(x[KN.RETURN.value].diff(1)).mean() / x[KN.RETURN.value].mean())
-                return r
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
 
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=['retDiffAbsMean', 'retMean'],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeRet',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-            res = data['retDiffAbsMean'] / data['retMean']
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        res = data['retDiffAbsMean'] / data['retMean']
 
         res[np.isinf(res)] = np.nan
         res = cls().reindex(res)
@@ -1668,7 +1107,7 @@ class HighFrequencyDistributionFactor(FactorBase):
                                  **kwargs):
         """上下午残差收益差的稳定性(APM)"""
         data = cls()._csv_data(data_name=[PVN.OPEN.value, '2hPrice', '4hPrice'],
-                               file_path=FPN.HFD_Stock_Depth.value,
+                               file_path=FPN.HFD_depthVwap.value,
                                file_name='VwapFactor',
                                stock_id=KN.STOCK_ID.value)
 
@@ -1707,7 +1146,7 @@ class HighFrequencyDistributionFactor(FactorBase):
                                  **kwargs):
         """N日隔夜收益与下午收益差和(OVP)"""
         data = cls()._csv_data(data_name=[PVN.OPEN.value, '2hPrice', '4hPrice'],
-                               file_path=FPN.HFD_Stock_Depth.value,
+                               file_path=FPN.HFD_depthVwap.value,
                                file_name='VwapFactor',
                                stock_id=KN.STOCK_ID.value)
 
@@ -1731,7 +1170,6 @@ class HighFrequencyDistributionFactor(FactorBase):
                          has_const: bool = False,
                          use_const: bool = True,
                          window: int = 20) -> pd.Series:
-        # print(reg_.index[0])
         if len(reg_) <= window:
             res = pd.Series(index=reg_.index)
         else:
@@ -1751,21 +1189,6 @@ class HighFrequencyDistributionFactor(FactorBase):
             stat = np.nanmean(diff_resids, axis=1) / np.nanstd(diff_resids, axis=1, ddof=1) * np.sqrt(window)
             res = pd.Series(stat, index=reg_object_am.index[window - 1:])
         return res
-
-    # 信息熵
-    @staticmethod
-    def entropy(x: pd.Series, bottom: int = 2):
-        """
-        离散熵
-        空值不剔除
-        :param x:
-        :param bottom:
-        :return:
-        """
-        Probability = (x.groupby(x).count()).div(len(x))
-        log2 = np.log(Probability) / np.log(bottom)
-        result = - (Probability * log2).sum()
-        return result
 
     @staticmethod
     def _reg(d: pd.DataFrame,
@@ -1787,4 +1210,3 @@ if __name__ == '__main__':
     A = HighFrequencyDistributionFactor()
     r_df = A.Distribution007_data_raw(minute=10, n=1)
     A.Distribution007(r_df)
-    pass

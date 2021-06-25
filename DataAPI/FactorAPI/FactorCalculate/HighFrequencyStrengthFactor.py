@@ -56,9 +56,19 @@ class HighFrequencyStrengthFactor(FactorBase):
                              **kwargs) -> pd.Series(float):
         """买单强弱()"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{n}days"
-        with open(os.path.join(r'B:\中间过程2',  'tradeBigOrderNum.pkl'), 'rb') as f:
-            data = pickle.load(f)
+        with open(r"D:\DataBase\MidData2\tradeMarket.pkl", 'rb') as f:
+            data1 = pickle.load(f)
 
+        with open(r"D:\DataBase\AStockData.pkl", 'rb') as f:
+            data2 = pickle.load(f)
+        data2['ret'] = data2.groupby('code')['close'].pct_change(fill_method=None)
+        data = pd.merge(data1, data2[['date', 'code', 'liqMv', 'ret']], on=['date', 'code'], how='left')
+
+        for i in facts:
+            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])[i.split('.')[0]]
+            res = cls().reindex(data)
+            res = res.reset_index()
+            res.to_pickle(r'D:\DataBase\HighFrequencyStrengthFactor\{}'.format(i))
         data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
 
         res = pow(data['ret2Up_0'] + data['ret2Down_0'], 0.5)

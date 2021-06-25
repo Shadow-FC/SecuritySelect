@@ -43,8 +43,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
+        F.data_category = cls().__class__.__name__
+        F.data_name = data.name
 
         return F
 
@@ -57,8 +57,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
+        F.data_category = cls().__class__.__name__
+        F.data_name = data.name
 
         return F
 
@@ -71,8 +71,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
+        F.data_category = cls().__class__.__name__
+        F.data_name = data.name
 
         return F
 
@@ -85,8 +85,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
+        F.data_category = cls().__class__.__name__
+        F.data_name = data.name
 
         return F
 
@@ -99,8 +99,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
+        F.data_category = cls().__class__.__name__
+        F.data_name = data.name
 
         return F
 
@@ -116,8 +116,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
+        F.data_category = cls().__class__.__name__
+        F.data_name = data.name
 
         return F
 
@@ -130,8 +130,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
+        F.data_category = cls().__class__.__name__
+        F.data_name = data.name
 
         return F
 
@@ -144,8 +144,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
+        F.data_category = cls().__class__.__name__
+        F.data_name = data.name
 
         return F
 
@@ -179,8 +179,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data[factor_name]
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = factor_name
+        F.data_category = cls().__class__.__name__
+        F.data_name = factor_name
 
         return F
 
@@ -196,8 +196,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
+        F.data_category = cls().__class__.__name__
+        F.data_name = data.name
 
         return F
 
@@ -213,8 +213,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
+        F.data_category = cls().__class__.__name__
+        F.data_name = data.name
 
         return F
 
@@ -232,8 +232,8 @@ class HighFrequencyVolPriceFactor(FactorBase):
         F = DataInfo()
         F.data = data
         F.data_type = 'HFD'
-        F.factor_category = cls().__class__.__name__
-        F.factor_name = data.name
+        F.data_category = cls().__class__.__name__
+        F.data_name = data.name
 
         return F
 
@@ -242,38 +242,18 @@ class HighFrequencyVolPriceFactor(FactorBase):
     def VolPrice008_data_raw(cls,
                              n: int = 20,
                              q: float = 0.2,
-                             method: str = 'mid',
                              **kwargs):
         """大单驱动涨幅(MOM_bigOrder)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{str(q).replace('.', '')}q_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                d_sub['amtPer'] = d_sub[PVN.AMOUNT.value] / d_sub['tradenum']
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(
-                    lambda x: (x[x['amtPer'] >= x['amtPer'].quantile(1 - q)][KN.RETURN.value] + 1).prod(min_count=1))
-                return r
+        data = cls()._csv_data(data_name=["MOMBigOrder"],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial1',
+                               stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.OPEN.value, PVN.AMOUNT.value, 'tradenum'],
-                                   func=func,
-                                   file_path=FPN.HFD_Stock_M.value)
-            res = pd.concat(Q)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
 
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=["MOMBigOrder"],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial1',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-            res = data["MOMBigOrder"]
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        res = data["MOMBigOrder"]
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -284,36 +264,18 @@ class HighFrequencyVolPriceFactor(FactorBase):
     @classmethod
     def VolPrice009_data_raw(cls,
                              n: int = 20,
-                             method: str = 'mid',
                              **kwargs):
         """改进反转(Rev_improve)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame):
-                d = d.dropna()
-                d_sub = d[d[KN.TRADE_TIME.value] >= '10:00:00']
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False)[PVN.CLOSE.value].apply(
-                    lambda x: np.nan if len(x) == 1 else x.iloc[-1] / x.iloc[0] - 1)
-                return r
+        data = cls()._csv_data(data_name=["close240m", "close30m"],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeClose',
+                               stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value],
-                                   func=func,
-                                   file_path=FPN.HFD_Stock_M.value)
-            res = pd.concat(Q)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
 
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=["close240m", "close30m"],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeClose',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-            res = data["close240m"] / data['close30m'] - 1
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        res = data["close240m"] / data['close30m'] - 1
 
         res[np.isinf(res)] = np.nan
         res = cls().reindex(res)
@@ -325,7 +287,6 @@ class HighFrequencyVolPriceFactor(FactorBase):
     @classmethod  # TODO 滚动10个交易日
     def VolPrice011_data_raw(cls,
                              n: int = 20,
-                             method: str = 'mid',
                              **kwargs):
         """
         聪明钱因子(SmartQ)
@@ -333,28 +294,14 @@ class HighFrequencyVolPriceFactor(FactorBase):
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_1min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame):
-                d_sub = d[cls().range]
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(cls.func_M_sqrt)
-                return r
+        data = cls()._csv_data(data_name=["SmartQ"],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial2',
+                               stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.VOLUME.value], func=func)
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
 
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=["SmartQ"],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial2',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-            res = data["SmartQ"]
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        res = data["SmartQ"]
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -366,46 +313,21 @@ class HighFrequencyVolPriceFactor(FactorBase):
     def VolPrice012_data_raw(cls,
                              minute: int = 5,
                              n: int = 21,
-                             method: str = 'mid',
                              **kwargs):
         """高频反转因子(HFD_Rev)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
-                r1 = d_sub.groupby(KN.STOCK_ID.value).apply(
-                    lambda x: (x[KN.RETURN.value] * x[PVN.VOLUME.value]).sum() / x[PVN.VOLUME.value].sum())
-                r2 = d_sub.groupby(KN.STOCK_ID.value)[PVN.VOLUME.value].sum()
-                r = pd.concat([r1, r2], axis=1)
-                r.columns = ['retVolWeight', PVN.VOLUME.value]
-                return r
+        data1 = cls()._csv_data(data_name=["retVolWeight"],
+                                file_path=FPN.HFD_midData.value,
+                                file_name='TradeRet',
+                                stock_id=KN.STOCK_ID.value)
+        data2 = cls()._csv_data(data_name=[PVN.VOLUME.value],
+                                file_path=FPN.HFD_depthVwap.value,
+                                file_name='MarketData',
+                                stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.VOLUME.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data1 = cls()._csv_data(data_name=["retVolWeight"],
-                                    file_path=FPN.HFD_MidData.value,
-                                    file_name='TradeRet',
-                                    stock_id=KN.STOCK_ID.value)
-
-            data2 = cls()._csv_data(data_name=[PVN.VOLUME.value],
-                                    file_path=FPN.HFD_Stock_Depth.value,
-                                    file_name='MarketData',
-                                    stock_id=KN.STOCK_ID.value)
-
-            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
-            res = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+        res = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
 
         res['rev_vol'] = res['retVolWeight'] * res[PVN.VOLUME.value]
         res = cls().reindex(res)
@@ -418,44 +340,22 @@ class HighFrequencyVolPriceFactor(FactorBase):
     def VolPrice013_data_raw(cls,
                              minute: int = 5,
                              n: int = 21,
-                             method: str = 'mid',
                              **kwargs):
         """轨迹非流动因子(Illiq_Track)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame):
-                d_sub = d[cls().range]
-                r1 = d_sub.groupby(KN.STOCK_ID.value).apply(
-                    lambda x: np.log(1 + abs(np.log(x[PVN.CLOSE.value] / x[PVN.CLOSE.value].shift(1)))).sum())
-                r2 = d_sub.groupby(KN.STOCK_ID.value)[PVN.AMOUNT.value].sum()
-                r = pd.concat([r1, r2], axis=1)
-                r.columns = ['retD', PVN.AMOUNT.value]
-                return r
+        data1 = cls()._csv_data(data_name=["retD"],
+                                file_path=FPN.HFD_midData.value,
+                                file_name='TradeSpecial1',
+                                stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-            res = pd.concat(Q)
+        data2 = cls()._csv_data(data_name=[PVN.AMOUNT.value],
+                                file_path=FPN.HFD_depthVwap.value,
+                                file_name='MarketData',
+                                stock_id=KN.STOCK_ID.value)
 
-        elif method == 'mid':
-            data1 = cls()._csv_data(data_name=["retD"],
-                                    file_path=FPN.HFD_MidData.value,
-                                    file_name='TradeSpecial1',
-                                    stock_id=KN.STOCK_ID.value)
-
-            data2 = cls()._csv_data(data_name=[PVN.AMOUNT.value],
-                                    file_path=FPN.HFD_Stock_Depth.value,
-                                    file_name='MarketData',
-                                    stock_id=KN.STOCK_ID.value)
-
-            data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
-            res = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = pd.merge(data1, data2, on=[KN.TRADE_DATE.value, KN.STOCK_ID.value], how='inner')
+        res = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).sum())
@@ -466,34 +366,17 @@ class HighFrequencyVolPriceFactor(FactorBase):
     def VolPrice014_data_raw(cls,
                              minute: int = 5,
                              n: int = 21,
-                             method: str = 'mid',
                              **kwargs):
         """加权收盘价比(Close_Weight)"""
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame):
-                d_sub = d[cls().range]
-                r = d_sub.groupby(KN.STOCK_ID.value, group_keys=False).apply(
-                    lambda x: (x[PVN.CLOSE.value] * x[PVN.AMOUNT.value]).sum() /
-                              (x[PVN.CLOSE.value].mean() * x[PVN.AMOUNT.value].sum()))
-                return r
+        data = cls()._csv_data(data_name=["closeMean", "closeAmtWeight"],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeClose',
+                               stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.AMOUNT.value], func=func)
-
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=["closeMean", "closeAmtWeight"],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeClose',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['closeAmtWeight'] / data['closeMean']
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['closeAmtWeight'] / data['closeMean']
 
         res[np.isinf(res)] = np.nan
         res = cls().reindex(res)
@@ -507,7 +390,6 @@ class HighFrequencyVolPriceFactor(FactorBase):
                              n: int = 20,
                              minute: int = 5,
                              ratio: float = 0.1,
-                             method: str = 'mid',
                              **kwargs):
         """
         结构化反转因子(Rev_struct)
@@ -515,33 +397,13 @@ class HighFrequencyVolPriceFactor(FactorBase):
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_{minute}min_{str(ratio).replace('.', '')}R_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame):
-                d_sub = d[cls().range]
-                d_sub[KN.RETURN.value] = d_sub.groupby(KN.STOCK_ID.value,
-                                                       group_keys=False)[PVN.CLOSE.value].pct_change(fill_method=None)
+        data = cls()._csv_data(data_name=["RevStruct"],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial1',
+                               stock_id=KN.STOCK_ID.value)
 
-                rev_struct = d_sub.groupby(KN.STOCK_ID.value).apply(cls.func_Structured_reversal, ratio)
-                return rev_struct
-
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.VOLUME.value],
-                                   func=func,
-                                   file_path=FPN.HFD.value,
-                                   sub_file=f"{minute}minute")
-
-            res = pd.concat(Q)
-
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=["RevStruct"],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial1',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['RevStruct']
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['RevStruct']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -551,7 +413,6 @@ class HighFrequencyVolPriceFactor(FactorBase):
     @classmethod  # TODO 滚动10个交易日
     def VolPrice016_data_raw(cls,
                              n: int = 20,
-                             method: str = 'mid',
                              **kwargs):
         """
         聪明钱因子改进(SmartQ_ln)
@@ -559,26 +420,13 @@ class HighFrequencyVolPriceFactor(FactorBase):
         """
         factor_name = sys._getframe().f_code.co_name[: -9] + f"_1min_{n}days"
 
-        if method == 'raw':
-            def func(d: pd.DataFrame):
-                d_sub = d[cls().range]
-                r = d_sub.groupby(KN.STOCK_ID.value).apply(cls.func_M_ln)
-                return r
+        data = cls()._csv_data(data_name=["SmartQln"],
+                               file_path=FPN.HFD_midData.value,
+                               file_name='TradeSpecial2',
+                               stock_id=KN.STOCK_ID.value)
 
-            Q = cls().csv_HFD_data(data_name=[PVN.CLOSE.value, PVN.VOLUME.value], func=func)
-
-            res = pd.concat(Q)
-        elif method == 'mid':
-            data = cls()._csv_data(data_name=["SmartQln"],
-                                   file_path=FPN.HFD_MidData.value,
-                                   file_name='TradeSpecial2',
-                                   stock_id=KN.STOCK_ID.value)
-
-            data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
-            res = data['SmartQln']
-        else:
-            print('Parameter is wrong!')
-            res = pd.Series()
+        data = data.set_index([KN.TRADE_DATE.value, KN.STOCK_ID.value])
+        res = data['SmartQln']
 
         res = cls().reindex(res)
         res = res.groupby(KN.STOCK_ID.value).apply(lambda x: x.rolling(n, min_periods=round(n * 0.8)).mean())
@@ -591,7 +439,7 @@ class HighFrequencyVolPriceFactor(FactorBase):
                              **kwargs):
         """PMA 特殊"""
         data = cls()._csv_data(data_name=[PVN.OPEN.value, '2hPrice', '4hPrice'],
-                               file_path=FPN.HFD_Stock_Depth.value,
+                               file_path=FPN.HFD_depthVwap.value,
                                file_name='VwapFactor',
                                stock_id=KN.STOCK_ID.value)
 
@@ -615,12 +463,9 @@ class HighFrequencyVolPriceFactor(FactorBase):
         def func(data: pd.DataFrame):
             print(data[KN.TRADE_DATE.value].iloc[0])
             data_sub = data[data[KN.TRADE_TIME.value] >= '09:30:00']
-            # data_sub['bid_Vol_weight'] = data_sub[bidvolume] @ cls.weight_attenuation(depth)
-            # data_sub['ask_Vol_weight'] = data_sub[askvolume] @ cls.weight_attenuation(depth)
-            data_sub[['diffBidPrice1', 'diffAskPrice1',
-                      'diffBidVol', 'diffAskVol']] = data_sub.groupby(KN.STOCK_ID.value,
-                                                                      group_keys=False).apply(
-                lambda x: x[['bidprice1', 'askprice1', f'bidvolume{depth}sum', f'askvolume{depth}sum']].diff(1))
+            data_sub[['diffBidPrice1', 'diffAskPrice1', 'diffBidVol', 'diffAskVol']] = \
+                data_sub[['code', 'bidprice1', 'askprice1', f'bidvolume{depth}sum', f'askvolume{depth}sum']].groupby(KN.STOCK_ID.value).diff(1)
+
             data_sub = data_sub.dropna()
 
             data_sub[['bid_judge', 'ask_judge']] = np.sign(data_sub[['diffBidPrice1', 'diffAskPrice1']])
@@ -637,10 +482,11 @@ class HighFrequencyVolPriceFactor(FactorBase):
             data_sub['VOI'] = data_sub['delta_V_bid'] - data_sub['delta_V_ask']
 
             # 截面标准化
-            data_sub['VOI_stand'] = data_sub.groupby(KN.TRADE_TIME.value,
-                                                     group_keys=False).apply(
-                lambda x: (x['VOI'] - x['VOI'].mean()) / x['VOI'].std())
-
+            data_df = data_sub.pivot(columns='code', index='time', values='VOI')
+            data_df_stand = data_df.sub(data_df.mean(axis=1), axis=0).div(data_df.std(axis=1), axis=0).stack()
+            data_df_stand.name = 'VOI_stand'
+            data_df_stand = data_df_stand.reset_index()
+            data_sub = pd.merge(data_sub, data_df_stand, on=['time', 'code'], how='left')
             data_sub['VOI_stand'][np.isinf(data_sub['VOI_stand'])] = 0
 
             # 转日频
@@ -650,13 +496,12 @@ class HighFrequencyVolPriceFactor(FactorBase):
 
         Q = cls().csv_HFD_data(data_name=['bidprice1', 'askprice1'] + [f'bidvolume{depth}sum', f'askvolume{depth}sum'],
                                func=func,
-                               file_path=FPN.HFD_Stock_Depth_1min.value)
+                               file_path=FPN.HFD_depth1min.value)
         res = pd.concat(Q)
-        res = cls().reindex(res)
+        res = cls().reindex(res).reset_index()
         # 滚动
-        res = res.groupby(KN.STOCK_ID.value,
-                          group_keys=False).rolling(n, min_periods=round(n * 0.8)).apply(
-            lambda x: x @ cls.weight_attenuation(len(x)))
+        res = res.pivot(columns='code', index='date', values='VOI_stand')
+        res = res.rolling(n, min_periods=round(n * 0.8)).apply(lambda x: x @ cls.weight_attenuation(len(x))).stack()
 
         res.name = factor_name
         return res
@@ -676,16 +521,16 @@ class HighFrequencyVolPriceFactor(FactorBase):
         def func(data: pd.DataFrame):
             print(data[KN.TRADE_DATE.value].iloc[0])
             data_sub = data[data[KN.TRADE_TIME.value] >= '09:30:00']
-            # data_sub['bid_Vol_weight'] = data_sub[bidvolume] @ cls.weight_attenuation(depth)
-            # data_sub['ask_Vol_weight'] = data_sub[askvolume] @ cls.weight_attenuation(depth)
 
             data_sub['OIR'] = (data_sub[f'bidvolume{depth}sum'] - data_sub[f'askvolume{depth}sum']) / (
                     data_sub[f'bidvolume{depth}sum'] + data_sub[f'askvolume{depth}sum'])
 
             # 截面标准化
-            data_sub['OIR_stand'] = data_sub.groupby(KN.TRADE_TIME.value,
-                                                     group_keys=False).apply(
-                lambda x: (x['OIR'] - x['OIR'].mean()) / x['OIR'].std())
+            data_df = data_sub.pivot(columns='code', index='time', values='OIR')
+            data_df_stand = data_df.sub(data_df.mean(axis=1), axis=0).div(data_df.std(axis=1), axis=0).stack()
+            data_df_stand.name = 'OIR_stand'
+            data_df_stand = data_df_stand.reset_index()
+            data_sub = pd.merge(data_sub, data_df_stand, on=['time', 'code'], how='left')
 
             data_sub['OIR_stand'][np.isinf(data_sub['OIR_stand'])] = 0
 
@@ -695,13 +540,12 @@ class HighFrequencyVolPriceFactor(FactorBase):
 
         Q = cls().csv_HFD_data(data_name=[f'askvolume{depth}sum', f'bidvolume{depth}sum'],
                                func=func,
-                               file_path=FPN.HFD_Stock_Depth_1min.value)
+                               file_path=FPN.HFD_depth1min.value)
         res = pd.concat(Q)
-        res = cls().reindex(res)
+        res = cls().reindex(res).reset_index()
         # 滚动
-        res = res.groupby(KN.STOCK_ID.value,
-                          group_keys=False).rolling(n, min_periods=round(n * 0.8)).apply(
-            lambda x: x @ cls.weight_attenuation(len(x)))
+        res = res.pivot(columns='code', index='date', values='OIR_stand')
+        res = res.rolling(n, min_periods=round(n * 0.8)).apply(lambda x: x @ cls.weight_attenuation(len(x))).stack()
 
         res.name = factor_name
         return res
@@ -729,15 +573,17 @@ class HighFrequencyVolPriceFactor(FactorBase):
             data_sub['MP'][data_sub['MP'] == 0] = np.nan
             data_sub['MP'] = data_sub.groupby(KN.STOCK_ID.value, group_keys=False)['MP'].ffill()
 
-            data_sub['delta_MP'] = data_sub[[KN.STOCK_ID.value, 'MP']].groupby(KN.STOCK_ID.value,
-                                                                               group_keys=False).rolling(2).mean()
+            data_sub.set_index(['time', 'code'], inplace=True)
+            data_sub['delta_MP'] = data_sub.groupby(KN.STOCK_ID.value)['MP'].apply(lambda x: x.rolling(2).mean())
 
             data_sub['MPB'] = data_sub['TP'] - data_sub['delta_MP']
 
             # 截面标准化
-            data_sub['MPB_stand'] = data_sub.groupby(KN.TRADE_TIME.value,
-                                                     group_keys=False).apply(
-                lambda x: (x['MPB'] - x['MPB'].mean()) / x['MPB'].std())
+            data_df = data_sub['MPB'].unstack()
+            data_df_stand = data_df.sub(data_df.mean(axis=1), axis=0).div(data_df.std(axis=1), axis=0).stack()
+            data_df_stand.name = 'MPB_stand'
+            data_df_stand = data_df_stand.reset_index()
+            data_sub = pd.merge(data_sub, data_df_stand, on=['time', 'code'], how='left')
 
             data_sub['MPB_stand'][np.isinf(data_sub['MPB_stand'])] = 0
 
@@ -748,61 +594,15 @@ class HighFrequencyVolPriceFactor(FactorBase):
         Q = cls().csv_HFD_data(
             data_name=[PVN.CLOSE.value, PVN.VOLUME.value, PVN.AMOUNT.value, 'bidprice1', 'askprice1'],
             func=func,
-            file_path=FPN.HFD_Stock_Depth_1min.value)
+            file_path=FPN.HFD_depth1min.value)
 
         res = pd.concat(Q)
-        res = cls().reindex(res)
+        res = cls().reindex(res).reset_index()
         # 滚动
-        res = res.groupby(KN.STOCK_ID.value,
-                          group_keys=False).rolling(n, min_periods=round(n * 0.8)).apply(
-            lambda x: x @ cls.weight_attenuation(len(x)))
+        res = res.pivot(columns='code', index='date', values='MPB_stand')
+        res = res.rolling(n, min_periods=round(n * 0.8)).apply(lambda x: x @ cls.weight_attenuation(len(x))).stack()
 
         res.name = factor_name
-        return res
-
-    @staticmethod
-    def func_Structured_reversal(data: pd.DataFrame,
-                                 ratio: float):
-
-        data = data.sort_values(PVN.VOLUME.value, ascending=True)
-        data['cum_volume'] = data[PVN.VOLUME.value].cumsum() / data[PVN.VOLUME.value].sum()
-
-        # momentum
-        data_mom = data[data['cum_volume'] <= ratio]
-        rev_mom = (data_mom['ret'] * (1 / data_mom[PVN.VOLUME.value])).sum() / (1 / data_mom[PVN.VOLUME.value]).sum()
-
-        # Reverse
-        data_rev = data[data['cum_volume'] > ratio]
-        rev_rev = (data_rev['ret'] * (data_rev[PVN.VOLUME.value])).sum() / (data_rev[PVN.VOLUME.value]).sum()
-
-        rev_struct = rev_rev - rev_mom
-        if np.isnan(rev_struct):
-            print("Nan error!")
-        return rev_struct
-
-    @staticmethod
-    def func_M_ln(data: pd.DataFrame):
-
-        data['S'] = abs(data[PVN.CLOSE.value].pct_change(fill_method=None)) / np.log(data[PVN.VOLUME.value])
-        VWAP = (data[PVN.CLOSE.value] * data[PVN.VOLUME.value] / (data[PVN.VOLUME.value]).sum()).sum()
-        data = data.sort_values('S', ascending=False)
-        data['cum_volume_R'] = data[PVN.VOLUME.value].cumsum() / (data[PVN.VOLUME.value]).sum()
-        data_ = data[data['cum_volume_R'] <= 0.2]
-        res = (data_[PVN.CLOSE.value] * data_[PVN.VOLUME.value] / (data_[PVN.VOLUME.value]).sum()).sum() / VWAP
-
-        return res
-
-    @staticmethod
-    def func_M_sqrt(data: pd.DataFrame):
-
-        # 可能存在分钟线丢失
-        data['S'] = abs(data[PVN.CLOSE.value].pct_change(fill_method=None)) / np.sqrt(data[PVN.VOLUME.value])
-        VWAP = (data[PVN.CLOSE.value] * data[PVN.VOLUME.value] / (data[PVN.VOLUME.value]).sum()).sum()
-        data = data.sort_values('S', ascending=False)
-        data['cum_volume_R'] = data[PVN.VOLUME.value].cumsum() / (data[PVN.VOLUME.value]).sum()
-        data_ = data[data['cum_volume_R'] <= 0.2]
-        res = (data_[PVN.CLOSE.value] * data_[PVN.VOLUME.value] / (data_[PVN.VOLUME.value]).sum()).sum() / VWAP
-
         return res
 
     @staticmethod

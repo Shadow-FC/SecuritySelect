@@ -430,7 +430,7 @@ class PortfolioModel(MethodSets):
                  legend=True,
                  grid=False)
 
-        plt.savefig(os.path.join(FPN.factor_test_res.value, f"NAV-{self.hp}days.png"),
+        plt.savefig(os.path.join(FPN.Fact_testRes.value, f"NAV-{self.hp}days.png"),
                     dpi=200,
                     bbox_inches='tight')
         plt.show()

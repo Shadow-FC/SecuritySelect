@@ -5,11 +5,6 @@
 
 from Analysis.FactorAnalysis import *
 
-DATABASE_NAME = {"Group": "分组数据保存",
-                 "Fin": "基本面因子保存",
-                 "PV": "价量易因子保存",
-                 "GenPro": "遗传规划算法挖掘因子保存"}
-
 API = LoadData()
 
 
@@ -18,9 +13,14 @@ def singleTest(factName: str = None, PathIn: str = ''):
     pathRead = os.path.join(PathIn, factName)
     with open(pathRead, mode='rb') as f:
         factValue = pickle.load(f)
-    factValue = factValue.set_index(['date', 'code']).rolling(5, min_periods=1).mean().reset_index()
-    nameNew = factName.split('.')[0].replace('_1days', '_5days')
-    factValue = factValue.rename(columns={factName.split('.')[0]: nameNew})
+    if factName.endswith('_1days.pkl'):
+        factValue = factValue.set_index(['date', 'code']).groupby('code').apply(
+            lambda x: x.rolling(5, min_periods=1).mean()).reset_index()
+        nameNew = factName.split('.')[0].replace('_1days', '_5days')
+        factValue = factValue.rename(columns={factName.split('.')[0]: nameNew})
+    else:
+        nameNew = factName.split('.')[0]
+
     dataParams = {
         "Factor": {"fact_name": nameNew,
                    "fact_value": factValue,
@@ -36,7 +36,7 @@ def singleTest(factName: str = None, PathIn: str = ''):
         "labelPoolData": API.getLabelPoolData(dataParams['LabelPool']),
     }
 
-    Analysis = FactorValidityCheck()
+    Analysis = FactorValidityCheckRelative()
     Analysis.set_data(**dataInput)
 
     # 2.检验参数设置
@@ -44,11 +44,12 @@ def singleTest(factName: str = None, PathIn: str = ''):
         "factName": dataInput['factPoolData'].data_name,
         "hp": 5,
         "groupNum": 10,
+        "groupMethod": "equalValue",
         "retName": "retOpen",
         "methodProcess": {
             "RO": {"method": "mad", "p": {}},  #
-            "Neu": {"method": "", "p": {"mvName": "liqMv", "indName": "indexCode"}},  # industry+mv
-            "Sta": {"method": "z_score", "p": {"mvName": "liqMv"}}
+            "Neu": {"method": "industry+mv", "p": {"mvName": "liqMv", "indName": "indexCode"}},  #
+            "Sta": {"method": "", "p": {"mvName": "liqMv"}}  # z_score
         },
     }
 
@@ -64,9 +65,11 @@ def singleTest(factName: str = None, PathIn: str = ''):
 
 
 if __name__ == '__main__':
-
-    fact_path = r'D:\DataBase\HighFrequencyStrengthFactor'
-    factNameList = os.listdir(fact_path)
-    for fact_ in factNameList:
-        singleTest(factName=fact_, PathIn=fact_path)
-    print('Finish!')
+    path = r'A:\DataBase\SecuritySelectData\FactorPool\FactorDataSet'
+    name = ['HighFrequencyDistributionFactor', 'HighFrequencyFundFlowFactor', 'HighFrequencyVolPriceFactor']
+    for i in name:
+        folderPath = os.path.join(path, i)
+        factNameList = os.listdir(folderPath)
+        for fact_ in factNameList:
+            singleTest(factName=fact_, PathIn=folderPath)
+        print('Finish!')

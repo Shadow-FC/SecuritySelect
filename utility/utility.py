@@ -19,13 +19,8 @@ from constant import (
     KeyName as KN,
     PriceVolumeName as PVN,
     FilePathName as FPN,
-    SpecialName as SN,
-    DBName as DBN
+    SpecialName as SN
 )
-
-from mapping import readMapping as readM
-
-REPLACE = "(_read)|(_worker)|(_switch)|(.py)"
 
 
 # 因子计算封装类
@@ -72,74 +67,11 @@ def timer(func):
 # 因子值入库
 @timer
 def factor_to_pkl(fact: DataInfo):
-    file_path = os.path.join(FPN.FactorDataSet.value, fact.data_category)
+    file_path = os.path.join(FPN.Fact_dataSet.value, fact.data_category)
 
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 
     data_path = os.path.join(file_path, fact.data_name + '.pkl')
     fact.data.to_pickle(data_path)
-
-
-# 方法搜寻函数
-def searchFunc(pathIn: str,
-               folderName: str) -> Dict[str, Callable]:
-    files = os.listdir(pathIn)
-
-    subPath = pathIn.split(f'SecuritySelect{os.sep}')[-1].replace(os.sep, '.')
-    mudPath = os.path.split(pathIn)[-1]
-
-    funcDict = {}
-
-    for file in files:
-        if file in [mudPath.split('.')[-1] + '.py', '__init__.py']:  # 母函数脚本无需再次导入
-            continue
-
-        # 对文件夹进行判断
-        if os.path.isdir(os.path.join(pathIn, file)):
-            if file.startswith('Synthetic'):       # 母函数文件夹则导入母函数
-                mud = importlib.import_module(f'{subPath}.{file}.{file}')
-                funcDict[re.sub(REPLACE, '', file)] = getattr(mud, file)
-            else:                                  # 非母函数文件夹导入文件夹下py文件
-                fileSubs = os.listdir(os.path.join(pathIn, file))
-                for fileSub in fileSubs:
-                    if fileSub.endswith('.py') and fileSub not in ['__init__.py']:
-                        mud = importlib.import_module(f'{subPath}.{file}.{fileSub[:-3]}')
-                        funcDict[re.sub(REPLACE, '', fileSub)] = getattr(mud, fileSub[:-3])
-        else:
-            if file.endswith(f'{folderName}.py'):  # 如果是_{name}.py脚本，加载脚本中的子函数
-                mud = importlib.import_module(f'{subPath}.{file[:-3]}')
-                funcDict[re.sub(REPLACE, '', file)] = getattr(mud, file[:-3])
-
-    return funcDict
-
-
-# 股票代码转换
-def switchCode(code: Union[str, int]) -> str:
-    codeStr = str(code)
-    if codeStr[0] in ['6', '9']:
-        return code + '.SH'
-    elif codeStr[0] in ['0', '2', '3']:
-        return code + '.SZ'
-    else:
-        return code
-
-
-# 有效股票代码
-def stockCode() -> List[str]:
-    data = pd.read_csv(r'Y:\DataBase\AStockData.csv', usecols=['code'])
-    stockID = data.drop_duplicates()['code'].to_list()
-    return stockID
-
-
-# 额外数据调取
-def getData(filePath: str, fileType: DBN) -> Union[Any, None]:
-    if fileType == DBN.CSV:
-        res = pd.read_csv(filePath)
-    elif fileType == DBN.PKL:
-        with open(filePath, mode='rb') as f:
-            res = pickle.load(f)
-    else:
-        res = None
-    return res
 

@@ -77,7 +77,7 @@ class FactorBase(object):
     # 读取因子计算所需常用数据
     def _csv_data(self,
                   data_name: list,
-                  file_path: str = FPN.Input_data_server.value,
+                  file_path: str = FPN.Server_inputData.value,
                   file_name: str = "AStockData",
                   date: str = KN.TRADE_DATE.value,
                   stock_id: str = KN.STOCK_ID.value):
@@ -88,13 +88,12 @@ class FactorBase(object):
     # 读取指数数据
     def csv_index(self,
                   data_name: list,
-                  file_path: str = FPN.factor_inputData.value,
-                  file_name: str = 'IndexInfo',
+                  file_path: str = '',
+                  file_name: str = '',
                   index_name: str = '',
                   date: str = KN.TRADE_DATE.value, ):
-        index_data = pd.read_csv(os.path.join(file_path, file_name + '.csv'),
-                                 usecols=[date, 'index_name'] + data_name)
-        res = index_data[index_data['index_name'] == index_name]
+        index_data = pd.read_csv(os.path.join(file_path, file_name + '.csv'), usecols=[date, 'code'] + data_name)
+        res = index_data[index_data['code'] == index_name]
         return res
 
     # 读取分钟数据(数据不在一个文件夹中)，返回回调函数结果
@@ -102,12 +101,12 @@ class FactorBase(object):
                      data_name: list,
                      func: Callable = None,
                      fun_kwargs: dict = {},
-                     file_path: str = FPN.HFD_Stock_M.value,
+                     file_path: str = '',
                      sub_file: str = '') -> Dict[str, Any]:
         if sub_file == '':
             Path = file_path
         elif sub_file == '1minute':
-            Path = FPN.HFD_Stock_M.value
+            Path = FPN.HFD_trade1min.value
         else:
             Path = os.path.join(file_path, sub_file)
         data_dict = {}

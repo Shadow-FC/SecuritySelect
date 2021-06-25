@@ -17,26 +17,21 @@ projectPath = os.path.abspath(os.path.dirname(os.getcwd()) + os.path.sep + ".")
 
 
 class FilePathName(Enum):
-    # factor_info = 'Z:\\Database\\'  # 因子信息路径
 
-    Input_data_server = 'B:\\DataBase'  # 服务端数据
-    Input_data_local = 'A:\\DataBase\\SecuritySelectData\\InputData'  # 本地数据
+    Server_inputData = 'Y:\\DataBase'  # 服务端数据
+    Local_inputData = 'A:\\DataBase\\SecuritySelectData\\InputData'  # 本地数据
 
-    factor_pool_path = 'A:\\DataBase\\SecuritySelectData\\FactorPool\\'  # 因子池
-    factor_inputData = 'A:\\DataBase\\SecuritySelectData\\FactorPool\\Factor_InputData\\'  # 因子计算所需数据
+    Fact_dataSet = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorDataSet"  # 因子库
+    Fact_testRes = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorsTestResult\\"  # 因子检验结果保存
+    Fact_corrRes = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorCorr\\"  # 因子相关性结果保存
 
-    FactorDataSet = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorDataSet"  # 标准因子集(日频)
-    factor_test_res = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorsTestResult\\"  # 因子检验结果保存
-    factor_ef = "A:\\DataBase\\SecuritySelectData\\FactorPool\\FactorEffective\\"  # 筛选有效因子集
-
-    Trade_Date = 'Y:\\DataBase'  # 交易日
     List_Date = 'A:\\DataBase\\ListDate'  # 成立日
 
-    HFD_Stock_Depth_1min = 'Y:\\合成数据\\十档1min\\因子数据'  # 高频十档分钟数据
-    HFD_Stock_M = 'Y:\\合成数据\\逐笔1min'  # 高频分钟数据
-    HFD_Stock_Depth = 'Y:\\合成数据\\十档Vwap'  # 高频十档盘口数据
-    HFD_Stock_CF = 'Y:\\合成数据\\逐笔资金流'  # 逐笔资金流向
-    HFD_MidData = 'B:\\中间过程2'  # 高频因子中间数据
+    HFD_depth1min = r'Y:\合成数据\十档1min\因子数据'  # 高频十档分钟数据  Y:\\合成数据\\十档1min\\因子数据
+    HFD_trade1min = r'B:\样本外数据_2021年\MidData1\逐笔\trade1min'  # 高频分钟数据  Y:\\合成数据\\逐笔1min
+    HFD_depthVwap = r'B:\合并数据\MidData1\十档Vwap'  # 高频十档盘口数据  Y:\\合成数据\\十档Vwap
+    HFD_tradeCF = r'B:\合并数据\MidData1\逐笔资金流'  # 逐笔资金流向  Y:\\合成数据\\逐笔资金流
+    HFD_midData = r'B:\合并数据\MidData2'  # 高频因子中间过程数据  B:\\中间过程2
     HFD = 'A:\\DataBase\\HFD'  # 高频数据存储地址
 
 
@@ -71,57 +66,6 @@ class SpecialName(Enum):
     CSI_50_INDUSTRY_MV = 'csi_50_mv'
     ANN_DATE = 'date'
     REPORT_DATE = 'report_date'
-
-
-class DBPath(Enum):
-    pathMidData1 = r"D:\DataBase\MidData1"
-    pathMidData2 = r"D:\DataBase\MidData2"
-
-    TXT = os.path.join(projectPath, "FileSets")
-    Record = os.path.join(projectPath, "FileSets")
-
-    depth1min = os.path.join(pathMidData1, "depth1min")
-    depthVwap = os.path.join(pathMidData1, "depthVwap")
-
-    depthUpLimitTick = os.path.join(pathMidData1, "depthUpLimitTick")
-    depthUpLimitInfo = os.path.join(pathMidData1, "depthUpLimitInfo")
-
-    trade1min = os.path.join(pathMidData1, "trade1min")
-    tradeCashFlow = os.path.join(pathMidData1, "tradeCashFlow")
-    tradeBigOrderNum = os.path.join(pathMidData1, "tradeBigOrderNum")
-    tradeBigOrderTime = os.path.join(pathMidData1, "tradeBigOrderTime")
-    tradeInvF_004_ZBQX = os.path.join(pathMidData1, "tradeInvF_004_ZBQX")
-    tradeInvF_005_ZBQX = os.path.join(pathMidData1, "tradeInvF_005_ZBQX")
-
-    tradeUpLimitInfo = os.path.join(pathMidData1, "tradeUpLimitInfo")
-
-    depth5VolSum = os.path.join(pathMidData2, "depth5VolSum")
-    depth10VolSum = os.path.join(pathMidData2, "depth10VolSum")
-
-    depthEqualIndex = os.path.join(pathMidData2, "depthEqualIndex")
-    depthWeightedIndex = os.path.join(pathMidData2, "depthWeightedIndex")
-
-    tradeRet = os.path.join(pathMidData2, "tradeRet")
-    tradeVol = os.path.join(pathMidData2, "tradeVol")
-    tradeClose = os.path.join(pathMidData2, "tradeClose")
-    tradeAmtStd = os.path.join(pathMidData2, "tradeAmtStd")
-    tradeAmtSum = os.path.join(pathMidData2, "tradeAmtSum")
-    tradeTradeNum = os.path.join(pathMidData2, "tradeTradeNum")
-    tradeBuyAmtSum = os.path.join(pathMidData2, "tradeBuyAmtSum")
-    tradeSellAmtSum = os.path.join(pathMidData2, "tradeSellAmtSum")
-    tradeSpecial1 = os.path.join(pathMidData2, "tradeSpecial1")
-    tradeSpecial2 = os.path.join(pathMidData2, "tradeSpecial2")
-
-    tradeEqualIndex = os.path.join(pathMidData2, "tradeEqualIndex")
-    tradeWeightedIndex = os.path.join(pathMidData2, "tradeWeightedIndex")
-
-
-@unique
-class DBName(Enum):
-    CSV = 'csv'
-    TXT = 'txt'
-    JSON = 'json'
-    PKL = 'pkl'
 
 
 @unique
@@ -230,50 +174,11 @@ class FactorCategoryName(Enum):
 
 
 @unique
-class StrategyName(Enum):
-    pass
-
-
-# def timer(func):
-#     def wrapper(*args, **kwargs):
-#         func_name = func.__name__
-#
-#         sta = time.time()
-#
-#         res = func(*args, **kwargs)
-#
-#         rang_time = round((time.time() - sta) / 60, 4)
-#
-#         print(f"\033[1;31m{dt.datetime.now().strftime('%X')}: It takes\033[0m "
-#               f"\033[1;33m{rang_time:<6}Min\033[0m "
-#               f"\033[1;31mto run func\033[0m "
-#               f"\033[1;33m\'{func_name}\'\033[0m")
-#         return res
-#
-#     return wrapper
-#
-#
-# # 因子计算封装类
-# class Process(object):
-#     def __init__(self,
-#                  funcType: str = ""):
-#         self.funcType = funcType
-#
-#     def __call__(self, func):
-#         def inner(*args, **kwargs):
-#             func_name = func.__name__
-#             data = kwargs['data'].set_index([KeyName.TRADE_DATE.value, KeyName.STOCK_ID.value])
-#             kwargs['data'] = data.sort_index()
-#
-#             res = func(*args, **kwargs, name=func_name)
-#             F = DataInfo(data=res['data'],
-#                          data_name=res['name'],
-#                          data_type=self.funcType,
-#                          data_category=func.__str__().split(" ")[1].split('.')[0])
-#             return F
-#
-#         return inner
-
-
-if __name__ == '__main__':
-    print('s')
+class FactorType(Enum):
+    HF_Dis = 'HighFrequencyDistribution'
+    HF_FundFlow = 'HighFrequencyFundFlow'
+    HF_VP = 'HighFrequencyVolPrice'
+    Tech_Beh = 'TechnicalBehavior'
+    Tech_Mom = 'TechnicalMoment'
+    Fund_EQ = 'FundamentalEaringQuality'
+    Fund_Grow = 'FundamentalGrow'

@@ -24,8 +24,11 @@ class Indicator(object):
              "Y": 1}
 
     # 累计收益率
-    def accumulative_return(self, nav: pd.Series) -> float:
-        ret = nav[-1] / nav[0] - 1
+    def acc_return(self, nav: pd.Series) -> float:
+        if nav.empty:
+            ret = np.nan
+        else:
+            ret = nav[-1] / nav[0] - 1
         return ret
 
     # 年化累计收益率
@@ -38,7 +41,7 @@ class Indicator(object):
         if period == 0:
             return 0
         else:
-            ret_a = (self.accumulative_return(nav) + 1) ** (self.cycle[freq] / period) - 1
+            ret_a = (self.acc_return(nav) + 1) ** (self.cycle[freq] / period) - 1
             return ret_a
 
     def odds(self, nav: pd.Series, bm: pd.Series) -> float:
